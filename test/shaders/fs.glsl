@@ -2,14 +2,14 @@
 
 precision mediump float;
 
-in vec3 fs_norm;
+//in vec3 fs_norm;
 //uniform vec3 mDiffColor; //material diffuse color 
 //uniform vec3 lightDirection; // directional light direction vec
 //uniform vec3 lightColor; //directional light color 
 out vec4 outColor;
 
 void main() {
-  vec3 norm = normalize(fs_norm);
+  //vec3 norm = normalize(fs_norm);
   //vec3 nLightDirection = normalize(lightDirection);
   //Here you should use either lightDirection or -lightDirection depending on
   //whether the direction has been inverted in webgl
