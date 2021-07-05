@@ -7,7 +7,7 @@ var models = new Array();
 
 var vao = new Array();
 
-var Tx = 0.0;
+var Tx = 10.0;
 var Ty = 0.0;
 var Tz = 0.0;
 var S  = 1.0;
@@ -25,9 +25,17 @@ function main() {
     gl.enable(gl.DEPTH_TEST);
     gl.enable(gl.CULL_FACE);*/
 
+    drawAllScenes();
+
+    window.requestAnimationFrame(drawAllScenes);
+}
+
+function drawAllScenes() {
     for (let i = 0; i < 26; i++) {
         drawScene(i);
     }
+
+    utils.resizeCanvasToDisplaySize(gl.canvas);
 }
 
 function drawScene(i) {
@@ -71,7 +79,7 @@ function drawScene(i) {
     var projectionMatrix = utils.multiplyMatrices(perspectiveMatrix, viewWorldMatrix);
     
     gl.uniformMatrix4fv(matrixLocation , gl.FALSE, utils.transposeMatrix(projectionMatrix));
-    gl.uniformMatrix4fv(normalMatrixPositionHandle , gl.FALSE, utils.transposeMatrix(normalMatrix ));
+    gl.uniformMatrix4fv(normalMatrixPositionHandle , gl.FALSE, utils.transposeMatrix(normalMatrix));
 
     gl.drawElements(gl.TRIANGLES, models[i].indices.length, gl.UNSIGNED_SHORT, 0);
   }
@@ -90,42 +98,61 @@ async function init() {
     }
     utils.resizeCanvasToDisplaySize(gl.canvas);
 
-    for (let i = 0; i < 26; i++) {
-        await utils.loadFiles([shaderDir + "vs.glsl", shaderDir + "fs.glsl"], function (shaderText) {
-            var vertexShader = utils.createShader(gl, gl.VERTEX_SHADER, shaderText[0]);
-            var fragmentShader = utils.createShader(gl, gl.FRAGMENT_SHADER, shaderText[1]);
+    for (let i = 0, count = 0; i < 26; i++) {
+        if (count === 0) {
+            await utils.loadFiles([shaderDir + "vs.glsl", shaderDir + "fs.glsl"], function (shaderText) {
+                var vertexShader = utils.createShader(gl, gl.VERTEX_SHADER, shaderText[0]);
+                var fragmentShader = utils.createShader(gl, gl.FRAGMENT_SHADER, shaderText[1]);
 
-            programs[i] = utils.createProgram(gl, vertexShader, fragmentShader);
-        });    
+                programs[i] = utils.createProgram(gl, vertexShader, fragmentShader);
+            });
+            count++;
+        } else if (count === 1) {
+            await utils.loadFiles([shaderDir + "vs1.glsl", shaderDir + "fs1.glsl"], function (shaderText) {
+                var vertexShader = utils.createShader(gl, gl.VERTEX_SHADER, shaderText[0]);
+                var fragmentShader = utils.createShader(gl, gl.FRAGMENT_SHADER, shaderText[1]);
+
+                programs[i] = utils.createProgram(gl, vertexShader, fragmentShader);
+            });
+            count++;
+        } else {
+            await utils.loadFiles([shaderDir + "vs2.glsl", shaderDir + "fs2.glsl"], function (shaderText) {
+                var vertexShader = utils.createShader(gl, gl.VERTEX_SHADER, shaderText[0]);
+                var fragmentShader = utils.createShader(gl, gl.FRAGMENT_SHADER, shaderText[1]);
+
+                programs[i] = utils.createProgram(gl, vertexShader, fragmentShader);
+            });
+            count = 0;
+        }
     }
     
 
     models[0] = await importObject("Cube00_B");
     models[1] = await importObject("Cube00_M");
     models[2] = await importObject("Cube00");
-    models[3] = new OBJ.Mesh("Cube01_B");
-    models[4] = new OBJ.Mesh("Cube01_M");
-    models[5] = new OBJ.Mesh("Cube01");
-    models[6] = new OBJ.Mesh("Cube02_B");
-    models[7] = new OBJ.Mesh("Cube02_M");
-    models[8] = new OBJ.Mesh("Cube02");
-    models[9] = new OBJ.Mesh("Cube10_B");
-    models[10] = new OBJ.Mesh("Cube10_M");
-    models[11] = new OBJ.Mesh("Cube10");
-    models[12] = new OBJ.Mesh("Cube11_B");
-    models[13] = new OBJ.Mesh("Cube11");
-    models[14] = new OBJ.Mesh("Cube12_B");
-    models[15] = new OBJ.Mesh("Cube12_M");
-    models[16] = new OBJ.Mesh("Cube12");
-    models[17] = new OBJ.Mesh("Cube20_B");
-    models[18] = new OBJ.Mesh("Cube20_M");
-    models[19] = new OBJ.Mesh("Cube20");
-    models[20] = new OBJ.Mesh("Cube21_B");
-    models[21] = new OBJ.Mesh("Cube21_M");
-    models[22] = new OBJ.Mesh("Cube21");
-    models[23] = new OBJ.Mesh("Cube22_B");
-    models[24] = new OBJ.Mesh("Cube22_M");
-    models[25] = new OBJ.Mesh("Cube22");
+    models[3] = await importObject("Cube01_B");
+    models[4] = await importObject("Cube01_M");
+    models[5] = await importObject("Cube01");
+    models[6] = await importObject("Cube02_B");
+    models[7] = await importObject("Cube02_M");
+    models[8] = await importObject("Cube02");
+    models[9] = await importObject("Cube10_B");
+    models[10] = await importObject("Cube10_M");
+    models[11] = await importObject("Cube10");
+    models[12] = await importObject("Cube11_B");
+    models[13] = await importObject("Cube11");
+    models[14] = await importObject("Cube12_B");
+    models[15] = await importObject("Cube12_M");
+    models[16] = await importObject("Cube12");
+    models[17] = await importObject("Cube20_B");
+    models[18] = await importObject("Cube20_M");
+    models[19] = await importObject("Cube20");
+    models[20] = await importObject("Cube21_B");
+    models[21] = await importObject("Cube21_M");
+    models[22] = await importObject("Cube21");
+    models[23] = await importObject("Cube22_B");
+    models[24] = await importObject("Cube22_M");
+    models[25] = await importObject("Cube22");
 
     main();
 }
