@@ -7,10 +7,13 @@ var models = new Array();
 
 var vao = new Array();
 
-var Tx = 10.0;
+var Tx = 0.0;
 var Ty = 0.0;
 var Tz = 0.0;
-var S  = 1.0;
+var Rx = 0.0;
+var Ry = 0.0;
+var Rz = 0.0;
+var S  = 0.5;
 
 async function importObject(name) { 
     var objStr = await utils.get_objstr("assets/" + name + ".obj");
@@ -19,12 +22,12 @@ async function importObject(name) {
 }
 
 function main() {
-    /*gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-    gl.clearColor(0, 0, 0, 0);
+    utils.resizeCanvasToDisplaySize(gl.canvas);
+    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+    gl.clearColor(0, 0, 0, 0); 
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     gl.enable(gl.DEPTH_TEST);
-    gl.enable(gl.CULL_FACE);*/
-
+    //gl.enable(gl.CULL_FACE);
     drawAllScenes();
 
     window.requestAnimationFrame(drawAllScenes);
@@ -41,7 +44,7 @@ function drawAllScenes() {
 function drawScene(i) {
     gl.useProgram(programs[i]);
     
-    var worldMatrix = utils.MakeWorld(Tx, Ty, Tz, 0.0, 0.0, 0.0, S);
+    var worldMatrix = utils.MakeWorld(Tx, Ty, Tz, Rx, Ry, Rz, S);
     var perspectiveMatrix = utils.MakePerspective(120, gl.canvas.width/gl.canvas.height, 0.1, 100.0);
     var viewMatrix = utils.MakeView(0, 0.0, 3.0, 0.0, 0.0);
 
