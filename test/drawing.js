@@ -5,7 +5,11 @@ var shaderDir;
 
 var models = new Array();
 
-var vao = new Array();
+var vaos = new Array();
+
+var positionAttributeLocation=new Array();
+
+var normalsAttributeLocation=new Array();
 
 var Tx = 0.0;
 var Ty = 0.0;
@@ -28,63 +32,114 @@ function main() {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     gl.enable(gl.DEPTH_TEST);
     //gl.enable(gl.CULL_FACE);
-    drawAllScenes();
+	
+	for(let j=0;j<3;j++){
+		
+		positionAttributeLocation[j] = gl.getAttribLocation(programs[j], "a_position");  
+		//normalsAttributeLocation[j] = gl.getAttribLocation(programs[j], "a_normal");
+		
+	}
+	
+	
+	for(let i=0; i< 26;i++){
+		
+		vaos[i]=gl.createVertexArray();
+		gl.bindVertexArray(vaos[i]);
+	
+		
+		var positionBuffer = gl.createBuffer();
+		gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(models[i].vertices), gl.STATIC_DRAW);
+		//console.log(positionAttributeLocation);
+		//console.log(models[i].vertices);
+		
+		if(i<8){
+			gl.enableVertexAttribArray(positionAttributeLocation[0]);
+			gl.vertexAttribPointer(positionAttributeLocation[0], 3, gl.FLOAT, false, 0, 0);
+		}
+		if(i>=8 && i<17){
+			gl.enableVertexAttribArray(positionAttributeLocation[1]);
+			gl.vertexAttribPointer(positionAttributeLocation[1], 3, gl.FLOAT, false, 0, 0);
+		}
+		if(i>=17){
+			gl.enableVertexAttribArray(positionAttributeLocation[2]);
+			gl.vertexAttribPointer(positionAttributeLocation[2], 3, gl.FLOAT, false, 0, 0);
+		}
 
-    window.requestAnimationFrame(drawAllScenes);
+
+		/*var normalsBuffer = gl.createBuffer();
+		gl.bindBuffer(gl.ARRAY_BUFFER, normalsBuffer);
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(models[i].normals), gl.STATIC_DRAW);
+		console.log(models[i].indices);
+		gl.enableVertexAttribArray(normalsAttributeLocation);
+		gl.vertexAttribPointer(normalsAttributeLocation, 3, gl.FLOAT, false, 0, 0);*/
+
+		var indexBuffer = gl.createBuffer();
+		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(models[i].indices), gl.STATIC_DRAW);
+		
+	}
+	
+	
+	
+	
+    drawScene();
+
 }
 
-function drawAllScenes() {
-    for (let i = 0; i < 26; i++) {
-        drawScene(i);
-    }
-
-    utils.resizeCanvasToDisplaySize(gl.canvas);
+function animate(){
+	
 }
 
-function drawScene(i) {
-    gl.useProgram(programs[i]);
-    
-    var worldMatrix = utils.MakeWorld(Tx, Ty, Tz, Rx, Ry, Rz, S);
-    var perspectiveMatrix = utils.MakePerspective(120, gl.canvas.width/gl.canvas.height, 0.1, 100.0);
-    var viewMatrix = utils.MakeView(0, 0.0, 3.0, 0.0, 0.0);
+function drawScene() {
+	
+	animate();
+	
+    for(let i = 0; i < 3; i++){
+		
+		gl.useProgram(programs[i]);
+		
+		var worldMatrix = utils.MakeWorld(Tx, Ty, Tz, Rx, Ry, Rz, S);
+		var perspectiveMatrix = utils.MakePerspective(120, gl.canvas.width/gl.canvas.height, 0.1, 100.0);
+		var viewMatrix = utils.MakeView(0, 0.0, 3.0, 0.0, 0.0);
 
-    var positionAttributeLocation = gl.getAttribLocation(programs[i], "a_position");  
-    //var normalsAttributeLocation = gl.getAttribLocation(programs[i], "a_normal");
-   
-    var matrixLocation = gl.getUniformLocation(programs[i], "matrix");
-    var normalMatrixPositionHandle = gl.getUniformLocation(programs[i], 'nMatrix');
-    
-    var normalMatrix = utils.invertMatrix(utils.transposeMatrix(worldMatrix));
-    //vao[i] = gl.createVertexArray();
+	   
+		var matrixLocation = gl.getUniformLocation(programs[i], "matrix");
+		var normalMatrixPositionHandle = gl.getUniformLocation(programs[i], 'nMatrix');
+		
+		var normalMatrix = utils.invertMatrix(utils.transposeMatrix(worldMatrix));
 
-    //gl.bindVertexArray(vao[i]);
-    
-    var positionBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(models[i].vertices), gl.STATIC_DRAW);
-    //console.log(positionAttributeLocation);
-    //console.log(models[i].vertices);
-    gl.enableVertexAttribArray(positionAttributeLocation);
-    gl.vertexAttribPointer(positionAttributeLocation, 3, gl.FLOAT, false, 0, 0);
 
-    /*var normalsBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, normalsBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(models[i].normals), gl.STATIC_DRAW);
-    console.log(models[i].indices);
-    gl.enableVertexAttribArray(normalsAttributeLocation);
-    gl.vertexAttribPointer(normalsAttributeLocation, 3, gl.FLOAT, false, 0, 0);*/
+		var viewWorldMatrix = utils.multiplyMatrices(viewMatrix, worldMatrix);
+		var projectionMatrix = utils.multiplyMatrices(perspectiveMatrix, viewWorldMatrix);
+		
+		gl.uniformMatrix4fv(matrixLocation , gl.FALSE, utils.transposeMatrix(projectionMatrix));
+		gl.uniformMatrix4fv(normalMatrixPositionHandle , gl.FALSE, utils.transposeMatrix(normalMatrix));
+		
+		if(i==0){
+			for(let j=0; j<8;j++){
+				gl.bindVertexArray(vaos[j]);
 
-    var indexBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
-    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(models[i].indices), gl.STATIC_DRAW);
+				gl.drawElements(gl.TRIANGLES, models[j].indices.length, gl.UNSIGNED_SHORT, 0);
+			}
+		}
+		if(i==1){
+			for(let j=8; j<17;j++){
+				gl.bindVertexArray(vaos[j]);
 
-    var viewWorldMatrix = utils.multiplyMatrices(viewMatrix, worldMatrix);
-    var projectionMatrix = utils.multiplyMatrices(perspectiveMatrix, viewWorldMatrix);
-    
-    gl.uniformMatrix4fv(matrixLocation , gl.FALSE, utils.transposeMatrix(projectionMatrix));
-    gl.uniformMatrix4fv(normalMatrixPositionHandle , gl.FALSE, utils.transposeMatrix(normalMatrix));
+				gl.drawElements(gl.TRIANGLES, models[j].indices.length, gl.UNSIGNED_SHORT, 0);
+			}
+		}
+		if(i==2){
+			for(let j=17; j<26;j++){
+				gl.bindVertexArray(vaos[j]);
 
-    gl.drawElements(gl.TRIANGLES, models[i].indices.length, gl.UNSIGNED_SHORT, 0);
+				gl.drawElements(gl.TRIANGLES, models[j].indices.length, gl.UNSIGNED_SHORT, 0);
+			}
+		
+		}
+		
+	}
   }
 
 async function init() {
