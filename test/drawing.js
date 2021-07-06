@@ -14,9 +14,9 @@ var normalsAttributeLocation=new Array();
 var Tx = 0.0;
 var Ty = 0.0;
 var Tz = 0.0;
-var Rx = 0.0;
-var Ry = 0.0;
-var Rz = 0.0;
+var Rx = 60.0;
+var Ry = 20.0;
+var Rz = 10.0;
 var S  = 0.5;
 
 async function importObject(name) { 
@@ -95,13 +95,16 @@ function drawScene() {
 	
 	animate();
 	
+	   gl.clearColor(0.85, 0.85, 0.85, 1.0);
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+	
     for(let i = 0; i < 3; i++){
 		
 		gl.useProgram(programs[i]);
 		
 		var worldMatrix = utils.MakeWorld(Tx, Ty, Tz, Rx, Ry, Rz, S);
-		var perspectiveMatrix = utils.MakePerspective(120, gl.canvas.width/gl.canvas.height, 0.1, 100.0);
-		var viewMatrix = utils.MakeView(0, 0.0, 3.0, 0.0, 0.0);
+		var perspectiveMatrix = utils.MakePerspective(30, gl.canvas.width/gl.canvas.height, 0.1, 100.0);
+		var viewMatrix = utils.MakeView(0, 0.0, 10.0, 1.0, 0.0);
 
 	   
 		var matrixLocation = gl.getUniformLocation(programs[i], "matrix");
