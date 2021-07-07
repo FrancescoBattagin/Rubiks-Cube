@@ -161,7 +161,7 @@ function drawScene() {
 		var normalMatrix = utils.invertMatrix(utils.transposeMatrix(worldMatrix));
 
 
-		var viewWorldMatrix = utils.multiplyMatrices(worldMatrix,viewMatrix);
+		var viewWorldMatrix = utils.multiplyMatrices(viewMatrix,worldMatrix);
 		var projectionMatrix = utils.multiplyMatrices(perspectiveMatrix, viewWorldMatrix);
 		
 		gl.uniformMatrix4fv(matrixLocation , gl.FALSE, utils.transposeMatrix(projectionMatrix));
