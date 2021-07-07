@@ -11,6 +11,12 @@ var positionAttributeLocation=new Array();
 
 var normalsAttributeLocation=new Array();
 
+var uvLocation = new Array();
+
+var textureFileHandle = new Array();
+
+var texture = new Array();
+
 var Tx = 0.0;
 var Ty = 0.0;
 var Tz = 0.0;
@@ -77,9 +83,10 @@ function main() {
 	
 	for(let j=0;j<3;j++){
 		
-		positionAttributeLocation[j] = gl.getAttribLocation(programs[j], "a_position");  
+		positionAttributeLocation[j] = gl.getAttribLocation(programs[j], "a_position");
+		uvLocation[j] = gl.getAttribLocation(programs[j], "a_uv");
 		//normalsAttributeLocation[j] = gl.getAttribLocation(programs[j], "a_normal");
-		
+		textureFileHandle[j] = gl.getUniformLocation(programs[j], "a_texture");
 	}
 	
 	
@@ -88,6 +95,28 @@ function main() {
 		vaos[i]=gl.createVertexArray();
 		gl.bindVertexArray(vaos[i]);
 	
+	    var image=new Image();
+	    image.src = "assets/Rubiks Cube.png";
+	    image.onload = function(e){
+	    	texture[i] = gl.createTexture();
+		    gl.activeTexture(gl.TEXTURE0);
+		    gl.bindTexture(gl.TEXTURE_2D, texture[i]);
+
+		    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+		    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+		    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+		    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+		    gl.generateMipmap(gl.TEXTURE_2D);
+
+		    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+
+		    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+
+		    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+		    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+
+		    gl.generateMipmap(gl.TEXTURE_2D);
+	    };
 		
 		var positionBuffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
@@ -119,11 +148,14 @@ function main() {
 		var indexBuffer = gl.createBuffer();
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
 		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(models[i].indices), gl.STATIC_DRAW);
+
+		var uvBuffer = gl.createBuffer();
+		gl.bindBuffer(gl.ARRAY_BUFFER, uvBuffer);
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(models[i].textures), gl.STATIC_DRAW);
+		gl.vertexAttribPointer(uvLocation, 2, gl.FLOAT, false, 0, 0);
+		gl.enableVertexAttribArray(uvLocation);
 		
 	}
-	
-	
-	
 	
     drawScene();
 
@@ -171,6 +203,10 @@ function drawScene() {
 			for(let j=0; j<8;j++){
 				gl.bindVertexArray(vaos[j]);
 
+				gl.activeTexture(gl.TEXTURE0);
+				gl.bindTexture(gl.TEXTURE_2D, texture[j]);
+				gl.uniform1i(textureFileHandle[i], 0);
+
 				gl.drawElements(gl.TRIANGLES, models[j].indices.length, gl.UNSIGNED_SHORT, 0);
 			}
 		}
@@ -178,12 +214,20 @@ function drawScene() {
 			for(let j=8; j<17;j++){
 				gl.bindVertexArray(vaos[j]);
 
+				gl.activeTexture(gl.TEXTURE0);
+				gl.bindTexture(gl.TEXTURE_2D, texture[j]);
+				gl.uniform1i(textureFileHandle[i], 0);
+
 				gl.drawElements(gl.TRIANGLES, models[j].indices.length, gl.UNSIGNED_SHORT, 0);
 			}
 		}
 		if(i==2){
 			for(let j=17; j<26;j++){
 				gl.bindVertexArray(vaos[j]);
+
+				gl.activeTexture(gl.TEXTURE0);
+				gl.bindTexture(gl.TEXTURE_2D, texture[j]);
+				gl.uniform1i(textureFileHandle[i], 0);
 
 				gl.drawElements(gl.TRIANGLES, models[j].indices.length, gl.UNSIGNED_SHORT, 0);
 			}
