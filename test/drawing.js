@@ -14,9 +14,9 @@ var normalsAttributeLocation=new Array();
 var Tx = 0.0;
 var Ty = 0.0;
 var Tz = 0.0;
-var Rx = 60.0;
-var Ry = 20.0;
-var Rz = 10.0;
+var Rx = 0.0;
+var Ry = 0.0;
+var Rz = 0.0;
 var S  = 0.5;
 
 var cx = 4.5;
@@ -145,14 +145,14 @@ function drawScene() {
 		gl.useProgram(programs[i]);
 		
 		var worldMatrix = utils.MakeWorld(Tx, Ty, Tz, Rx, Ry, Rz, S);
-		var perspectiveMatrix = utils.MakePerspective(65, gl.canvas.width/gl.canvas.height, 0.1, 100.0);
+		var perspectiveMatrix = utils.MakePerspective(30, gl.canvas.width/gl.canvas.height, 0.1, 100.0);
 		
 		cz = lookRadius * Math.cos(utils.degToRad(-angle)) * Math.cos(utils.degToRad(-elevation));
 		cx = lookRadius * Math.sin(utils.degToRad(-angle)) * Math.cos(utils.degToRad(-elevation));
 		cy = lookRadius * Math.sin(utils.degToRad(-elevation));
 		
 		
-		var viewMatrix = utils.MakeView(cx, cy, cz, elevation, -angle);
+		var viewMatrix = utils.MakeView(cx, cy, cz, elevation,angle);
 
 	   
 		var matrixLocation = gl.getUniformLocation(programs[i], "matrix");
@@ -161,7 +161,7 @@ function drawScene() {
 		var normalMatrix = utils.invertMatrix(utils.transposeMatrix(worldMatrix));
 
 
-		var viewWorldMatrix = utils.multiplyMatrices(viewMatrix, worldMatrix);
+		var viewWorldMatrix = utils.multiplyMatrices(worldMatrix,viewMatrix);
 		var projectionMatrix = utils.multiplyMatrices(perspectiveMatrix, viewWorldMatrix);
 		
 		gl.uniformMatrix4fv(matrixLocation , gl.FALSE, utils.transposeMatrix(projectionMatrix));
