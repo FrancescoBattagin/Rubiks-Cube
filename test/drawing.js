@@ -25,7 +25,7 @@ var cz = 10.0;
 var elevation = -15.0;
 var angle = 0.0;
 
-var lookRadius = 5.0;
+var lookRadius = 23.0;
 
 var mouseState = false;
 var lastMouseX = -100, lastMouseY = -100;
