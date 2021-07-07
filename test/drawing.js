@@ -19,6 +19,48 @@ var Ry = 20.0;
 var Rz = 10.0;
 var S  = 0.5;
 
+var cx = 4.5;
+var cy = 0.0;
+var cz = 10.0;
+var elevation = -15.0;
+var angle = 0.0;
+
+var lookRadius = 5.0;
+
+var mouseState = false;
+var lastMouseX = -100, lastMouseY = -100;
+
+function doMouseDown(event) {
+	lastMouseX = event.pageX;
+	lastMouseY = event.pageY;
+	mouseState = true;
+}
+function doMouseUp(event) {
+	lastMouseX = -100;
+	lastMouseY = -100;
+	mouseState = false;
+}
+function doMouseMove(event) {
+	if(mouseState) {
+		var dx = event.pageX - lastMouseX;
+		var dy = lastMouseY - event.pageY;
+		lastMouseX = event.pageX;
+		lastMouseY = event.pageY;
+		
+		if((dx != 0) || (dy != 0)) {
+			angle = angle + 0.5 * dx;
+			elevation = elevation + 0.5 * dy;
+		}
+	}
+}
+
+function doMouseWheel(event) {
+	var nLookRadius = lookRadius + event.wheelDelta/200.0;
+	if((nLookRadius > 2.0) && (nLookRadius < 100.0)) {
+		lookRadius = nLookRadius;
+	}
+}
+
 async function importObject(name) { 
     var objStr = await utils.get_objstr("assets/" + name + ".obj");
     var objModel = new OBJ.Mesh(objStr);
@@ -103,8 +145,14 @@ function drawScene() {
 		gl.useProgram(programs[i]);
 		
 		var worldMatrix = utils.MakeWorld(Tx, Ty, Tz, Rx, Ry, Rz, S);
-		var perspectiveMatrix = utils.MakePerspective(30, gl.canvas.width/gl.canvas.height, 0.1, 100.0);
-		var viewMatrix = utils.MakeView(0, 0.0, 10.0, 1.0, 0.0);
+		var perspectiveMatrix = utils.MakePerspective(65, gl.canvas.width/gl.canvas.height, 0.1, 100.0);
+		
+		cz = lookRadius * Math.cos(utils.degToRad(-angle)) * Math.cos(utils.degToRad(-elevation));
+		cx = lookRadius * Math.sin(utils.degToRad(-angle)) * Math.cos(utils.degToRad(-elevation));
+		cy = lookRadius * Math.sin(utils.degToRad(-elevation));
+		
+		
+		var viewMatrix = utils.MakeView(cx, cy, cz, elevation, -angle);
 
 	   
 		var matrixLocation = gl.getUniformLocation(programs[i], "matrix");
@@ -143,6 +191,7 @@ function drawScene() {
 		}
 		
 	}
+	window.requestAnimationFrame(drawScene);
   }
 
 async function init() {
@@ -152,6 +201,12 @@ async function init() {
     shaderDir = baseDir+"shaders/";
     
     var canvas = document.getElementById("c");
+	
+	canvas.addEventListener("mousedown", doMouseDown, false);
+	canvas.addEventListener("mouseup", doMouseUp, false);
+	canvas.addEventListener("mousemove", doMouseMove, false);
+	canvas.addEventListener("mousewheel", doMouseWheel, false);
+	
     gl = canvas.getContext("webgl2");
     if (!gl) {
         document.write("GL context not opened");
