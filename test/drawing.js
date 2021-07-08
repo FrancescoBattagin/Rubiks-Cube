@@ -23,7 +23,7 @@ var Tz = 0.0;
 var Rx = 0.0;
 var Ry = 0.0;
 var Rz = 0.0;
-var S  = 0.5;
+var S  = 0.7;
 
 var cx = 4.5;
 var cy = 0.0;
