@@ -164,6 +164,7 @@ function drawScene() {
 	   
 		var matrixLocation = gl.getUniformLocation(program, "matrix");
 		var normalMatrixPositionHandle = gl.getUniformLocation(program, 'nMatrix');
+		var worldMatrixLocation = gl.getUniformLocation(program, 'worldMatrix');
 		
 		var normalMatrix = utils.invertMatrix(utils.transposeMatrix(worldMatrix));
 
@@ -173,6 +174,7 @@ function drawScene() {
 		
 		gl.uniformMatrix4fv(matrixLocation , gl.FALSE, utils.transposeMatrix(projectionMatrix));
 		gl.uniformMatrix4fv(normalMatrixPositionHandle , gl.FALSE, utils.transposeMatrix(normalMatrix));
+		gl.uniformMatrix4fv(worldMatrixLocation , gl.FALSE, utils.transposeMatrix(worldMatrix));
 		
 		for(let i=0;i<26;i++){
 			
