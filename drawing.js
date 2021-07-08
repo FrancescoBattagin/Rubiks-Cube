@@ -75,41 +75,28 @@ async function importObject(name) {
 }
 
 function main() {
-	
     utils.resizeCanvasToDisplaySize(gl.canvas);
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
     gl.clearColor(0, 0, 0, 0); 
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     gl.enable(gl.DEPTH_TEST);
     //gl.enable(gl.CULL_FACE);
-	
-	
 		
-		positionAttributeLocation = gl.getAttribLocation(program, "a_position");
-		uvLocation = gl.getAttribLocation(program, "a_uv");
-		//normalsAttributeLocation = gl.getAttribLocation(program, "a_normal");
-		textureFileHandle= gl.getUniformLocation(program, "a_texture");
+	positionAttributeLocation = gl.getAttribLocation(program, "a_position");
+	uvLocation = gl.getAttribLocation(program, "a_uv");
+	//normalsAttributeLocation = gl.getAttribLocation(program, "a_normal");
+	textureFileHandle= gl.getUniformLocation(program, "a_texture");
 	
-	
-	
-	for(let i=0; i< 26;i++){
-		
+	for(let i = 0; i < 26; i++){
 		vaos[i]=gl.createVertexArray();
 		gl.bindVertexArray(vaos[i]);
-	
-	    
-		
+
 		var positionBuffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(models[i].vertices), gl.STATIC_DRAW);
-		//console.log(positionAttributeLocation);
-		//console.log(models[i].vertices);
-		
-		
+
 		gl.enableVertexAttribArray(positionAttributeLocation);
 		gl.vertexAttribPointer(positionAttributeLocation, 3, gl.FLOAT, false, 0, 0);
-	
-
 
 		/*var normalsBuffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, normalsBuffer);
@@ -127,100 +114,61 @@ function main() {
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(models[i].textures), gl.STATIC_DRAW);
 		gl.vertexAttribPointer(uvLocation, 2, gl.FLOAT, false, 0, 0);
 		gl.enableVertexAttribArray(uvLocation);
-		
 	}
 	
     drawScene();
-
 }
 
 function animate(){
 	
 }
 
-
 //fare 26 programmi per fare le animazioni
-
 function drawScene() {
 	
 	animate();
 	
 	gl.clearColor(0.85, 0.85, 0.85, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+		
+	gl.useProgram(program);
 	
-		
-		gl.useProgram(program);
-		
-		var worldMatrix = utils.MakeWorld(Tx, Ty, Tz, Rx, Ry, Rz, S);
-		var perspectiveMatrix = utils.MakePerspective(30, gl.canvas.width/gl.canvas.height, 0.1, 100.0);
-		
-		cz = lookRadius * Math.cos(utils.degToRad(-angle)) * Math.cos(utils.degToRad(-elevation));
-		cx = lookRadius * Math.sin(utils.degToRad(-angle)) * Math.cos(utils.degToRad(-elevation));
-		cy = lookRadius * Math.sin(utils.degToRad(-elevation));
-		
-		
-		var viewMatrix = utils.MakeView(cx, cy, cz, elevation,angle);
+	var worldMatrix = utils.MakeWorld(Tx, Ty, Tz, Rx, Ry, Rz, S);
+	var perspectiveMatrix = utils.MakePerspective(30, gl.canvas.width/gl.canvas.height, 0.1, 100.0);
+	
+	cz = lookRadius * Math.cos(utils.degToRad(-angle)) * Math.cos(utils.degToRad(-elevation));
+	cx = lookRadius * Math.sin(utils.degToRad(-angle)) * Math.cos(utils.degToRad(-elevation));
+	cy = lookRadius * Math.sin(utils.degToRad(-elevation));
+	
+	var viewMatrix = utils.MakeView(cx, cy, cz, elevation,angle);
 
-	   
-		var matrixLocation = gl.getUniformLocation(program, "matrix");
-		var normalMatrixPositionHandle = gl.getUniformLocation(program, 'nMatrix');
-		var worldMatrixLocation = gl.getUniformLocation(program, 'worldMatrix');
-		
-		var normalMatrix = utils.invertMatrix(utils.transposeMatrix(worldMatrix));
+	var matrixLocation = gl.getUniformLocation(program, "matrix");
+	var normalMatrixPositionHandle = gl.getUniformLocation(program, 'nMatrix');
+	var worldMatrixLocation = gl.getUniformLocation(program, 'worldMatrix');
+	
+	var normalMatrix = utils.invertMatrix(utils.transposeMatrix(worldMatrix));
 
+	var viewWorldMatrix = utils.multiplyMatrices(viewMatrix,worldMatrix);
+	var projectionMatrix = utils.multiplyMatrices(perspectiveMatrix, viewWorldMatrix);
+	
+	gl.uniformMatrix4fv(matrixLocation , gl.FALSE, utils.transposeMatrix(projectionMatrix));
+	gl.uniformMatrix4fv(normalMatrixPositionHandle , gl.FALSE, utils.transposeMatrix(normalMatrix));
+	gl.uniformMatrix4fv(worldMatrixLocation , gl.FALSE, utils.transposeMatrix(worldMatrix));
+	
+	for(let i = 0; i < 26; i++){
+		gl.bindVertexArray(vaos[i]);
 
-		var viewWorldMatrix = utils.multiplyMatrices(viewMatrix,worldMatrix);
-		var projectionMatrix = utils.multiplyMatrices(perspectiveMatrix, viewWorldMatrix);
+		gl.activeTexture(gl.TEXTURE0);
+		gl.bindTexture(gl.TEXTURE_2D, texture);
+		gl.uniform1i(textureFileHandle, 0);
 		
-		gl.uniformMatrix4fv(matrixLocation , gl.FALSE, utils.transposeMatrix(projectionMatrix));
-		gl.uniformMatrix4fv(normalMatrixPositionHandle , gl.FALSE, utils.transposeMatrix(normalMatrix));
-		gl.uniformMatrix4fv(worldMatrixLocation , gl.FALSE, utils.transposeMatrix(worldMatrix));
-		
-		for(let i=0;i<26;i++){
-			
-			gl.bindVertexArray(vaos[i]);
-
-			gl.activeTexture(gl.TEXTURE0);
-			gl.bindTexture(gl.TEXTURE_2D, texture);
-			gl.uniform1i(textureFileHandle, 0);
-			
-			gl.drawElements(gl.TRIANGLES, models[i].indices.length, gl.UNSIGNED_SHORT, 0);
-			
-		}
-		
+		gl.drawElements(gl.TRIANGLES, models[i].indices.length, gl.UNSIGNED_SHORT, 0);
+	}
 	
 	window.requestAnimationFrame(drawScene);
   }
 
 async function init() {
-	
-	image=new Image();
-	    image.src = "assets/Rubiks Cube.png";
-	    image.onload = function(e){
-	    	texture = gl.createTexture();
-		    gl.activeTexture(gl.TEXTURE0);
-		    gl.bindTexture(gl.TEXTURE_2D, texture);
-
-		    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-		    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
-		    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-		    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-		    gl.generateMipmap(gl.TEXTURE_2D);
-
-		    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-
-		    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
-
-		    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-		    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-
-		    gl.generateMipmap(gl.TEXTURE_2D);
-	    };
-		
-    var path = window.location.pathname;
-    var page = path.split("/").pop();
-    baseDir = window.location.href.replace(page, '');
-    shaderDir = baseDir+"shaders/";
     
     var canvas = document.getElementById("c");
 	
@@ -237,13 +185,40 @@ async function init() {
 	
     utils.resizeCanvasToDisplaySize(gl.canvas);
 
-		await utils.loadFiles([shaderDir + "vs.glsl", shaderDir + "fs.glsl"], function (shaderText) {
-		var vertexShader = utils.createShader(gl, gl.VERTEX_SHADER, shaderText[0]);
-        var fragmentShader = utils.createShader(gl, gl.FRAGMENT_SHADER, shaderText[1]);
+    image=new Image();
+    image.src = "assets/Rubiks Cube.png";
+    image.onload = function(e){
+    	texture = gl.createTexture();
+	    gl.activeTexture(gl.TEXTURE0);
+	    gl.bindTexture(gl.TEXTURE_2D, texture);
 
-        program = utils.createProgram(gl, vertexShader, fragmentShader);
-		});
-    
+	    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+	    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+	    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+	    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+	    gl.generateMipmap(gl.TEXTURE_2D);
+
+	    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+
+	    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+
+	    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+	    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+
+	    gl.generateMipmap(gl.TEXTURE_2D);
+    };
+		
+    var path = window.location.pathname;
+    var page = path.split("/").pop();
+    baseDir = window.location.href.replace(page, '');
+    shaderDir = baseDir+"shaders/";
+
+	await utils.loadFiles([shaderDir + "vs.glsl", shaderDir + "fs.glsl"], function (shaderText) {
+		var vertexShader = utils.createShader(gl, gl.VERTEX_SHADER, shaderText[0]);
+		var fragmentShader = utils.createShader(gl, gl.FRAGMENT_SHADER, shaderText[1]);
+
+		program = utils.createProgram(gl, vertexShader, fragmentShader);
+	});
 
     models[0] = await importObject("Cube00_B");
     models[1] = await importObject("Cube00_M");
