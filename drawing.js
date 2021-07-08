@@ -2,6 +2,7 @@ var programs = new Array();
 var gl;
 var baseDir;
 var shaderDir;
+var image;
 
 var models = new Array();
 
@@ -15,7 +16,7 @@ var uvLocation = new Array();
 
 var textureFileHandle = new Array();
 
-var texture = new Array();
+var texture;
 
 var Tx = 0.0;
 var Ty = 0.0;
@@ -95,28 +96,7 @@ function main() {
 		vaos[i]=gl.createVertexArray();
 		gl.bindVertexArray(vaos[i]);
 	
-	    var image=new Image();
-	    image.src = "assets/Rubiks Cube.png";
-	    image.onload = function(e){
-	    	texture[i] = gl.createTexture();
-		    gl.activeTexture(gl.TEXTURE0);
-		    gl.bindTexture(gl.TEXTURE_2D, texture[i]);
-
-		    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-		    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
-		    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-		    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-		    gl.generateMipmap(gl.TEXTURE_2D);
-
-		    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-
-		    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
-
-		    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-		    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-
-		    gl.generateMipmap(gl.TEXTURE_2D);
-	    };
+	    
 		
 		var positionBuffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
@@ -204,7 +184,7 @@ function drawScene() {
 				gl.bindVertexArray(vaos[j]);
 
 				gl.activeTexture(gl.TEXTURE0);
-				gl.bindTexture(gl.TEXTURE_2D, texture[j]);
+				gl.bindTexture(gl.TEXTURE_2D, texture);
 				gl.uniform1i(textureFileHandle[i], 0);
 
 				gl.drawElements(gl.TRIANGLES, models[j].indices.length, gl.UNSIGNED_SHORT, 0);
@@ -215,7 +195,7 @@ function drawScene() {
 				gl.bindVertexArray(vaos[j]);
 
 				gl.activeTexture(gl.TEXTURE0);
-				gl.bindTexture(gl.TEXTURE_2D, texture[j]);
+				gl.bindTexture(gl.TEXTURE_2D, texture);
 				gl.uniform1i(textureFileHandle[i], 0);
 
 				gl.drawElements(gl.TRIANGLES, models[j].indices.length, gl.UNSIGNED_SHORT, 0);
@@ -226,7 +206,7 @@ function drawScene() {
 				gl.bindVertexArray(vaos[j]);
 
 				gl.activeTexture(gl.TEXTURE0);
-				gl.bindTexture(gl.TEXTURE_2D, texture[j]);
+				gl.bindTexture(gl.TEXTURE_2D, texture);
 				gl.uniform1i(textureFileHandle[i], 0);
 
 				gl.drawElements(gl.TRIANGLES, models[j].indices.length, gl.UNSIGNED_SHORT, 0);
@@ -239,6 +219,30 @@ function drawScene() {
   }
 
 async function init() {
+	
+	image=new Image();
+	    image.src = "assets/Rubiks Cube.png";
+	    image.onload = function(e){
+	    	texture = gl.createTexture();
+		    gl.activeTexture(gl.TEXTURE0);
+		    gl.bindTexture(gl.TEXTURE_2D, texture);
+
+		    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+		    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+		    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+		    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+		    gl.generateMipmap(gl.TEXTURE_2D);
+
+		    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+
+		    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+
+		    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+		    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+
+		    gl.generateMipmap(gl.TEXTURE_2D);
+	    };
+		
     var path = window.location.pathname;
     var page = path.split("/").pop();
     baseDir = window.location.href.replace(page, '');
