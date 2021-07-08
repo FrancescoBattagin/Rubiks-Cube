@@ -1,4 +1,4 @@
-var programs = new Array();
+var program;
 var gl;
 var baseDir;
 var shaderDir;
@@ -8,13 +8,13 @@ var models = new Array();
 
 var vaos = new Array();
 
-var positionAttributeLocation=new Array();
+var positionAttributeLocation;
 
-var normalsAttributeLocation=new Array();
+var normalsAttributeLocation;
 
-var uvLocation = new Array();
+var uvLocation;
 
-var textureFileHandle = new Array();
+var textureFileHandle;
 
 var texture;
 
@@ -75,6 +75,7 @@ async function importObject(name) {
 }
 
 function main() {
+	
     utils.resizeCanvasToDisplaySize(gl.canvas);
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
     gl.clearColor(0, 0, 0, 0); 
@@ -82,13 +83,13 @@ function main() {
     gl.enable(gl.DEPTH_TEST);
     //gl.enable(gl.CULL_FACE);
 	
-	for(let j=0;j<3;j++){
+	
 		
-		positionAttributeLocation[j] = gl.getAttribLocation(programs[j], "a_position");
-		uvLocation[j] = gl.getAttribLocation(programs[j], "a_uv");
-		//normalsAttributeLocation[j] = gl.getAttribLocation(programs[j], "a_normal");
-		textureFileHandle[j] = gl.getUniformLocation(programs[j], "a_texture");
-	}
+		positionAttributeLocation = gl.getAttribLocation(program, "a_position");
+		uvLocation = gl.getAttribLocation(program, "a_uv");
+		//normalsAttributeLocation = gl.getAttribLocation(program, "a_normal");
+		textureFileHandle= gl.getUniformLocation(program, "a_texture");
+	
 	
 	
 	for(let i=0; i< 26;i++){
@@ -104,18 +105,10 @@ function main() {
 		//console.log(positionAttributeLocation);
 		//console.log(models[i].vertices);
 		
-		if(i<8){
-			gl.enableVertexAttribArray(positionAttributeLocation[0]);
-			gl.vertexAttribPointer(positionAttributeLocation[0], 3, gl.FLOAT, false, 0, 0);
-		}
-		if(i>=8 && i<17){
-			gl.enableVertexAttribArray(positionAttributeLocation[1]);
-			gl.vertexAttribPointer(positionAttributeLocation[1], 3, gl.FLOAT, false, 0, 0);
-		}
-		if(i>=17){
-			gl.enableVertexAttribArray(positionAttributeLocation[2]);
-			gl.vertexAttribPointer(positionAttributeLocation[2], 3, gl.FLOAT, false, 0, 0);
-		}
+		
+		gl.enableVertexAttribArray(positionAttributeLocation);
+		gl.vertexAttribPointer(positionAttributeLocation, 3, gl.FLOAT, false, 0, 0);
+	
 
 
 		/*var normalsBuffer = gl.createBuffer();
@@ -145,16 +138,18 @@ function animate(){
 	
 }
 
+
+//fare 26 programmi per fare le animazioni
+
 function drawScene() {
 	
 	animate();
 	
-	   gl.clearColor(0.85, 0.85, 0.85, 1.0);
+	gl.clearColor(0.85, 0.85, 0.85, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 	
-    for(let i = 0; i < 3; i++){
 		
-		gl.useProgram(programs[i]);
+		gl.useProgram(program);
 		
 		var worldMatrix = utils.MakeWorld(Tx, Ty, Tz, Rx, Ry, Rz, S);
 		var perspectiveMatrix = utils.MakePerspective(30, gl.canvas.width/gl.canvas.height, 0.1, 100.0);
@@ -167,8 +162,8 @@ function drawScene() {
 		var viewMatrix = utils.MakeView(cx, cy, cz, elevation,angle);
 
 	   
-		var matrixLocation = gl.getUniformLocation(programs[i], "matrix");
-		var normalMatrixPositionHandle = gl.getUniformLocation(programs[i], 'nMatrix');
+		var matrixLocation = gl.getUniformLocation(program, "matrix");
+		var normalMatrixPositionHandle = gl.getUniformLocation(program, 'nMatrix');
 		
 		var normalMatrix = utils.invertMatrix(utils.transposeMatrix(worldMatrix));
 
@@ -179,42 +174,19 @@ function drawScene() {
 		gl.uniformMatrix4fv(matrixLocation , gl.FALSE, utils.transposeMatrix(projectionMatrix));
 		gl.uniformMatrix4fv(normalMatrixPositionHandle , gl.FALSE, utils.transposeMatrix(normalMatrix));
 		
-		if(i==0){
-			for(let j=0; j<8;j++){
-				gl.bindVertexArray(vaos[j]);
+		for(let i=0;i<26;i++){
+			
+			gl.bindVertexArray(vaos[i]);
 
-				gl.activeTexture(gl.TEXTURE0);
-				gl.bindTexture(gl.TEXTURE_2D, texture);
-				gl.uniform1i(textureFileHandle[i], 0);
-
-				gl.drawElements(gl.TRIANGLES, models[j].indices.length, gl.UNSIGNED_SHORT, 0);
-			}
-		}
-		if(i==1){
-			for(let j=8; j<17;j++){
-				gl.bindVertexArray(vaos[j]);
-
-				gl.activeTexture(gl.TEXTURE0);
-				gl.bindTexture(gl.TEXTURE_2D, texture);
-				gl.uniform1i(textureFileHandle[i], 0);
-
-				gl.drawElements(gl.TRIANGLES, models[j].indices.length, gl.UNSIGNED_SHORT, 0);
-			}
-		}
-		if(i==2){
-			for(let j=17; j<26;j++){
-				gl.bindVertexArray(vaos[j]);
-
-				gl.activeTexture(gl.TEXTURE0);
-				gl.bindTexture(gl.TEXTURE_2D, texture);
-				gl.uniform1i(textureFileHandle[i], 0);
-
-				gl.drawElements(gl.TRIANGLES, models[j].indices.length, gl.UNSIGNED_SHORT, 0);
-			}
-		
+			gl.activeTexture(gl.TEXTURE0);
+			gl.bindTexture(gl.TEXTURE_2D, texture);
+			gl.uniform1i(textureFileHandle, 0);
+			
+			gl.drawElements(gl.TRIANGLES, models[i].indices.length, gl.UNSIGNED_SHORT, 0);
+			
 		}
 		
-	}
+	
 	window.requestAnimationFrame(drawScene);
   }
 
@@ -260,35 +232,15 @@ async function init() {
         document.write("GL context not opened");
         return;
     }
+	
     utils.resizeCanvasToDisplaySize(gl.canvas);
 
-    for (let i = 0, count = 0; i < 26; i++) {
-        if (count === 0) {
-            await utils.loadFiles([shaderDir + "vs.glsl", shaderDir + "fs.glsl"], function (shaderText) {
-                var vertexShader = utils.createShader(gl, gl.VERTEX_SHADER, shaderText[0]);
-                var fragmentShader = utils.createShader(gl, gl.FRAGMENT_SHADER, shaderText[1]);
+		await utils.loadFiles([shaderDir + "vs.glsl", shaderDir + "fs.glsl"], function (shaderText) {
+		var vertexShader = utils.createShader(gl, gl.VERTEX_SHADER, shaderText[0]);
+        var fragmentShader = utils.createShader(gl, gl.FRAGMENT_SHADER, shaderText[1]);
 
-                programs[i] = utils.createProgram(gl, vertexShader, fragmentShader);
-            });
-            count++;
-        } else if (count === 1) {
-            await utils.loadFiles([shaderDir + "vs1.glsl", shaderDir + "fs1.glsl"], function (shaderText) {
-                var vertexShader = utils.createShader(gl, gl.VERTEX_SHADER, shaderText[0]);
-                var fragmentShader = utils.createShader(gl, gl.FRAGMENT_SHADER, shaderText[1]);
-
-                programs[i] = utils.createProgram(gl, vertexShader, fragmentShader);
-            });
-            count++;
-        } else {
-            await utils.loadFiles([shaderDir + "vs2.glsl", shaderDir + "fs2.glsl"], function (shaderText) {
-                var vertexShader = utils.createShader(gl, gl.VERTEX_SHADER, shaderText[0]);
-                var fragmentShader = utils.createShader(gl, gl.FRAGMENT_SHADER, shaderText[1]);
-
-                programs[i] = utils.createProgram(gl, vertexShader, fragmentShader);
-            });
-            count = 0;
-        }
-    }
+        program = utils.createProgram(gl, vertexShader, fragmentShader);
+		});
     
 
     models[0] = await importObject("Cube00_B");
