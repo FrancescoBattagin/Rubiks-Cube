@@ -2,7 +2,6 @@
 
 in vec3 a_position;
 in vec2 a_uv;
-
 out vec2 uvCoord;
 //in vec3 a_normal;
 

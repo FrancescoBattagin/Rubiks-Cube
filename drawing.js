@@ -14,7 +14,6 @@ var normalsAttributeLocation;
 
 var uvLocation;
 
-
 var textureFileHandle;
 
 var texture;
@@ -165,7 +164,6 @@ function drawScene() {
 	   
 		var matrixLocation = gl.getUniformLocation(program, "matrix");
 		var normalMatrixPositionHandle = gl.getUniformLocation(program, 'nMatrix');
-		var worldMatrixLocation = gl.getUniformLocation(program, 'worldMatrix');
 		
 		var normalMatrix = utils.invertMatrix(utils.transposeMatrix(worldMatrix));
 
@@ -173,7 +171,6 @@ function drawScene() {
 		var viewWorldMatrix = utils.multiplyMatrices(viewMatrix,worldMatrix);
 		var projectionMatrix = utils.multiplyMatrices(perspectiveMatrix, viewWorldMatrix);
 		
-		gl.uniformMatrix4fv(worldMatrixLocation , gl.FALSE, utils.transposeMatrix(worldMatrix));
 		gl.uniformMatrix4fv(matrixLocation , gl.FALSE, utils.transposeMatrix(projectionMatrix));
 		gl.uniformMatrix4fv(normalMatrixPositionHandle , gl.FALSE, utils.transposeMatrix(normalMatrix));
 		
