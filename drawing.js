@@ -3,6 +3,8 @@ var baseDir;
 var shaderDir;
 var image;
 
+var cubes = ["Cube00_B", "Cube00_M", "Cube00", "Cube01_B", "Cube01_M", "Cube01", "Cube02_B", "Cube02_M", "Cube02", "Cube10_B", "Cube10_M", "Cube10", "Cube11_B", "Cube11", "Cube12_B", "Cube12_M", "Cube12", "Cube20_B", "Cube20_M", "Cube20", "Cube21_B", "Cube21_M", "Cube21", "Cube22_B", "Cube22_M", "Cube22"];
+
 var models = new Array();
 var vaos = new Array();
 
@@ -20,6 +22,8 @@ var textureFileHandle;
 var texture;
 
 var selectedFace;
+
+var shift;
 
 var cx = 4.5;
 var cy = 0.0;
@@ -71,46 +75,64 @@ var keyFunctionDown = function(e) {
 		//METTERE SHIFT DA PREMERE INSIEME A I TASTI DIREZIONALI PER GIRARE
 		//LE RIGHE CENTRALI
   		case 87:
-			console.log("KeyUp - White");
+			console.log("KeyDown - White");
 			selectedFace="W";
 			break;
 	  	case 89:
-			console.log("KeyUp - Yellow");
+			console.log("KeyDown - Yellow");
 			selectedFace="Y";
 			break;
 	  	case 66:
-			console.log("KeyUp - Blue");
+			console.log("KeyDown - Blue");
 			selectedFace="B";
 			break;
 	  	case 71:
-			console.log("KeyUp - Green");
+			console.log("KeyDown - Green");
 			selectedFace="G";
 			break;
 	  	case 82:
-			console.log("KeyUp - Red");
+			console.log("KeyDown - Red");
 			selectedFace="R";
 			break;
 	  	case 79:
-			console.log("KeyUp - Orange");
+			console.log("KeyDown - Orange");
 			selectedFace="O";
 			break;
 		case 39:
-			console.log("KeyUp - Right");
-			//rotateFace();
+			console.log("KeyDown - Right");
+			if(shift)
+				rotateMiddle();
+			else
+				rotateFace();
 			break;
 	  	case 37:
-			console.log("KeyUp - Left");
-			//rotateFace();
+			console.log("KeyDown - Left");
+			if(shift)
+				rotateMiddle();
+			else
+				rotateFace();
 			break;	
 		case 38:
-			console.log("KeyUp - Up");
-			//rotateFace();
+			console.log("KeyDown - Up");
+			if(shift)
+				rotateMiddle();
 			break;
 		case 40:
-			console.log("KeyUp - Down");
-			//rotateFace();
+			console.log("KeyDown - Down");
+			if(shift)
+				rotateMiddle();
 			break;
-			
+		case 16:
+			console.log("KeyDown - Shift");
+			shift = false;
+			break;
+	}
+}
+
+var keyFunctionUp = function(e) {
+	if(e.keyCode === 16){
+		console.log("KeyUp - Shift")
+		shift = true;
 	}
 }
 
@@ -126,11 +148,11 @@ function main() {
     gl.clearColor(0, 0, 0, 0); 
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     gl.enable(gl.DEPTH_TEST);
-    //gl.enable(gl.CULL_FACE);
+    gl.enable(gl.CULL_FACE);
 		
 	positionAttributeLocation = gl.getAttribLocation(program, "a_position");
 	uvLocation = gl.getAttribLocation(program, "a_uv");
-	//normalsAttributeLocation = gl.getAttribLocation(programs[0], "a_normal");
+	normalsAttributeLocation = gl.getAttribLocation(program, "a_normal");
 	textureFileHandle = gl.getUniformLocation(program, "a_texture");
 	
 	for(let i = 0; i < 26; i++){
@@ -144,12 +166,12 @@ function main() {
 		gl.enableVertexAttribArray(positionAttributeLocation);
 		gl.vertexAttribPointer(positionAttributeLocation, 3, gl.FLOAT, false, 0, 0);
 
-		/*var normalsBuffer = gl.createBuffer();
+		var normalsBuffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, normalsBuffer);
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(models[i].normals), gl.STATIC_DRAW);
-		console.log(models[i].indices);
+		//console.log(models[i].indices);
 		gl.enableVertexAttribArray(normalsAttributeLocation);
-		gl.vertexAttribPointer(normalsAttributeLocation, 3, gl.FLOAT, false, 0, 0);*/
+		gl.vertexAttribPointer(normalsAttributeLocation, 3, gl.FLOAT, false, 0, 0);
 
 		var indexBuffer = gl.createBuffer();
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
@@ -169,11 +191,15 @@ function rotateFace(){
 	
 }
 
-function animate(){
-	
+function rotateMiddle(){
+
 }
 
-//fare 26 programsmi per fare le animazioni
+function animate(){
+	/*interpolation*/
+}
+
+
 function drawScene() {
 	
 	animate();
@@ -220,7 +246,6 @@ function drawScene() {
 					count++;
 				}
 			}
-	
 	window.requestAnimationFrame(drawScene);
 }
 
@@ -232,7 +257,10 @@ async function init() {
 	canvas.addEventListener("mouseup", doMouseUp, false);
 	canvas.addEventListener("mousemove", doMouseMove, false);
 	canvas.addEventListener("mousewheel", doMouseWheel, false);
-	
+	canvas.addEventListener('keydown', keyFunctionDown);
+	canvas.addEventListener('keyup', keyFunctionUp);
+
+
     gl = canvas.getContext("webgl2");
     if (!gl) {
         document.write("GL context not opened");
@@ -302,18 +330,20 @@ async function init() {
 	i-> TOP=0 MEDIUM=1 BOTTOM=2
 	j-> LEFT=0 CENTER=1 RIGHT=2
 	k-> FRONT=0 BETWEEN=1 BACK=2
-	
-	
-	
+	*/
 	
 	
 	/*
-    /*
 	00 - 01 - 02 -> column "right"
 	10 - 11 - 12 -> column "in the middle"
 	20 - 21 - 22 -> column "left"
 	*/
-    models[0] = await importObject("Cube00_B"); //green face, bottom right
+    
+	for (let c in cubes) {
+        models[c] = await importObject(cubes[c]);
+    }
+
+    /*models[0] = await importObject("Cube00_B"); //green face, bottom right
     models[1] = await importObject("Cube00_M"); //green face, medium right
     models[2] = await importObject("Cube00"); //green face, top right
     models[3] = await importObject("Cube01_B"); //yellow face, bottom center
@@ -338,7 +368,7 @@ async function init() {
     models[22] = await importObject("Cube21"); //white face, medium left 
     models[23] = await importObject("Cube22_B"); //blue face, bottom left
     models[24] = await importObject("Cube22_M"); //red face, medium left
-    models[25] = await importObject("Cube22"); //white face, top left
+    models[25] = await importObject("Cube22"); //white face, top left*/
 
     main();
 }
