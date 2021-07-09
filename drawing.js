@@ -190,7 +190,7 @@ function drawScene() {
 					gl.bindTexture(gl.TEXTURE_2D, texture);
 					gl.uniform1i(textureFileHandle, 0);
 					
-					gl.drawElements(gl.TRIANGLES, models[i].indices.length, gl.UNSIGNED_SHORT, 0);
+					gl.drawElements(gl.TRIANGLES, models[count].indices.length, gl.UNSIGNED_SHORT, 0);
 					count++;
 				}
 			}
