@@ -19,6 +19,8 @@ var uvLocation;
 var textureFileHandle;
 var texture;
 
+var selectedFace;
+
 var cx = 4.5;
 var cy = 0.0;
 var cz = 10.0;
@@ -65,30 +67,50 @@ function doMouseWheel(event) {
 
 var keyFunctionDown = function(e) {
 	switch(e.keyCode) {
+		
+		//METTERE SHIFT DA PREMERE INSIEME A I TASTI DIREZIONALI PER GIRARE
+		//LE RIGHE CENTRALI
   		case 87:
 			console.log("KeyUp - White");
+			selectedFace="W";
 			break;
 	  	case 89:
 			console.log("KeyUp - Yellow");
+			selectedFace="Y";
 			break;
 	  	case 66:
 			console.log("KeyUp - Blue");
+			selectedFace="B";
 			break;
 	  	case 71:
 			console.log("KeyUp - Green");
+			selectedFace="G";
 			break;
 	  	case 82:
 			console.log("KeyUp - Red");
+			selectedFace="R";
 			break;
 	  	case 79:
 			console.log("KeyUp - Orange");
+			selectedFace="O";
 			break;
 		case 39:
 			console.log("KeyUp - Right");
+			//rotateFace();
 			break;
 	  	case 37:
 			console.log("KeyUp - Left");
+			//rotateFace();
 			break;	
+		case 38:
+			console.log("KeyUp - Up");
+			//rotateFace();
+			break;
+		case 40:
+			console.log("KeyUp - Down");
+			//rotateFace();
+			break;
+			
 	}
 }
 
@@ -141,6 +163,10 @@ function main() {
 	}
 	
     drawScene();
+}
+
+function rotateFace(){
+	
 }
 
 function animate(){
@@ -269,7 +295,19 @@ async function init() {
 		var fragmentShader = utils.createShader(gl, gl.FRAGMENT_SHADER, shaderText[1]);
 		program = utils.createProgram(gl, vertexShader, fragmentShader);
 	});
-
+	
+	/*
+	cubeWorldMatrices[i][j][k]
+	
+	i-> TOP=0 MEDIUM=1 BOTTOM=2
+	j-> LEFT=0 CENTER=1 RIGHT=2
+	k-> FRONT=0 BETWEEN=1 BACK=2
+	
+	
+	
+	
+	
+	/*
     /*
 	00 - 01 - 02 -> column "right"
 	10 - 11 - 12 -> column "in the middle"
