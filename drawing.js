@@ -270,32 +270,37 @@ async function init() {
 		program = utils.createProgram(gl, vertexShader, fragmentShader);
 	});
 
-    models[0] = await importObject("Cube00_B");
-    models[1] = await importObject("Cube00_M");
-    models[2] = await importObject("Cube00");
-    models[3] = await importObject("Cube01_B");
-    models[4] = await importObject("Cube01_M");
-    models[5] = await importObject("Cube01");
-    models[6] = await importObject("Cube02_B");
-    models[7] = await importObject("Cube02_M");
-    models[8] = await importObject("Cube02");
-    models[9] = await importObject("Cube10_B");
-    models[10] = await importObject("Cube10_M");
-    models[11] = await importObject("Cube10");
-    models[12] = await importObject("Cube11_B");
-    models[13] = await importObject("Cube11");
-    models[14] = await importObject("Cube12_B");
-    models[15] = await importObject("Cube12_M");
-    models[16] = await importObject("Cube12");
-    models[17] = await importObject("Cube20_B");
-    models[18] = await importObject("Cube20_M");
-    models[19] = await importObject("Cube20");
-    models[20] = await importObject("Cube21_B");
-    models[21] = await importObject("Cube21_M");
-    models[22] = await importObject("Cube21");
-    models[23] = await importObject("Cube22_B");
-    models[24] = await importObject("Cube22_M");
-    models[25] = await importObject("Cube22");
+    /*
+	00 - 01 - 02 -> column "right"
+	10 - 11 - 12 -> column "in the middle"
+	20 - 21 - 22 -> column "left"
+	*/
+    models[0] = await importObject("Cube00_B"); //green face, bottom right
+    models[1] = await importObject("Cube00_M"); //green face, medium right
+    models[2] = await importObject("Cube00"); //green face, top right
+    models[3] = await importObject("Cube01_B"); //yellow face, bottom center
+    models[4] = await importObject("Cube01_M"); //yellow face, medium center
+    models[5] = await importObject("Cube01"); //yellow face, top center
+    models[6] = await importObject("Cube02_B"); //yellow face, bottom right
+    models[7] = await importObject("Cube02_M"); //yellow face, medium right
+    models[8] = await importObject("Cube02"); //yellow face, top right
+    models[9] = await importObject("Cube10_B"); //green face, bottom center 
+    models[10] = await importObject("Cube10_M"); //green face, medium center
+    models[11] = await importObject("Cube10"); //green face, top medium
+    models[12] = await importObject("Cube11_B"); //blue face, bottom center
+    models[13] = await importObject("Cube11"); //white face, medium center
+    models[14] = await importObject("Cube12_B"); //blue face, bottom center
+    models[15] = await importObject("Cube12_M"); //orange face, medium center
+    models[16] = await importObject("Cube12"); //white face, top center
+    models[17] = await importObject("Cube20_B"); //green face, bottom left
+    models[18] = await importObject("Cube20_M"); //green face, medium left
+    models[19] = await importObject("Cube20"); //green face, top left
+    models[20] = await importObject("Cube21_B"); //blue face, medium left
+    models[21] = await importObject("Cube21_M"); //red face, medium center
+    models[22] = await importObject("Cube21"); //white face, medium left 
+    models[23] = await importObject("Cube22_B"); //blue face, bottom left
+    models[24] = await importObject("Cube22_M"); //red face, medium left
+    models[25] = await importObject("Cube22"); //white face, top left
 
     main();
 }
