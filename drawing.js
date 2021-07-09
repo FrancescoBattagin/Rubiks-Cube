@@ -122,7 +122,7 @@ var keyFunctionDown = function(e) {
 			break;
 		case 16:
 			console.log("KeyDown - Shift");
-			shift = false;
+			shift = true;
 			break;
 	}
 }
@@ -130,7 +130,7 @@ var keyFunctionDown = function(e) {
 var keyFunctionUp = function(e) {
 	if(e.keyCode === 16){
 		console.log("KeyUp - Shift")
-		shift = true;
+		shift = false;
 	}
 }
 
@@ -278,16 +278,7 @@ function counterClockwiseRightFace() {
 	temp021 = worldMatricesRef[0][2][1];
 	temp022 = worldMatricesRef[0][2][2];
 
-	// not working
-	/*worldMatricesRef[0][0][0] = temp020;
-	worldMatricesRef[0][0][1] = temp010;
-	worldMatricesRef[0][0][2] = temp000;
-	worldMatricesRef[0][1][0] = temp021;
-	worldMatricesRef[0][1][2] = temp001;
-	worldMatricesRef[0][2][0] = temp022;
-	worldMatricesRef[0][2][1] = temp012;
-	worldMatricesRef[0][2][2] = temp002;*/
-
+	// reassign worldMatricesRef related to moved cubes
 }
 
 function rotateRightFace(deg) {
@@ -314,16 +305,7 @@ function clockwiseLeftFace() {
 	temp021 = worldMatricesRef[2][2][1];
 	temp022 = worldMatricesRef[2][2][2];
 
-	// not working
-	/*worldMatricesRef[2][0][0] = temp020;
-	worldMatricesRef[2][0][1] = temp010;
-	worldMatricesRef[2][0][2] = temp000;
-	worldMatricesRef[2][1][0] = temp021;
-	worldMatricesRef[2][1][2] = temp001;
-	worldMatricesRef[2][2][0] = temp022;
-	worldMatricesRef[2][2][1] = temp012;
-	worldMatricesRef[2][2][2] = temp002;*/
-
+	// reassign worldMatricesRef related to moved cubes
 }
 
 function counterClockwiseLeftFace() {
@@ -339,15 +321,7 @@ function counterClockwiseLeftFace() {
 	temp021 = worldMatricesRef[2][2][1];
 	temp022 = worldMatricesRef[2][2][2];
 
-	// not working
-	/*worldMatricesRef[2][0][0] = temp020;
-	worldMatricesRef[2][0][1] = temp010;
-	worldMatricesRef[2][0][2] = temp000;
-	worldMatricesRef[2][1][0] = temp021;
-	worldMatricesRef[2][1][2] = temp001;
-	worldMatricesRef[2][2][0] = temp022;
-	worldMatricesRef[2][2][1] = temp012;
-	worldMatricesRef[2][2][2] = temp002;*/
+	// reassign worldMatricesRef related to moved cubes
 }
 
 function rotateLeftFace(deg) {
@@ -374,15 +348,7 @@ function clockwiseFrontFace() {
 	temp201 = worldMatricesRef[2][0][1];
 	temp202 = worldMatricesRef[2][0][2];
 
-	// not working
-	/*worldMatricesRef[0][0][0] = ;
-	worldMatricesRef[0][0][1] = ;
-	worldMatricesRef[0][0][2] = ;
-	worldMatricesRef[1][0][0] = ;
-	worldMatricesRef[1][0][2] = ;
-	worldMatricesRef[2][0][0] = ;
-	worldMatricesRef[2][0][1] = ;
-	worldMatricesRef[2][0][2] = ;*/
+	// reassign worldMatricesRef related to moved cubes
 }
 
 function counterClockwiseFrontFace() {
@@ -397,6 +363,8 @@ function counterClockwiseFrontFace() {
 	temp200 = worldMatricesRef[2][0][0];
 	temp201 = worldMatricesRef[2][0][1];
 	temp202 = worldMatricesRef[2][0][2];
+
+	// reassign worldMatricesRef related to moved cubes
 }
 
 function rotateFrontFace(deg) {
@@ -423,15 +391,7 @@ function clockwiseBackFace() {
 	temp201 = worldMatricesRef[2][2][1];
 	temp202 = worldMatricesRef[2][2][2];
 
-	// not working
-	/*worldMatricesRef[0][0][0] = ;
-	worldMatricesRef[0][0][1] = ;
-	worldMatricesRef[0][0][2] = ;
-	worldMatricesRef[1][0][0] = ;
-	worldMatricesRef[1][0][2] = ;
-	worldMatricesRef[2][0][0] = ;
-	worldMatricesRef[2][0][1] = ;
-	worldMatricesRef[2][0][2] = ;*/
+	// reassign worldMatricesRef related to moved cubes
 }
 
 function counterClockwiseBackFace() {
@@ -447,16 +407,7 @@ function counterClockwiseBackFace() {
 	temp201 = worldMatricesRef[2][2][1];
 	temp202 = worldMatricesRef[2][2][2];
 
-	// not working
-	/*worldMatricesRef[0][0][0] = ;
-	worldMatricesRef[0][0][1] = ;
-	worldMatricesRef[0][0][2] = ;
-	worldMatricesRef[1][0][0] = ;
-	worldMatricesRef[1][0][2] = ;
-	worldMatricesRef[2][0][0] = ;
-	worldMatricesRef[2][0][1] = ;
-	worldMatricesRef[2][0][2] = ;*/
-	
+	// reassign worldMatricesRef related to moved cubes
 }
 
 function rotateBackFace(deg) {
@@ -471,23 +422,237 @@ function rotateBackFace(deg) {
 }
 
 function clockwiseDownFace() {
+	rotateDownFace(-90);
 
+	// reassign worldMatricesRef related to moved cubes
 }
 
 function counterClockwiseDownFace() {
-	
+	rotateDownFace(90);
+
+	// reassign worldMatricesRef related to moved cubes
+}
+
+function rotateDownFace(deg) {
+	worldMatricesList[worldMatricesRef[0][0][0]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[0][0][0]], utils.MakeRotateYMatrix(deg));
+	worldMatricesList[worldMatricesRef[0][1][0]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[0][1][0]], utils.MakeRotateYMatrix(deg));
+	worldMatricesList[worldMatricesRef[0][2][0]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[0][2][0]], utils.MakeRotateYMatrix(deg));
+	worldMatricesList[worldMatricesRef[1][0][0]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[1][0][0]], utils.MakeRotateYMatrix(deg));
+	worldMatricesList[worldMatricesRef[1][2][0]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[1][2][0]], utils.MakeRotateYMatrix(deg));
+	worldMatricesList[worldMatricesRef[2][0][0]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[2][0][0]], utils.MakeRotateYMatrix(deg));
+	worldMatricesList[worldMatricesRef[2][1][0]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[2][1][0]], utils.MakeRotateYMatrix(deg));
+	worldMatricesList[worldMatricesRef[2][2][0]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[2][2][0]], utils.MakeRotateYMatrix(deg));
 }
 
 function clockwiseUpFace() {
+	rotateUpFace(90);
 
+	// reassign worldMatricesRef related to moved cubes
 }
 
 function counterClockwiseUpFace() {
-	
+	rotateUpFace(-90);
+
+	// reassign worldMatricesRef related to moved cubes
+}
+
+function rotateUpFace(deg) {
+	worldMatricesList[worldMatricesRef[0][0][2]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[0][0][2]], utils.MakeRotateYMatrix(deg));
+	worldMatricesList[worldMatricesRef[0][1][2]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[0][1][2]], utils.MakeRotateYMatrix(deg));
+	worldMatricesList[worldMatricesRef[0][2][2]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[0][2][2]], utils.MakeRotateYMatrix(deg));
+	worldMatricesList[worldMatricesRef[1][0][2]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[1][0][2]], utils.MakeRotateYMatrix(deg));
+	worldMatricesList[worldMatricesRef[1][2][2]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[1][2][2]], utils.MakeRotateYMatrix(deg));
+	worldMatricesList[worldMatricesRef[2][0][2]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[2][0][2]], utils.MakeRotateYMatrix(deg));
+	worldMatricesList[worldMatricesRef[2][1][2]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[2][1][2]], utils.MakeRotateYMatrix(deg));
+	worldMatricesList[worldMatricesRef[2][2][2]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[2][2][2]], utils.MakeRotateYMatrix(deg));
 }
 
 function rotateMiddle(rotation){
 	// the rotation must reassign centerCoordinates of each color center involved in the rotation
+	if (selectedFace.i === 0) {
+		switch(rotation) {
+			case "R":
+				rightMiddleHorizontal();
+				break;
+			case "L":
+				leftMiddleHorizontal();
+				break;
+			case "U":
+				upMiddleVerticalRight();
+				break;
+			case "D":
+				downMiddleVerticalRight();
+		}
+	} else if (selectedFace.i === 2) {
+		switch(rotation) {
+			case "R":
+				rightMiddleHorizontal();
+				break;
+			case "L":
+				leftMiddleHorizontal();
+				break;
+			case "U":
+				upMiddleVerticalLeft();
+				break;
+			case "D":
+				downMiddleVerticalLeft();
+				break;
+		}
+	} else {
+		if (selectedFace.j === 0) {
+			switch(rotation) {
+				case "R":
+					rightMiddleHorizontal();
+					break;
+				case "L":
+					leftMiddleHorizontal();
+					break;
+				case "U":
+					upMiddleVerticalFront();
+					break;
+				case "D":
+					downMiddleVerticalFront();
+					break;
+			}
+		} else if (selectedFace.j === 2) {
+			switch(rotation) {
+				case "R":
+					rightMiddleHorizontal();
+					break;
+				case "L":
+					leftMiddleHorizontal();
+					break;
+				case "U":
+					upMiddleVerticalBack();
+					break;
+				case "D":
+					downMiddleVerticalBack();
+					break;
+			}
+		} else {
+			if (selectedFace.k === 0) {
+				switch(rotation) {
+					case "R":
+						
+						break;
+					case "L":
+						
+						break;
+					case "U":
+						upMiddleVerticalTop();
+						break;
+					case "D":
+						downMiddleHorizontalTop();
+						break;
+				}
+			} else if (selectedFace.k === 2) {
+				switch(rotation) {
+					case "R":
+						
+						break;
+					case "L":
+						
+						break;
+					case "U":
+						upMiddleVerticalBottom();
+						break;
+					case "D":
+						downMiddleHorizontalBottom();
+						break;
+				}
+			}
+		}
+	}
+}
+
+function rightMiddleHorizontal() {
+	rotateMiddleHorizontal(-90);
+}
+
+function leftMiddleHorizontal() {
+	rotateMiddleHorizontal(90);
+}
+
+// all cubes with k = 1
+function rotateMiddleHorizontal(deg) {
+	worldMatricesList[worldMatricesRef[0][0][1]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[0][0][1]], utils.MakeRotateYMatrix(deg));
+	worldMatricesList[worldMatricesRef[0][1][1]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[0][1][1]], utils.MakeRotateYMatrix(deg));
+	worldMatricesList[worldMatricesRef[0][2][1]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[0][2][1]], utils.MakeRotateYMatrix(deg));
+	worldMatricesList[worldMatricesRef[1][0][1]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[1][0][1]], utils.MakeRotateYMatrix(deg));
+	worldMatricesList[worldMatricesRef[1][2][1]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[1][2][1]], utils.MakeRotateYMatrix(deg));
+	worldMatricesList[worldMatricesRef[2][0][1]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[2][0][1]], utils.MakeRotateYMatrix(deg));
+	worldMatricesList[worldMatricesRef[2][1][1]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[2][1][1]], utils.MakeRotateYMatrix(deg));
+	worldMatricesList[worldMatricesRef[2][2][1]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[2][2][1]], utils.MakeRotateYMatrix(deg));
+}
+
+function upMiddleVerticalFront() {
+	rotateMiddleVerticalFrontBack(-90);
+}
+
+function downMiddleVerticalFront() {
+	rotateMiddleVerticalFrontBack(90);	
+}
+
+function upMiddleVerticalBack() {
+	rotateMiddleVerticalFrontBack(90);
+}
+
+function downMiddleVerticalBack() {
+	rotateMiddleVerticalFrontBack(-90);	
+}
+
+function rotateMiddleVerticalFrontBack(deg) {
+	worldMatricesList[worldMatricesRef[1][0][0]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[1][0][0]], utils.MakeRotateXMatrix(deg));
+	worldMatricesList[worldMatricesRef[1][0][1]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[1][0][1]], utils.MakeRotateXMatrix(deg));
+	worldMatricesList[worldMatricesRef[1][0][2]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[1][0][2]], utils.MakeRotateXMatrix(deg));
+	worldMatricesList[worldMatricesRef[1][1][0]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[1][1][0]], utils.MakeRotateXMatrix(deg));
+	worldMatricesList[worldMatricesRef[1][1][2]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[1][1][2]], utils.MakeRotateXMatrix(deg));
+	worldMatricesList[worldMatricesRef[1][2][0]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[1][2][0]], utils.MakeRotateXMatrix(deg));
+	worldMatricesList[worldMatricesRef[1][2][1]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[1][2][1]], utils.MakeRotateXMatrix(deg));
+	worldMatricesList[worldMatricesRef[1][2][2]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[1][2][2]], utils.MakeRotateXMatrix(deg));
+}
+
+function upMiddleVerticalRight() {
+	rotateMiddleVerticalRightLeft(-90);
+}
+
+function downMiddleVerticalRight() {
+	rotateMiddleVerticalRightLeft(90)
+}
+
+function upMiddleVerticalLeft() {
+	rotateMiddleVerticalRightLeft(90);
+}
+
+function downMiddleVerticalLeft() {
+	rotateMiddleVerticalRightLeft(90);
+}
+
+function rotateMiddleVerticalRightLeft(deg) {
+	worldMatricesList[worldMatricesRef[0][1][0]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[0][1][0]], utils.MakeRotateZMatrix(deg));
+	worldMatricesList[worldMatricesRef[0][1][1]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[0][1][1]], utils.MakeRotateZMatrix(deg));
+	worldMatricesList[worldMatricesRef[0][1][2]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[0][1][2]], utils.MakeRotateZMatrix(deg));
+	worldMatricesList[worldMatricesRef[1][1][0]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[1][1][0]], utils.MakeRotateZMatrix(deg));
+	worldMatricesList[worldMatricesRef[1][1][2]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[1][1][2]], utils.MakeRotateZMatrix(deg));
+	worldMatricesList[worldMatricesRef[2][1][0]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[2][1][0]], utils.MakeRotateZMatrix(deg));
+	worldMatricesList[worldMatricesRef[2][1][1]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[2][1][1]], utils.MakeRotateZMatrix(deg));
+	worldMatricesList[worldMatricesRef[2][1][2]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[2][1][2]], utils.MakeRotateZMatrix(deg));
+}
+
+function upMiddleVerticalTop() {
+	rotateMiddleVerticalFrontBack(-90);
+}
+
+function downMiddleHorizontalTop() {
+	rotateMiddleVerticalFrontBack(90);
+}
+
+function upMiddleVerticalBottom() {
+	rotateMiddleVerticalFrontBack(-90);
+}
+
+function downMiddleHorizontalBottom() {
+	rotateMiddleVerticalFrontBack(90);
 }
 
 function animate(){
