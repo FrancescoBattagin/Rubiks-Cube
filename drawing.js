@@ -10,9 +10,10 @@ var vaos = new Array();
 
 var program;
 
-var cubeWorldMatrices =  new Array();
-cubeWorldMatrices[0] = new Array();
-cubeWorldMatrices[0][0] = new Array();
+var worldMatricesList =  new Array();
+var worldMatricesRef =  new Array();
+
+var centerCoordinates = {};
 
 var positionAttributeLocation;
 var normalsAttributeLocation;
@@ -21,7 +22,7 @@ var uvLocation;
 var textureFileHandle;
 var texture;
 
-var selectedFace;
+var selectedFace = null;
 
 var shift;
 
@@ -71,56 +72,53 @@ function doMouseWheel(event) {
 
 var keyFunctionDown = function(e) {
 	switch(e.keyCode) {
-		
-		//METTERE SHIFT DA PREMERE INSIEME A I TASTI DIREZIONALI PER GIRARE
-		//LE RIGHE CENTRALI
   		case 87:
 			console.log("KeyDown - White");
-			selectedFace="W";
+			selectedFace = centerCoordinates.white;
 			break;
 	  	case 89:
 			console.log("KeyDown - Yellow");
-			selectedFace="Y";
+			selectedFace = centerCoordinates.yellow;
 			break;
 	  	case 66:
 			console.log("KeyDown - Blue");
-			selectedFace="B";
+			selectedFace = centerCoordinates.blue;
 			break;
 	  	case 71:
 			console.log("KeyDown - Green");
-			selectedFace="G";
+			selectedFace = centerCoordinates.green;
 			break;
 	  	case 82:
 			console.log("KeyDown - Red");
-			selectedFace="R";
+			selectedFace = centerCoordinates.red;
 			break;
 	  	case 79:
 			console.log("KeyDown - Orange");
-			selectedFace="O";
+			selectedFace = centerCoordinates.orange;
 			break;
 		case 39:
 			console.log("KeyDown - Right");
 			if(shift)
-				rotateMiddle();
+				rotateMiddle("R");
 			else
-				rotateFace();
+				rotateFace("R");
 			break;
 	  	case 37:
 			console.log("KeyDown - Left");
 			if(shift)
-				rotateMiddle();
+				rotateMiddle("L");
 			else
-				rotateFace();
+				rotateFace("L");
 			break;	
 		case 38:
 			console.log("KeyDown - Up");
 			if(shift)
-				rotateMiddle();
+				rotateMiddle("U");
 			break;
 		case 40:
 			console.log("KeyDown - Down");
 			if(shift)
-				rotateMiddle();
+				rotateMiddle("D");
 			break;
 		case 16:
 			console.log("KeyDown - Shift");
@@ -187,12 +185,309 @@ function main() {
     drawScene();
 }
 
-function rotateFace(){
+function rotateFace(rotation){
+	if (selectedFace.i === 0) {
+		switch(rotation) {
+			case "R":
+				clockwiseRightFace();
+				break;
+			case "L":
+				counterClockwiseRightFace();
+		}
+	} else if (selectedFace.i === 2) {
+		switch(rotation) {
+			case "R":
+				clockwiseLeftFace();
+				break;
+			case "L":
+				counterClockwiseLeftFace();
+		}
+	} else {
+		if (selectedFace.j === 0) {
+			switch(rotation) {
+				case "R":
+					clockwiseFrontFace();
+					break;
+				case "L":
+					counterClockwiseFrontFace();
+			}
+		} else if (selectedFace.j === 2) {
+			switch(rotation) {
+				case "R":
+					clockwiseBackFace();
+					break;
+				case "L":
+					counterClockwiseBackFace();
+			}
+		} else {
+			if (selectedFace.k === 0) {
+				switch(rotation) {
+					case "R":
+						clockwiseDownFace();
+						break;
+					case "L":
+						counterClockwiseDownFace();
+				}
+			} else if (selectedFace.k === 2) {
+				switch(rotation) {
+					case "R":
+						clockwiseUpFace();
+						break;
+					case "L":
+						counterClockwiseUpFace();
+				}
+			}
+		}
+	}
+}
+
+function clockwiseRightFace() {
+	rotateRightFace(-90);
+
+	let temp000, temp001, temp002, temp010, temp012, temp020, temp021, temp022;
+	temp000 = worldMatricesRef[0][0][0];
+	temp001 = worldMatricesRef[0][0][1];
+	temp002 = worldMatricesRef[0][0][2];
+	temp010 = worldMatricesRef[0][1][0];
+	temp012 = worldMatricesRef[0][1][2];
+	temp020 = worldMatricesRef[0][2][0];
+	temp021 = worldMatricesRef[0][2][1];
+	temp022 = worldMatricesRef[0][2][2];
+
+	// not working
+	/*worldMatricesRef[0][0][0] = temp020;
+	worldMatricesRef[0][0][1] = temp010;
+	worldMatricesRef[0][0][2] = temp000;
+	worldMatricesRef[0][1][0] = temp021;
+	worldMatricesRef[0][1][2] = temp001;
+	worldMatricesRef[0][2][0] = temp022;
+	worldMatricesRef[0][2][1] = temp012;
+	worldMatricesRef[0][2][2] = temp002;*/
+}
+
+function counterClockwiseRightFace() {
+	rotateRightFace(90);
+
+	let temp000, temp001, temp002, temp010, temp012, temp020, temp021, temp022;
+	temp000 = worldMatricesRef[0][0][0];
+	temp001 = worldMatricesRef[0][0][1];
+	temp002 = worldMatricesRef[0][0][2];
+	temp010 = worldMatricesRef[0][1][0];
+	temp012 = worldMatricesRef[0][1][2];
+	temp020 = worldMatricesRef[0][2][0];
+	temp021 = worldMatricesRef[0][2][1];
+	temp022 = worldMatricesRef[0][2][2];
+
+	// not working
+	/*worldMatricesRef[0][0][0] = temp020;
+	worldMatricesRef[0][0][1] = temp010;
+	worldMatricesRef[0][0][2] = temp000;
+	worldMatricesRef[0][1][0] = temp021;
+	worldMatricesRef[0][1][2] = temp001;
+	worldMatricesRef[0][2][0] = temp022;
+	worldMatricesRef[0][2][1] = temp012;
+	worldMatricesRef[0][2][2] = temp002;*/
+
+}
+
+function rotateRightFace(deg) {
+	worldMatricesList[worldMatricesRef[0][0][0]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[0][0][0]], utils.MakeRotateXMatrix(deg));
+	worldMatricesList[worldMatricesRef[0][0][1]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[0][0][1]], utils.MakeRotateXMatrix(deg));
+	worldMatricesList[worldMatricesRef[0][0][2]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[0][0][2]], utils.MakeRotateXMatrix(deg));
+	worldMatricesList[worldMatricesRef[0][1][0]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[0][1][0]], utils.MakeRotateXMatrix(deg));
+	worldMatricesList[worldMatricesRef[0][1][2]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[0][1][2]], utils.MakeRotateXMatrix(deg));
+	worldMatricesList[worldMatricesRef[0][2][0]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[0][2][0]], utils.MakeRotateXMatrix(deg));
+	worldMatricesList[worldMatricesRef[0][2][1]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[0][2][1]], utils.MakeRotateXMatrix(deg));
+	worldMatricesList[worldMatricesRef[0][2][2]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[0][2][2]], utils.MakeRotateXMatrix(deg));
+}
+
+function clockwiseLeftFace() {
+	rotateLeftFace(90);
+
+	let temp000, temp001, temp002, temp010, temp012, temp020, temp021, temp022;
+	temp000 = worldMatricesRef[2][0][0];
+	temp001 = worldMatricesRef[2][0][1];
+	temp002 = worldMatricesRef[2][0][2];
+	temp010 = worldMatricesRef[2][1][0];
+	temp012 = worldMatricesRef[2][1][2];
+	temp020 = worldMatricesRef[2][2][0];
+	temp021 = worldMatricesRef[2][2][1];
+	temp022 = worldMatricesRef[2][2][2];
+
+	// not working
+	/*worldMatricesRef[2][0][0] = temp020;
+	worldMatricesRef[2][0][1] = temp010;
+	worldMatricesRef[2][0][2] = temp000;
+	worldMatricesRef[2][1][0] = temp021;
+	worldMatricesRef[2][1][2] = temp001;
+	worldMatricesRef[2][2][0] = temp022;
+	worldMatricesRef[2][2][1] = temp012;
+	worldMatricesRef[2][2][2] = temp002;*/
+
+}
+
+function counterClockwiseLeftFace() {
+	rotateLeftFace(-90);
+
+	let temp000, temp001, temp002, temp010, temp012, temp020, temp021, temp022;
+	temp000 = worldMatricesRef[2][0][0];
+	temp001 = worldMatricesRef[2][0][1];
+	temp002 = worldMatricesRef[2][0][2];
+	temp010 = worldMatricesRef[2][1][0];
+	temp012 = worldMatricesRef[2][1][2];
+	temp020 = worldMatricesRef[2][2][0];
+	temp021 = worldMatricesRef[2][2][1];
+	temp022 = worldMatricesRef[2][2][2];
+
+	// not working
+	/*worldMatricesRef[2][0][0] = temp020;
+	worldMatricesRef[2][0][1] = temp010;
+	worldMatricesRef[2][0][2] = temp000;
+	worldMatricesRef[2][1][0] = temp021;
+	worldMatricesRef[2][1][2] = temp001;
+	worldMatricesRef[2][2][0] = temp022;
+	worldMatricesRef[2][2][1] = temp012;
+	worldMatricesRef[2][2][2] = temp002;*/
+}
+
+function rotateLeftFace(deg) {
+	worldMatricesList[worldMatricesRef[2][0][0]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[2][0][0]], utils.MakeRotateXMatrix(deg));
+	worldMatricesList[worldMatricesRef[2][0][1]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[2][0][1]], utils.MakeRotateXMatrix(deg));
+	worldMatricesList[worldMatricesRef[2][0][2]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[2][0][2]], utils.MakeRotateXMatrix(deg));
+	worldMatricesList[worldMatricesRef[2][1][0]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[2][1][0]], utils.MakeRotateXMatrix(deg));
+	worldMatricesList[worldMatricesRef[2][1][2]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[2][1][2]], utils.MakeRotateXMatrix(deg));
+	worldMatricesList[worldMatricesRef[2][2][0]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[2][2][0]], utils.MakeRotateXMatrix(deg));
+	worldMatricesList[worldMatricesRef[2][2][1]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[2][2][1]], utils.MakeRotateXMatrix(deg));
+	worldMatricesList[worldMatricesRef[2][2][2]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[2][2][2]], utils.MakeRotateXMatrix(deg));
+}
+
+function clockwiseFrontFace() {
+	rotateFrontFace(90);
+
+	let temp000, temp001, temp002, temp010, temp012, temp020, temp021, temp022;
+	temp000 = worldMatricesRef[0][0][0];
+	temp001 = worldMatricesRef[0][0][1];
+	temp002 = worldMatricesRef[0][0][2];
+	temp100 = worldMatricesRef[1][0][0];
+	temp102 = worldMatricesRef[1][0][2];
+	temp200 = worldMatricesRef[2][0][0];
+	temp201 = worldMatricesRef[2][0][1];
+	temp202 = worldMatricesRef[2][0][2];
+
+	// not working
+	/*worldMatricesRef[0][0][0] = ;
+	worldMatricesRef[0][0][1] = ;
+	worldMatricesRef[0][0][2] = ;
+	worldMatricesRef[1][0][0] = ;
+	worldMatricesRef[1][0][2] = ;
+	worldMatricesRef[2][0][0] = ;
+	worldMatricesRef[2][0][1] = ;
+	worldMatricesRef[2][0][2] = ;*/
+}
+
+function counterClockwiseFrontFace() {
+	rotateFrontFace(-90);
+
+	let temp000, temp001, temp002, temp010, temp012, temp020, temp021, temp022;
+	temp000 = worldMatricesRef[0][0][0];
+	temp001 = worldMatricesRef[0][0][1];
+	temp002 = worldMatricesRef[0][0][2];
+	temp100 = worldMatricesRef[1][0][0];
+	temp102 = worldMatricesRef[1][0][2];
+	temp200 = worldMatricesRef[2][0][0];
+	temp201 = worldMatricesRef[2][0][1];
+	temp202 = worldMatricesRef[2][0][2];
+}
+
+function rotateFrontFace(deg) {
+	worldMatricesList[worldMatricesRef[0][0][0]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[0][0][0]], utils.MakeRotateZMatrix(deg));
+	worldMatricesList[worldMatricesRef[0][0][1]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[0][0][1]], utils.MakeRotateZMatrix(deg));
+	worldMatricesList[worldMatricesRef[0][0][2]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[0][0][2]], utils.MakeRotateZMatrix(deg));
+	worldMatricesList[worldMatricesRef[1][0][0]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[1][0][0]], utils.MakeRotateZMatrix(deg));
+	worldMatricesList[worldMatricesRef[1][0][2]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[1][0][2]], utils.MakeRotateZMatrix(deg));
+	worldMatricesList[worldMatricesRef[2][0][0]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[2][0][0]], utils.MakeRotateZMatrix(deg));
+	worldMatricesList[worldMatricesRef[2][0][1]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[2][0][1]], utils.MakeRotateZMatrix(deg));
+	worldMatricesList[worldMatricesRef[2][0][2]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[2][0][2]], utils.MakeRotateZMatrix(deg));
+}
+
+function clockwiseBackFace() {
+	rotateBackFace(-90);
+
+	let temp000, temp001, temp002, temp010, temp012, temp020, temp021, temp022;
+	temp000 = worldMatricesRef[0][2][0];
+	temp001 = worldMatricesRef[0][2][1];
+	temp002 = worldMatricesRef[0][2][2];
+	temp100 = worldMatricesRef[1][2][0];
+	temp102 = worldMatricesRef[1][2][2];
+	temp200 = worldMatricesRef[2][2][0];
+	temp201 = worldMatricesRef[2][2][1];
+	temp202 = worldMatricesRef[2][2][2];
+
+	// not working
+	/*worldMatricesRef[0][0][0] = ;
+	worldMatricesRef[0][0][1] = ;
+	worldMatricesRef[0][0][2] = ;
+	worldMatricesRef[1][0][0] = ;
+	worldMatricesRef[1][0][2] = ;
+	worldMatricesRef[2][0][0] = ;
+	worldMatricesRef[2][0][1] = ;
+	worldMatricesRef[2][0][2] = ;*/
+}
+
+function counterClockwiseBackFace() {
+	rotateBackFace(90);
+
+	let temp000, temp001, temp002, temp010, temp012, temp020, temp021, temp022;
+	temp000 = worldMatricesRef[0][2][0];
+	temp001 = worldMatricesRef[0][2][1];
+	temp002 = worldMatricesRef[0][2][2];
+	temp100 = worldMatricesRef[1][2][0];
+	temp102 = worldMatricesRef[1][2][2];
+	temp200 = worldMatricesRef[2][2][0];
+	temp201 = worldMatricesRef[2][2][1];
+	temp202 = worldMatricesRef[2][2][2];
+
+	// not working
+	/*worldMatricesRef[0][0][0] = ;
+	worldMatricesRef[0][0][1] = ;
+	worldMatricesRef[0][0][2] = ;
+	worldMatricesRef[1][0][0] = ;
+	worldMatricesRef[1][0][2] = ;
+	worldMatricesRef[2][0][0] = ;
+	worldMatricesRef[2][0][1] = ;
+	worldMatricesRef[2][0][2] = ;*/
 	
 }
 
-function rotateMiddle(){
+function rotateBackFace(deg) {
+	worldMatricesList[worldMatricesRef[0][2][0]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[0][2][0]], utils.MakeRotateZMatrix(deg));
+	worldMatricesList[worldMatricesRef[0][2][1]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[0][2][1]], utils.MakeRotateZMatrix(deg));
+	worldMatricesList[worldMatricesRef[0][2][2]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[0][2][2]], utils.MakeRotateZMatrix(deg));
+	worldMatricesList[worldMatricesRef[1][2][0]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[1][2][0]], utils.MakeRotateZMatrix(deg));
+	worldMatricesList[worldMatricesRef[1][2][2]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[1][2][2]], utils.MakeRotateZMatrix(deg));
+	worldMatricesList[worldMatricesRef[2][2][0]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[2][2][0]], utils.MakeRotateZMatrix(deg));
+	worldMatricesList[worldMatricesRef[2][2][1]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[2][2][1]], utils.MakeRotateZMatrix(deg));
+	worldMatricesList[worldMatricesRef[2][2][2]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[2][2][2]], utils.MakeRotateZMatrix(deg));
+}
 
+function clockwiseDownFace() {
+
+}
+
+function counterClockwiseDownFace() {
+	
+}
+
+function clockwiseUpFace() {
+
+}
+
+function counterClockwiseUpFace() {
+	
+}
+
+function rotateMiddle(rotation){
+	// the rotation must reassign centerCoordinates of each color center involved in the rotation
 }
 
 function animate(){
@@ -207,45 +502,45 @@ function drawScene() {
 	gl.clearColor(0.85, 0.85, 0.85, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 	
-	let count = 0;
+	/*let count = 0;
 	for(let i = 0; i < 3; i++)
 		for (let j = 0; j < 3; j++)
 			for (let k = 0; k < 3; k++) {
-				if (!(i === 1 && j === 1 && k === 1)) {
+				if (!(i === 1 && j === 1 && k === 1)) {*/
 					//console.log(count);
-					gl.useProgram(program);
-				
-					var perspectiveMatrix = utils.MakePerspective(30, gl.canvas.width/gl.canvas.height, 0.1, 100.0);
-					
-					cz = lookRadius * Math.cos(utils.degToRad(-angle)) * Math.cos(utils.degToRad(-elevation));
-					cx = lookRadius * Math.sin(utils.degToRad(-angle)) * Math.cos(utils.degToRad(-elevation));
-					cy = lookRadius * Math.sin(utils.degToRad(-elevation));
-					
-					var viewMatrix = utils.MakeView(cx, cy, cz, elevation,angle);
+	for (let i = 0; i < 26; i++) {
+		gl.useProgram(program);
+	
+		var perspectiveMatrix = utils.MakePerspective(30, gl.canvas.width/gl.canvas.height, 0.1, 100.0);
+		
+		cz = lookRadius * Math.cos(utils.degToRad(-angle)) * Math.cos(utils.degToRad(-elevation));
+		cx = lookRadius * Math.sin(utils.degToRad(-angle)) * Math.cos(utils.degToRad(-elevation));
+		cy = lookRadius * Math.sin(utils.degToRad(-elevation));
+		
+		var viewMatrix = utils.MakeView(cx, cy, cz, elevation,angle);
 
-					var matrixLocation = gl.getUniformLocation(program, "matrix");
-					var normalMatrixPositionHandle = gl.getUniformLocation(program, 'nMatrix');
-					var worldMatrixLocation = gl.getUniformLocation(program, 'worldMatrix');
-					
-					var normalMatrix = utils.invertMatrix(utils.transposeMatrix(cubeWorldMatrices[i][j][k]));
+		var matrixLocation = gl.getUniformLocation(program, "matrix");
+		var normalMatrixPositionHandle = gl.getUniformLocation(program, 'nMatrix');
+		var worldMatrixLocation = gl.getUniformLocation(program, 'worldMatrix');
+		
+		var normalMatrix = utils.invertMatrix(utils.transposeMatrix(worldMatricesList[i]));
 
-					var viewWorldMatrix = utils.multiplyMatrices(viewMatrix,cubeWorldMatrices[i][j][k]);
-					var projectionMatrix = utils.multiplyMatrices(perspectiveMatrix, viewWorldMatrix);
-					
-					gl.uniformMatrix4fv(matrixLocation , gl.FALSE, utils.transposeMatrix(projectionMatrix));
-					gl.uniformMatrix4fv(normalMatrixPositionHandle , gl.FALSE, utils.transposeMatrix(normalMatrix));
-					gl.uniformMatrix4fv(worldMatrixLocation , gl.FALSE, utils.transposeMatrix(cubeWorldMatrices[i][j][k]));
+		var viewWorldMatrix = utils.multiplyMatrices(viewMatrix, worldMatricesList[i]);
+		var projectionMatrix = utils.multiplyMatrices(perspectiveMatrix, viewWorldMatrix);
+		
+		gl.uniformMatrix4fv(matrixLocation , gl.FALSE, utils.transposeMatrix(projectionMatrix));
+		gl.uniformMatrix4fv(normalMatrixPositionHandle , gl.FALSE, utils.transposeMatrix(normalMatrix));
+		gl.uniformMatrix4fv(worldMatrixLocation , gl.FALSE, utils.transposeMatrix(worldMatricesList[i]));
 
-					gl.bindVertexArray(vaos[count]);
+		gl.bindVertexArray(vaos[i]);
 
-					gl.activeTexture(gl.TEXTURE0);
-					gl.bindTexture(gl.TEXTURE_2D, texture);
-					gl.uniform1i(textureFileHandle, 0);
-					
-					gl.drawElements(gl.TRIANGLES, models[count].indices.length, gl.UNSIGNED_SHORT, 0);
-					count++;
-				}
-			}
+		gl.activeTexture(gl.TEXTURE0);
+		gl.bindTexture(gl.TEXTURE_2D, texture);
+		gl.uniform1i(textureFileHandle, 0);
+		
+		gl.drawElements(gl.TRIANGLES, models[i].indices.length, gl.UNSIGNED_SHORT, 0);
+	}
+
 	window.requestAnimationFrame(drawScene);
 }
 
@@ -257,8 +552,8 @@ async function init() {
 	canvas.addEventListener("mouseup", doMouseUp, false);
 	canvas.addEventListener("mousemove", doMouseMove, false);
 	canvas.addEventListener("mousewheel", doMouseWheel, false);
-	canvas.addEventListener('keydown', keyFunctionDown);
-	canvas.addEventListener('keyup', keyFunctionUp);
+	document.addEventListener('keydown', keyFunctionDown);
+	document.addEventListener('keyup', keyFunctionUp);
 
 
     gl = canvas.getContext("webgl2");
@@ -297,27 +592,61 @@ async function init() {
     baseDir = window.location.href.replace(page, '');
     shaderDir = baseDir + "shaders/";
 
-    for (let i = 0; i < 3; i++) {
-    	if (!cubeWorldMatrices[i]) {
-    		cubeWorldMatrices[i] = [];
+    for (let i = 0, count = 0; i < 3; i++) {
+    	if (!worldMatricesRef[i]) {
+    		worldMatricesRef[i] = [];
     	}
     	for (let j = 0; j < 3; j++) {
-	    	if (!cubeWorldMatrices[i][j]) {
-	    		cubeWorldMatrices[i][j] = [];
+	    	if (!worldMatricesRef[i][j]) {
+	    		worldMatricesRef[i][j] = [];
 	    	}
     		for (let k = 0; k < 3; k++) {
-    			if (!cubeWorldMatrices[i][j][k]) {
-		    		cubeWorldMatrices[i][j][k] = [];
+    			if (!worldMatricesRef[i][j][k]) {
+		    		worldMatricesRef[i][j][k] = [];
 		    	}
     			if (i === 1 && j === 1 && k === 1) {
-					cubeWorldMatrices[i][j][k] = "none";
+					worldMatricesRef[i][j][k] = "none";
     			} else {
 					var worldMatrix = utils.MakeWorld(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.7);
-					cubeWorldMatrices[i][j][k] = worldMatrix;
+					worldMatricesList[count] = worldMatrix;
+					worldMatricesRef[i][j][k] = count;
+					count++;
     			}
     		}
     	}
 	}
+
+	centerCoordinates.white = {
+		i: 1,
+		j: 1,
+		k: 2
+	};
+	centerCoordinates.yellow = {
+		i: 0,
+		j: 1,
+		k: 1
+	};
+	centerCoordinates.blue = {
+		i: 1,
+		j: 1,
+		k: 0
+	};
+	centerCoordinates.green = {
+		i: 1,
+		j: 0,
+		k: 1
+	};
+	centerCoordinates.red = {
+		i: 2,
+		j: 1,
+		k: 1
+	};
+	centerCoordinates.orange = {
+		i: 1,
+		j: 2,
+		k: 1
+	};
+
     await utils.loadFiles([shaderDir + "vs.glsl", shaderDir + "fs.glsl"], function (shaderText) {
 		var vertexShader = utils.createShader(gl, gl.VERTEX_SHADER, shaderText[0]);
 		var fragmentShader = utils.createShader(gl, gl.FRAGMENT_SHADER, shaderText[1]);
@@ -327,48 +656,47 @@ async function init() {
 	/*
 	cubeWorldMatrices[i][j][k]
 	
-	i-> TOP=0 MEDIUM=1 BOTTOM=2
-	j-> LEFT=0 CENTER=1 RIGHT=2
-	k-> FRONT=0 BETWEEN=1 BACK=2
+	i-> RIGHT=0 CENTER=1 LEFT=2
+	j-> FRONT=0 BETWEEN=1 BACK=2
+	k-> BOTTOM=0 MEDIUM=1 TOP=2
 	*/
+    
+	for (let c in cubes) {
+        models[c] = await importObject(cubes[c]);
+    }
 	
 	
 	/*
 	00 - 01 - 02 -> column "right"
 	10 - 11 - 12 -> column "in the middle"
 	20 - 21 - 22 -> column "left"
-	*/
-    
-	for (let c in cubes) {
-        models[c] = await importObject(cubes[c]);
-    }
 
-    /*models[0] = await importObject("Cube00_B"); //green face, bottom right
-    models[1] = await importObject("Cube00_M"); //green face, medium right
-    models[2] = await importObject("Cube00"); //green face, top right
-    models[3] = await importObject("Cube01_B"); //yellow face, bottom center
-    models[4] = await importObject("Cube01_M"); //yellow face, medium center
-    models[5] = await importObject("Cube01"); //yellow face, top center
-    models[6] = await importObject("Cube02_B"); //yellow face, bottom right
-    models[7] = await importObject("Cube02_M"); //yellow face, medium right
-    models[8] = await importObject("Cube02"); //yellow face, top right
-    models[9] = await importObject("Cube10_B"); //green face, bottom center 
-    models[10] = await importObject("Cube10_M"); //green face, medium center
-    models[11] = await importObject("Cube10"); //green face, top medium
-    models[12] = await importObject("Cube11_B"); //blue face, bottom center
-    models[13] = await importObject("Cube11"); //white face, medium center
-    models[14] = await importObject("Cube12_B"); //blue face, bottom center
-    models[15] = await importObject("Cube12_M"); //orange face, medium center
-    models[16] = await importObject("Cube12"); //white face, top center
-    models[17] = await importObject("Cube20_B"); //green face, bottom left
-    models[18] = await importObject("Cube20_M"); //green face, medium left
-    models[19] = await importObject("Cube20"); //green face, top left
-    models[20] = await importObject("Cube21_B"); //blue face, medium left
-    models[21] = await importObject("Cube21_M"); //red face, medium center
-    models[22] = await importObject("Cube21"); //white face, medium left 
-    models[23] = await importObject("Cube22_B"); //blue face, bottom left
-    models[24] = await importObject("Cube22_M"); //red face, medium left
-    models[25] = await importObject("Cube22"); //white face, top left*/
+    Cube00_B --> green face, bottom right
+    Cube00_M --> green face, medium right
+    Cube00 --> green face, top right
+    Cube01_B --> yellow face, bottom center
+    Cube01_M --> yellow face, medium center
+    Cube01 --> yellow face, top center
+    Cube02_B --> yellow face, bottom right
+    Cube02_M --> yellow face, medium right
+    Cube02 --> yellow face, top right
+    Cube10_B --> green face, bottom center 
+    Cube10_M --> green face, medium center
+    Cube10 --> green face, top medium
+    Cube11_B --> blue face, bottom center
+    Cube11 --> white face, medium center
+    Cube12_B --> blue face, bottom center
+    Cube12_M --> orange face, medium center
+    Cube12 --> white face, top center
+    Cube20_B --> green face, bottom left
+    Cube20_M --> green face, medium left
+    Cube20 --> green face, top left
+    Cube21_B --> blue face, medium left
+    Cube21_M --> red face, medium center
+    Cube21 --> white face, medium left 
+    Cube22_B --> blue face, bottom left
+    Cube22_M --> red face, medium left
+    Cube22 --> white face, top left*/
 
     main();
 }
