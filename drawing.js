@@ -1,30 +1,23 @@
-var programs = new Array();
 var gl;
 var baseDir;
 var shaderDir;
 var image;
 
 var models = new Array();
-
 var vaos = new Array();
 
-var positionAttributeLocation;
+var program;
 
+var cubeWorldMatrices =  new Array();
+cubeWorldMatrices[0] = new Array();
+cubeWorldMatrices[0][0] = new Array();
+
+var positionAttributeLocation;
 var normalsAttributeLocation;
 
 var uvLocation;
-
 var textureFileHandle;
-
 var texture;
-
-var Tx = 0.0;
-var Ty = 0.0;
-var Tz = 0.0;
-var Rx = 0.0;
-var Ry = 0.0;
-var Rz = 0.0;
-var S  = 0.7;
 
 var cx = 4.5;
 var cy = 0.0;
@@ -42,11 +35,13 @@ function doMouseDown(event) {
 	lastMouseY = event.pageY;
 	mouseState = true;
 }
+
 function doMouseUp(event) {
 	lastMouseX = -100;
 	lastMouseY = -100;
 	mouseState = false;
 }
+
 function doMouseMove(event) {
 	if(mouseState) {
 		var dx = event.pageX - lastMouseX;
@@ -68,6 +63,35 @@ function doMouseWheel(event) {
 	}
 }
 
+var keyFunctionDown = function(e) {
+	switch(e.keyCode) {
+  		case 87:
+			console.log("KeyUp - White");
+			break;
+	  	case 89:
+			console.log("KeyUp - Yellow");
+			break;
+	  	case 66:
+			console.log("KeyUp - Blue");
+			break;
+	  	case 71:
+			console.log("KeyUp - Green");
+			break;
+	  	case 82:
+			console.log("KeyUp - Red");
+			break;
+	  	case 79:
+			console.log("KeyUp - Orange");
+			break;
+		case 39:
+			console.log("KeyUp - Right");
+			break;
+	  	case 37:
+			console.log("KeyUp - Left");
+			break;	
+	}
+}
+
 async function importObject(name) { 
     var objStr = await utils.get_objstr("assets/" + name + ".obj");
     var objModel = new OBJ.Mesh(objStr);
@@ -82,13 +106,13 @@ function main() {
     gl.enable(gl.DEPTH_TEST);
     //gl.enable(gl.CULL_FACE);
 		
-	positionAttributeLocation = gl.getAttribLocation(programs[0], "a_position");
-	uvLocation = gl.getAttribLocation(programs[0], "a_uv");
+	positionAttributeLocation = gl.getAttribLocation(program, "a_position");
+	uvLocation = gl.getAttribLocation(program, "a_uv");
 	//normalsAttributeLocation = gl.getAttribLocation(programs[0], "a_normal");
-	textureFileHandle = gl.getUniformLocation(programs[0], "a_texture");
+	textureFileHandle = gl.getUniformLocation(program, "a_texture");
 	
 	for(let i = 0; i < 26; i++){
-		vaos[i]=gl.createVertexArray();
+		vaos[i] = gl.createVertexArray();
 		gl.bindVertexArray(vaos[i]);
 
 		var positionBuffer = gl.createBuffer();
@@ -131,42 +155,48 @@ function drawScene() {
 	gl.clearColor(0.85, 0.85, 0.85, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 	
-	for(let i = 0; i < 26; i++){
-		gl.useProgram(programs[i]);
-		
-		var worldMatrix = utils.MakeWorld(Tx, Ty, Tz, Rx, Ry, Rz, S);
-		var perspectiveMatrix = utils.MakePerspective(30, gl.canvas.width/gl.canvas.height, 0.1, 100.0);
-		
-		cz = lookRadius * Math.cos(utils.degToRad(-angle)) * Math.cos(utils.degToRad(-elevation));
-		cx = lookRadius * Math.sin(utils.degToRad(-angle)) * Math.cos(utils.degToRad(-elevation));
-		cy = lookRadius * Math.sin(utils.degToRad(-elevation));
-		
-		var viewMatrix = utils.MakeView(cx, cy, cz, elevation,angle);
+	let count = 0;
+	for(let i = 0; i < 3; i++)
+		for (let j = 0; j < 3; j++)
+			for (let k = 0; k < 3; k++) {
+				if (!(i === 1 && j === 1 && k === 1)) {
+					//console.log(count);
+					gl.useProgram(program);
+				
+					var perspectiveMatrix = utils.MakePerspective(30, gl.canvas.width/gl.canvas.height, 0.1, 100.0);
+					
+					cz = lookRadius * Math.cos(utils.degToRad(-angle)) * Math.cos(utils.degToRad(-elevation));
+					cx = lookRadius * Math.sin(utils.degToRad(-angle)) * Math.cos(utils.degToRad(-elevation));
+					cy = lookRadius * Math.sin(utils.degToRad(-elevation));
+					
+					var viewMatrix = utils.MakeView(cx, cy, cz, elevation,angle);
 
-		var matrixLocation = gl.getUniformLocation(programs[i], "matrix");
-		var normalMatrixPositionHandle = gl.getUniformLocation(programs[i], 'nMatrix');
-		var worldMatrixLocation = gl.getUniformLocation(programs[i], 'worldMatrix');
-		
-		var normalMatrix = utils.invertMatrix(utils.transposeMatrix(worldMatrix));
+					var matrixLocation = gl.getUniformLocation(program, "matrix");
+					var normalMatrixPositionHandle = gl.getUniformLocation(program, 'nMatrix');
+					var worldMatrixLocation = gl.getUniformLocation(program, 'worldMatrix');
+					
+					var normalMatrix = utils.invertMatrix(utils.transposeMatrix(cubeWorldMatrices[i][j][k]));
 
-		var viewWorldMatrix = utils.multiplyMatrices(viewMatrix,worldMatrix);
-		var projectionMatrix = utils.multiplyMatrices(perspectiveMatrix, viewWorldMatrix);
-		
-		gl.uniformMatrix4fv(matrixLocation , gl.FALSE, utils.transposeMatrix(projectionMatrix));
-		gl.uniformMatrix4fv(normalMatrixPositionHandle , gl.FALSE, utils.transposeMatrix(normalMatrix));
-		gl.uniformMatrix4fv(worldMatrixLocation , gl.FALSE, utils.transposeMatrix(worldMatrix));
+					var viewWorldMatrix = utils.multiplyMatrices(viewMatrix,cubeWorldMatrices[i][j][k]);
+					var projectionMatrix = utils.multiplyMatrices(perspectiveMatrix, viewWorldMatrix);
+					
+					gl.uniformMatrix4fv(matrixLocation , gl.FALSE, utils.transposeMatrix(projectionMatrix));
+					gl.uniformMatrix4fv(normalMatrixPositionHandle , gl.FALSE, utils.transposeMatrix(normalMatrix));
+					gl.uniformMatrix4fv(worldMatrixLocation , gl.FALSE, utils.transposeMatrix(cubeWorldMatrices[i][j][k]));
 
-		gl.bindVertexArray(vaos[i]);
+					gl.bindVertexArray(vaos[count]);
 
-		gl.activeTexture(gl.TEXTURE0);
-		gl.bindTexture(gl.TEXTURE_2D, texture);
-		gl.uniform1i(textureFileHandle, 0);
-		
-		gl.drawElements(gl.TRIANGLES, models[i].indices.length, gl.UNSIGNED_SHORT, 0);
-	}
+					gl.activeTexture(gl.TEXTURE0);
+					gl.bindTexture(gl.TEXTURE_2D, texture);
+					gl.uniform1i(textureFileHandle, 0);
+					
+					gl.drawElements(gl.TRIANGLES, models[i].indices.length, gl.UNSIGNED_SHORT, 0);
+					count++;
+				}
+			}
 	
 	window.requestAnimationFrame(drawScene);
-  }
+}
 
 async function init() {
     
@@ -185,7 +215,7 @@ async function init() {
 	
     utils.resizeCanvasToDisplaySize(gl.canvas);
 
-    image=new Image();
+    image = new Image();
     image.src = "assets/Rubiks Cube.png";
     image.onload = function(e){
     	texture = gl.createTexture();
@@ -211,16 +241,34 @@ async function init() {
     var path = window.location.pathname;
     var page = path.split("/").pop();
     baseDir = window.location.href.replace(page, '');
-    shaderDir = baseDir+"shaders/";
+    shaderDir = baseDir + "shaders/";
 
-    for (let i = 0; i < 26; i++) {
-    	await utils.loadFiles([shaderDir + "vs.glsl", shaderDir + "fs.glsl"], function (shaderText) {
-			var vertexShader = utils.createShader(gl, gl.VERTEX_SHADER, shaderText[0]);
-			var fragmentShader = utils.createShader(gl, gl.FRAGMENT_SHADER, shaderText[1]);
-
-			programs[i] = utils.createProgram(gl, vertexShader, fragmentShader);
-		});	
-    }
+    for (let i = 0; i < 3; i++) {
+    	if (!cubeWorldMatrices[i]) {
+    		cubeWorldMatrices[i] = [];
+    	}
+    	for (let j = 0; j < 3; j++) {
+	    	if (!cubeWorldMatrices[i][j]) {
+	    		cubeWorldMatrices[i][j] = [];
+	    	}
+    		for (let k = 0; k < 3; k++) {
+    			if (!cubeWorldMatrices[i][j][k]) {
+		    		cubeWorldMatrices[i][j][k] = [];
+		    	}
+    			if (i === 1 && j === 1 && k === 1) {
+					cubeWorldMatrices[i][j][k] = "none";
+    			} else {
+					var worldMatrix = utils.MakeWorld(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.7);
+					cubeWorldMatrices[i][j][k] = worldMatrix;
+    			}
+    		}
+    	}
+	}
+    await utils.loadFiles([shaderDir + "vs.glsl", shaderDir + "fs.glsl"], function (shaderText) {
+		var vertexShader = utils.createShader(gl, gl.VERTEX_SHADER, shaderText[0]);
+		var fragmentShader = utils.createShader(gl, gl.FRAGMENT_SHADER, shaderText[1]);
+		program = utils.createProgram(gl, vertexShader, fragmentShader);
+	});
 
     models[0] = await importObject("Cube00_B");
     models[1] = await importObject("Cube00_M");
