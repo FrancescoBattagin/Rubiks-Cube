@@ -1,4 +1,4 @@
-var program;
+var programs = new Array();
 var gl;
 var baseDir;
 var shaderDir;
@@ -82,10 +82,10 @@ function main() {
     gl.enable(gl.DEPTH_TEST);
     //gl.enable(gl.CULL_FACE);
 		
-	positionAttributeLocation = gl.getAttribLocation(program, "a_position");
-	uvLocation = gl.getAttribLocation(program, "a_uv");
-	//normalsAttributeLocation = gl.getAttribLocation(program, "a_normal");
-	textureFileHandle= gl.getUniformLocation(program, "a_texture");
+	positionAttributeLocation = gl.getAttribLocation(programs[0], "a_position");
+	uvLocation = gl.getAttribLocation(programs[0], "a_uv");
+	//normalsAttributeLocation = gl.getAttribLocation(programs[0], "a_normal");
+	textureFileHandle = gl.getUniformLocation(programs[0], "a_texture");
 	
 	for(let i = 0; i < 26; i++){
 		vaos[i]=gl.createVertexArray();
@@ -123,39 +123,39 @@ function animate(){
 	
 }
 
-//fare 26 programmi per fare le animazioni
+//fare 26 programsmi per fare le animazioni
 function drawScene() {
 	
 	animate();
 	
 	gl.clearColor(0.85, 0.85, 0.85, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-		
-	gl.useProgram(program);
-	
-	var worldMatrix = utils.MakeWorld(Tx, Ty, Tz, Rx, Ry, Rz, S);
-	var perspectiveMatrix = utils.MakePerspective(30, gl.canvas.width/gl.canvas.height, 0.1, 100.0);
-	
-	cz = lookRadius * Math.cos(utils.degToRad(-angle)) * Math.cos(utils.degToRad(-elevation));
-	cx = lookRadius * Math.sin(utils.degToRad(-angle)) * Math.cos(utils.degToRad(-elevation));
-	cy = lookRadius * Math.sin(utils.degToRad(-elevation));
-	
-	var viewMatrix = utils.MakeView(cx, cy, cz, elevation,angle);
-
-	var matrixLocation = gl.getUniformLocation(program, "matrix");
-	var normalMatrixPositionHandle = gl.getUniformLocation(program, 'nMatrix');
-	var worldMatrixLocation = gl.getUniformLocation(program, 'worldMatrix');
-	
-	var normalMatrix = utils.invertMatrix(utils.transposeMatrix(worldMatrix));
-
-	var viewWorldMatrix = utils.multiplyMatrices(viewMatrix,worldMatrix);
-	var projectionMatrix = utils.multiplyMatrices(perspectiveMatrix, viewWorldMatrix);
-	
-	gl.uniformMatrix4fv(matrixLocation , gl.FALSE, utils.transposeMatrix(projectionMatrix));
-	gl.uniformMatrix4fv(normalMatrixPositionHandle , gl.FALSE, utils.transposeMatrix(normalMatrix));
-	gl.uniformMatrix4fv(worldMatrixLocation , gl.FALSE, utils.transposeMatrix(worldMatrix));
 	
 	for(let i = 0; i < 26; i++){
+		gl.useProgram(programs[i]);
+		
+		var worldMatrix = utils.MakeWorld(Tx, Ty, Tz, Rx, Ry, Rz, S);
+		var perspectiveMatrix = utils.MakePerspective(30, gl.canvas.width/gl.canvas.height, 0.1, 100.0);
+		
+		cz = lookRadius * Math.cos(utils.degToRad(-angle)) * Math.cos(utils.degToRad(-elevation));
+		cx = lookRadius * Math.sin(utils.degToRad(-angle)) * Math.cos(utils.degToRad(-elevation));
+		cy = lookRadius * Math.sin(utils.degToRad(-elevation));
+		
+		var viewMatrix = utils.MakeView(cx, cy, cz, elevation,angle);
+
+		var matrixLocation = gl.getUniformLocation(programs[i], "matrix");
+		var normalMatrixPositionHandle = gl.getUniformLocation(programs[i], 'nMatrix');
+		var worldMatrixLocation = gl.getUniformLocation(programs[i], 'worldMatrix');
+		
+		var normalMatrix = utils.invertMatrix(utils.transposeMatrix(worldMatrix));
+
+		var viewWorldMatrix = utils.multiplyMatrices(viewMatrix,worldMatrix);
+		var projectionMatrix = utils.multiplyMatrices(perspectiveMatrix, viewWorldMatrix);
+		
+		gl.uniformMatrix4fv(matrixLocation , gl.FALSE, utils.transposeMatrix(projectionMatrix));
+		gl.uniformMatrix4fv(normalMatrixPositionHandle , gl.FALSE, utils.transposeMatrix(normalMatrix));
+		gl.uniformMatrix4fv(worldMatrixLocation , gl.FALSE, utils.transposeMatrix(worldMatrix));
+
 		gl.bindVertexArray(vaos[i]);
 
 		gl.activeTexture(gl.TEXTURE0);
@@ -213,12 +213,14 @@ async function init() {
     baseDir = window.location.href.replace(page, '');
     shaderDir = baseDir+"shaders/";
 
-	await utils.loadFiles([shaderDir + "vs.glsl", shaderDir + "fs.glsl"], function (shaderText) {
-		var vertexShader = utils.createShader(gl, gl.VERTEX_SHADER, shaderText[0]);
-		var fragmentShader = utils.createShader(gl, gl.FRAGMENT_SHADER, shaderText[1]);
+    for (let i = 0; i < 26; i++) {
+    	await utils.loadFiles([shaderDir + "vs.glsl", shaderDir + "fs.glsl"], function (shaderText) {
+			var vertexShader = utils.createShader(gl, gl.VERTEX_SHADER, shaderText[0]);
+			var fragmentShader = utils.createShader(gl, gl.FRAGMENT_SHADER, shaderText[1]);
 
-		program = utils.createProgram(gl, vertexShader, fragmentShader);
-	});
+			programs[i] = utils.createProgram(gl, vertexShader, fragmentShader);
+		});	
+    }
 
     models[0] = await importObject("Cube00_B");
     models[1] = await importObject("Cube00_M");
