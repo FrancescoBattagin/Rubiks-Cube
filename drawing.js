@@ -241,48 +241,65 @@ function rotateFace(rotation){
 	}
 }
 
+//test rotation -> complete rotation after n*sleep(), with n = # intermediate steps  (see temp_deg)
 function rightFace(deg) {
-	rotateRightFace(deg);
-
-	let temp000, temp001, temp002, temp010, temp012, temp020, temp021, temp022;
-	temp000 = worldMatricesRef[0][0][0];
-	temp001 = worldMatricesRef[0][0][1];
-	temp002 = worldMatricesRef[0][0][2];
-	temp010 = worldMatricesRef[0][1][0];
-	temp012 = worldMatricesRef[0][1][2];
-	temp020 = worldMatricesRef[0][2][0];
-	temp021 = worldMatricesRef[0][2][1];
-	temp022 = worldMatricesRef[0][2][2];
-
-	//fix this
-	if(deg===-90){
-		console.log(worldMatricesRef);
-		worldMatricesRef[0][0][0] = temp020;
-		worldMatricesRef[0][0][1] = temp010;
-		worldMatricesRef[0][0][2] = temp000;
-		worldMatricesRef[0][1][0] = temp021;
-		worldMatricesRef[0][1][2] = temp001;
-		worldMatricesRef[0][2][0] = temp022;
-		worldMatricesRef[0][2][1] = temp012;
-		worldMatricesRef[0][2][2] = temp002;
+	console.log(deg);
+	console.log(Math.sign(deg))
+	if(Math.sign(deg)>0){
+		for(temp_deg = 0; temp_deg <= deg; temp_deg+=2){
+			rotateRightFace(temp_deg);
+			let temp000, temp001, temp002, temp010, temp012, temp020, temp021, temp022;
+			temp000 = worldMatricesRef[0][0][0];
+			temp001 = worldMatricesRef[0][0][1];
+			temp002 = worldMatricesRef[0][0][2];
+			temp010 = worldMatricesRef[0][1][0];
+			temp012 = worldMatricesRef[0][1][2];
+			temp020 = worldMatricesRef[0][2][0];
+			temp021 = worldMatricesRef[0][2][1];
+			temp022 = worldMatricesRef[0][2][2];
+			
+			worldMatricesRef[0][0][0] = temp002;
+			worldMatricesRef[0][0][1] = temp012;
+			worldMatricesRef[0][0][2] = temp022;
+			worldMatricesRef[0][1][0] = temp001;
+			worldMatricesRef[0][1][2] = temp021;
+			worldMatricesRef[0][2][0] = temp000;
+			worldMatricesRef[0][2][1] = temp010;
+			worldMatricesRef[0][2][2] = temp020;	
+			sleep(200);
+			drawScene();
+		}
 		console.log(worldMatricesRef);
 	}
 	else{
-		console.log(worldMatricesRef);
-		worldMatricesRef[0][0][0] = temp002;
-		worldMatricesRef[0][0][1] = temp012;
-		worldMatricesRef[0][0][2] = temp022;
-		worldMatricesRef[0][1][0] = temp001;
-		worldMatricesRef[0][1][2] = temp021;
-		worldMatricesRef[0][2][0] = temp000;
-		worldMatricesRef[0][2][1] = temp010;
-		worldMatricesRef[0][2][2] = temp020;
-		console.log(worldMatricesRef);	
+		for(temp_deg = 0; temp_deg >= deg; temp_deg-=2){
+			rotateRightFace(temp_deg);
+			
+			let temp000, temp001, temp002, temp010, temp012, temp020, temp021, temp022;
+			temp000 = worldMatricesRef[0][0][0];
+			temp001 = worldMatricesRef[0][0][1];
+			temp002 = worldMatricesRef[0][0][2];
+			temp010 = worldMatricesRef[0][1][0];
+			temp012 = worldMatricesRef[0][1][2];
+			temp020 = worldMatricesRef[0][2][0];
+			temp021 = worldMatricesRef[0][2][1];
+			temp022 = worldMatricesRef[0][2][2];
 
+			worldMatricesRef[0][0][0] = temp020;
+			worldMatricesRef[0][0][1] = temp010;
+			worldMatricesRef[0][0][2] = temp000;
+			worldMatricesRef[0][1][0] = temp021;
+			worldMatricesRef[0][1][2] = temp001;
+			worldMatricesRef[0][2][0] = temp022;
+			worldMatricesRef[0][2][1] = temp012;
+			worldMatricesRef[0][2][2] = temp002;
+			
+			sleep(200);
+			drawScene();
+		}
+		console.log(worldMatricesRef);
 	}
 	//else: add counterclockwise reassignment
-
-
 }
 
 function rotateRightFace(deg) {
@@ -769,5 +786,17 @@ async function init() {
 
     main();
 }
+
+
+function sleep(milliseconds) {
+  const date = Date.now();
+  let currentDate = null;
+  do {
+    currentDate = Date.now();
+  } while (currentDate - date < milliseconds);
+}
+
+
+
 
 window.onload = init;
