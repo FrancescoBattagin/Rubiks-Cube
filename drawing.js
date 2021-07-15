@@ -382,9 +382,34 @@ function frontFace(deg) {
 	temp200 = worldMatricesRef[2][0][0];
 	temp201 = worldMatricesRef[2][0][1];
 	temp202 = worldMatricesRef[2][0][2];
+	
+	if(deg>0){
+		
 
-	//if clockwise: reassign worldMatricesRef related to moved cubes
-	//else: add counterclockwise reassignment
+			worldMatricesRef[0][0][0]=temp200;
+		worldMatricesRef[0][0][1]=temp100;
+		worldMatricesRef[0][0][2]=temp000;
+		worldMatricesRef[1][0][0]=temp201;
+		worldMatricesRef[1][0][2]=temp001;
+		worldMatricesRef[2][0][0]=temp202;
+		worldMatricesRef[2][0][1]=temp102;
+		worldMatricesRef[2][0][2]=temp002;
+		
+		
+		
+		
+	}else{
+	
+				worldMatricesRef[0][0][0]=temp002;
+		worldMatricesRef[0][0][1]=temp102;
+		worldMatricesRef[0][0][2]=temp202;
+		worldMatricesRef[1][0][0]=temp001;
+		worldMatricesRef[1][0][2]=temp201;
+		worldMatricesRef[2][0][0]=temp000;
+		worldMatricesRef[2][0][1]=temp100;
+		worldMatricesRef[2][0][2]=temp200;
+	}
+
 }
 
 function rotateFrontFace(deg) {
