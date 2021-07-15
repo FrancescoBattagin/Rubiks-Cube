@@ -245,10 +245,8 @@ function rotateFace(rotation){
 function rightFace(deg) {
 	console.log(deg);
 	console.log(Math.sign(deg))
-	if(Math.sign(deg)>0){
-		for(temp_deg = 0; temp_deg <= deg; temp_deg+=2){
-			rotateRightFace(temp_deg);
-			let temp000, temp001, temp002, temp010, temp012, temp020, temp021, temp022;
+	
+	let temp000, temp001, temp002, temp010, temp012, temp020, temp021, temp022;
 			temp000 = worldMatricesRef[0][0][0];
 			temp001 = worldMatricesRef[0][0][1];
 			temp002 = worldMatricesRef[0][0][2];
@@ -257,6 +255,19 @@ function rightFace(deg) {
 			temp020 = worldMatricesRef[0][2][0];
 			temp021 = worldMatricesRef[0][2][1];
 			temp022 = worldMatricesRef[0][2][2];
+			
+	if(Math.sign(deg)>0){
+		/*for(temp_deg = 0; temp_deg <= deg; temp_deg+=2){*/
+			rotateRightFace(deg); //temp_deg
+			/*let temp000, temp001, temp002, temp010, temp012, temp020, temp021, temp022;
+			temp000 = worldMatricesRef[0][0][0];
+			temp001 = worldMatricesRef[0][0][1];
+			temp002 = worldMatricesRef[0][0][2];
+			temp010 = worldMatricesRef[0][1][0];
+			temp012 = worldMatricesRef[0][1][2];
+			temp020 = worldMatricesRef[0][2][0];
+			temp021 = worldMatricesRef[0][2][1];
+			temp022 = worldMatricesRef[0][2][2];*/
 			
 			worldMatricesRef[0][0][0] = temp002;
 			worldMatricesRef[0][0][1] = temp012;
@@ -266,16 +277,16 @@ function rightFace(deg) {
 			worldMatricesRef[0][2][0] = temp000;
 			worldMatricesRef[0][2][1] = temp010;
 			worldMatricesRef[0][2][2] = temp020;	
-			sleep(200);
-			drawScene();
+			//sleep(200);
+			//drawScene();
 		}
-		console.log(worldMatricesRef);
-	}
+		//console.log(worldMatricesRef);
+	//}
 	else{
-		for(temp_deg = 0; temp_deg >= deg; temp_deg-=2){
-			rotateRightFace(temp_deg);
+		//for(temp_deg = 0; temp_deg >= deg; temp_deg-=2){
+			rotateRightFace(deg);
 			
-			let temp000, temp001, temp002, temp010, temp012, temp020, temp021, temp022;
+			/*let temp000, temp001, temp002, temp010, temp012, temp020, temp021, temp022;
 			temp000 = worldMatricesRef[0][0][0];
 			temp001 = worldMatricesRef[0][0][1];
 			temp002 = worldMatricesRef[0][0][2];
@@ -283,7 +294,7 @@ function rightFace(deg) {
 			temp012 = worldMatricesRef[0][1][2];
 			temp020 = worldMatricesRef[0][2][0];
 			temp021 = worldMatricesRef[0][2][1];
-			temp022 = worldMatricesRef[0][2][2];
+			temp022 = worldMatricesRef[0][2][2];*/
 
 			worldMatricesRef[0][0][0] = temp020;
 			worldMatricesRef[0][0][1] = temp010;
@@ -298,8 +309,7 @@ function rightFace(deg) {
 			drawScene();
 		}
 		console.log(worldMatricesRef);
-	}
-	//else: add counterclockwise reassignment
+	//}
 }
 
 function rotateRightFace(deg) {
@@ -325,9 +335,28 @@ function leftFace(deg) {
 	temp020 = worldMatricesRef[2][2][0];
 	temp021 = worldMatricesRef[2][2][1];
 	temp022 = worldMatricesRef[2][2][2];
+	
+	if(deg>0){
+		worldMatricesRef[2][0][0]=temp020;
+		worldMatricesRef[2][0][1]=temp010;
+		worldMatricesRef[2][0][2]=temp000;
+		worldMatricesRef[2][1][0]=temp021;
+		worldMatricesRef[2][1][2]=temp001;
+		worldMatricesRef[2][2][0]=temp022;
+		worldMatricesRef[2][2][1]=temp012;
+		worldMatricesRef[2][2][2]=temp002;
+		
+	}else{
+		worldMatricesRef[2][0][0]=temp002;
+		worldMatricesRef[2][0][1]=temp012;
+		worldMatricesRef[2][0][2]=temp022;
+		worldMatricesRef[2][1][0]=temp001;
+		worldMatricesRef[2][1][2]=temp021;
+		worldMatricesRef[2][2][0]=temp000;
+		worldMatricesRef[2][2][1]=temp010;
+		worldMatricesRef[2][2][2]=temp020;
+	}
 
-	//if clockwise: reassign worldMatricesRef related to moved cubes
-	//else: add counterclockwise reassignment
 }
 
 function rotateLeftFace(deg) {
