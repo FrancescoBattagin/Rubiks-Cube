@@ -17,6 +17,9 @@ var centerCoordinates = {};
 
 var positionAttributeLocation;
 var normalsAttributeLocation;
+var lightDirectionHandle;
+var lightColorHandle;
+
 
 var uvLocation;
 var textureFileHandle;
@@ -38,6 +41,16 @@ var lookRadius = 23.0;
 
 var mouseState = false;
 var lastMouseX = -100, lastMouseY = -100;
+
+ var dirLightAlpha = -utils.degToRad(60);
+ var dirLightBeta  = -utils.degToRad(120);
+
+ var directionalLight = [Math.cos(dirLightAlpha) * Math.cos(dirLightBeta),
+              Math.sin(dirLightAlpha),
+              Math.cos(dirLightAlpha) * Math.sin(dirLightBeta)
+              ];
+			  
+var directionalLightColor = [0.1, 1.0, 1.0];
 
 function doMouseDown(event) {
 	lastMouseX = event.pageX;
@@ -154,6 +167,8 @@ function main() {
 	uvLocation = gl.getAttribLocation(program, "a_uv");
 	normalsAttributeLocation = gl.getAttribLocation(program, "a_normal");
 	textureFileHandle = gl.getUniformLocation(program, "a_texture");
+	lightDirectionHandle = gl.getUniformLocation(program, 'lightDirection');
+    lightColorHandle = gl.getUniformLocation(program, 'lightColor');
 	
 	for(let i = 0; i < 26; i++){
 		vaos[i] = gl.createVertexArray();
@@ -742,6 +757,7 @@ function animate(){
 	/*interpolation*/
 }
 
+//------------------------------------------------------------- DRAW SCENE ---------------------------------------------------------------------
 
 function drawScene() {
 	
@@ -929,6 +945,7 @@ async function init() {
         models[c] = await importObject(cubes[c]);
     }
 	
+	console.log(models[0]);
 	
 	/*
 	00 - 01 - 02 -> column "right"
