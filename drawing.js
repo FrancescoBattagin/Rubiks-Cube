@@ -199,10 +199,10 @@ function rotateFace(rotation){
 	} else if (selectedFace.i === 2) {
 		switch(rotation) {
 			case "R":
-				leftFace(-90);
+				leftFace(90);
 				break;
 			case "L":
-				leftFace(90);
+				leftFace(-90);
 		}
 	} else {
 		if (selectedFace.j === 0) {
@@ -216,27 +216,27 @@ function rotateFace(rotation){
 		} else if (selectedFace.j === 2) {
 			switch(rotation) {
 				case "R":
-					backFace(-90);
+					backFace(90);
 					break;
 				case "L":
-					backFace(90);
+					backFace(-90);
 			}
 		} else {
 			if (selectedFace.k === 0) {
 				switch(rotation) {
 					case "R":
-						downFace(-90);
+						downFace(90);
 						break;
 					case "L":
-						downFace(90);
+						downFace(-90);
 				}
 			} else if (selectedFace.k === 2) {
 				switch(rotation) {
 					case "R":
-						upFace(90);
+						upFace(-90);
 						break;
 					case "L":
-						upFace(-90);
+						upFace(90);
 				}
 			}
 		}
@@ -244,6 +244,7 @@ function rotateFace(rotation){
 }
 
 function rightFace(deg) {
+	rotateRightFace(deg);
 	let temp000, temp001, temp002, temp010, temp012, temp020, temp021, temp022;
 	temp000 = wmRef[0][0][0];
 	temp001 = wmRef[0][0][1];
@@ -253,11 +254,9 @@ function rightFace(deg) {
 	temp020 = wmRef[0][2][0];
 	temp021 = wmRef[0][2][1];
 	temp022 = wmRef[0][2][2];
-	console.log(temp000, temp001, temp002, temp010, temp012, temp020, temp021, temp022);
 			
 	if(deg > 0){
 		// counterclockwise
-		rotateRightFace(deg);
 		wmRef[0][0][0] = temp002;
 		wmRef[0][0][1] = temp012;
 		wmRef[0][0][2] = temp022;
@@ -268,7 +267,6 @@ function rightFace(deg) {
 		wmRef[0][2][2] = temp020;
 	} else{
 		// clockwise
-		rotateRightFace(deg);
 		wmRef[0][0][0] = temp020;
 		wmRef[0][0][1] = temp010;
 		wmRef[0][0][2] = temp000;
@@ -278,111 +276,61 @@ function rightFace(deg) {
 		wmRef[0][2][1] = temp012;
 		wmRef[0][2][2] = temp002;
 	}
-	console.log(wmRef[0][0][0], wmRef[0][0][1], wmRef[0][0][2], wmRef[0][1][0], wmRef[0][1][2], wmRef[0][2][0], wmRef[0][2][1], wmRef[0][2][2]);
 }
 
 function rotateRightFace(deg) {
-	wmAndQList[wmRef[0][0][0]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[0][0][0]].matrix, utils.MakeRotateXMatrix(deg));
 	updateQuaternion(wmRef[0][0][0], deg, 0, 0);
-	wmAndQList[wmRef[0][0][1]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[0][0][1]].matrix, utils.MakeRotateXMatrix(deg));
 	updateQuaternion(wmRef[0][0][1], deg, 0, 0);
-	wmAndQList[wmRef[0][0][2]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[0][0][2]].matrix, utils.MakeRotateXMatrix(deg));
 	updateQuaternion(wmRef[0][0][2], deg, 0, 0);
-	wmAndQList[wmRef[0][1][0]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[0][1][0]].matrix, utils.MakeRotateXMatrix(deg));
 	updateQuaternion(wmRef[0][1][0], deg, 0, 0);
-	wmAndQList[wmRef[0][1][2]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[0][1][2]].matrix, utils.MakeRotateXMatrix(deg));
 	updateQuaternion(wmRef[0][1][2], deg, 0, 0);
-	wmAndQList[wmRef[0][2][0]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[0][2][0]].matrix, utils.MakeRotateXMatrix(deg));
 	updateQuaternion(wmRef[0][2][0], deg, 0, 0);
-	wmAndQList[wmRef[0][2][1]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[0][2][1]].matrix, utils.MakeRotateXMatrix(deg));
 	updateQuaternion(wmRef[0][2][1], deg, 0, 0);
-	wmAndQList[wmRef[0][2][2]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[0][2][2]].matrix, utils.MakeRotateXMatrix(deg));
 	updateQuaternion(wmRef[0][2][2], deg, 0, 0);
 }
 
-function leftFace(deg) { //async
-	if (deg < 0) {
-		//for(temp_deg = 0; temp_deg <= deg; temp_deg+=2){
-			//i=2 forall cube
-			rotateLeftFace(deg);
-			let temp200, temp201, temp202, temp210, temp212, temp220, temp221, temp222;
-			temp200 = wmRef[2][0][0];
-			temp201 = wmRef[2][0][1];
-			temp202 = wmRef[2][0][2];
-			temp210 = wmRef[2][1][0];
-			temp212 = wmRef[2][1][2];
-			temp220 = wmRef[2][2][0];
-			temp221 = wmRef[2][2][1];
-			temp222 = wmRef[2][2][2];
-
-			console.log(temp200, temp201, temp202, temp210, temp212, temp220, temp221, temp222);
-
-			wmRef[2][0][0] = temp202;
-			wmRef[2][0][1] = temp212;
-			wmRef[2][0][2] = temp222;
-			wmRef[2][1][0] = temp201;
-			wmRef[2][1][2] = temp221;
-			wmRef[2][2][0] = temp200;
-			wmRef[2][2][1] = temp210;
-			wmRef[2][2][2] = temp220;
-
-			console.log(wmRef[2][0][0], wmRef[2][0][1], wmRef[2][0][2], wmRef[2][1][0], wmRef[2][1][2], wmRef[2][2][0], wmRef[2][2][1], wmRef[2][2][2]);
-
-			//drawScene();
-			//sleep(200);
-		//}
-	} else {
-		rotateLeftFace(deg);
-		//for(temp_deg = 0; temp_deg >= deg; temp_deg-=2){
-			let temp200, temp201, temp202, temp210, temp212, temp220, temp221, temp222;
-			temp200 = wmRef[2][0][0];
-			temp201 = wmRef[2][0][1];
-			temp202 = wmRef[2][0][2];
-			temp210 = wmRef[2][1][0];
-			temp212 = wmRef[2][1][2];
-			temp220 = wmRef[2][2][0];
-			temp221 = wmRef[2][2][1];
-			temp222 = wmRef[2][2][2];
-
-			console.log(temp200, temp201, temp202, temp210, temp212, temp220, temp221, temp222);
-			
-			wmRef[2][0][0] = temp220;
-			wmRef[2][0][1] = temp210;
-			wmRef[2][0][2] = temp200;
-			wmRef[2][1][0] = temp221;
-			wmRef[2][1][2] = temp201;
-			wmRef[2][2][0] = temp222;
-			wmRef[2][2][1] = temp212;
-			wmRef[2][2][2] = temp202;
-
-			console.log(wmRef[2][0][0], wmRef[2][0][1], wmRef[2][0][2], wmRef[2][1][0], wmRef[2][1][2], wmRef[2][2][0], wmRef[2][2][1], wmRef[2][2][2] )
-			
-			//drawScene();
-			//sleep(200);
-
-		//}
+function leftFace(deg) {
+	rotateLeftFace(deg);
+	let temp200, temp201, temp202, temp210, temp212, temp220, temp221, temp222;
+	temp200 = wmRef[2][0][0];
+	temp201 = wmRef[2][0][1];
+	temp202 = wmRef[2][0][2];
+	temp210 = wmRef[2][1][0];
+	temp212 = wmRef[2][1][2];
+	temp220 = wmRef[2][2][0];
+	temp221 = wmRef[2][2][1];
+	temp222 = wmRef[2][2][2];
 	
+	if (deg < 0) {
+		wmRef[2][0][0] = temp220;
+		wmRef[2][0][1] = temp210;
+		wmRef[2][0][2] = temp200;
+		wmRef[2][1][0] = temp221;
+		wmRef[2][1][2] = temp201;
+		wmRef[2][2][0] = temp222;
+		wmRef[2][2][1] = temp212;
+		wmRef[2][2][2] = temp202;
+	} else {
+		wmRef[2][0][0] = temp202;
+		wmRef[2][0][1] = temp212;
+		wmRef[2][0][2] = temp222;
+		wmRef[2][1][0] = temp201;
+		wmRef[2][1][2] = temp221;
+		wmRef[2][2][0] = temp200;
+		wmRef[2][2][1] = temp210;
+		wmRef[2][2][2] = temp220;	
 	}
-	//console.log(wmRef);
 }
 
-
 function rotateLeftFace(deg) {
-	wmAndQList[wmRef[2][0][0]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[2][0][0]].matrix, utils.MakeRotateXMatrix(deg));
-	
-	wmAndQList[wmRef[2][0][1]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[2][0][1]].matrix, utils.MakeRotateXMatrix(deg));
-	
-	wmAndQList[wmRef[2][0][2]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[2][0][2]].matrix, utils.MakeRotateXMatrix(deg));
-	
-	wmAndQList[wmRef[2][1][0]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[2][1][0]].matrix, utils.MakeRotateXMatrix(deg));
-	
-	wmAndQList[wmRef[2][1][2]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[2][1][2]].matrix, utils.MakeRotateXMatrix(deg));
-	
-	wmAndQList[wmRef[2][2][0]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[2][2][0]].matrix, utils.MakeRotateXMatrix(deg));
-	
-	wmAndQList[wmRef[2][2][1]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[2][2][1]].matrix, utils.MakeRotateXMatrix(deg));
-	
-	wmAndQList[wmRef[2][2][2]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[2][2][2]].matrix, utils.MakeRotateXMatrix(deg));
+	updateQuaternion(wmRef[2][0][0], deg, 0, 0);
+	updateQuaternion(wmRef[2][0][1], deg, 0, 0);
+	updateQuaternion(wmRef[2][0][2], deg, 0, 0);
+	updateQuaternion(wmRef[2][1][0], deg, 0, 0);
+	updateQuaternion(wmRef[2][1][2], deg, 0, 0);
+	updateQuaternion(wmRef[2][2][0], deg, 0, 0);
+	updateQuaternion(wmRef[2][2][1], deg, 0, 0);
+	updateQuaternion(wmRef[2][2][2], deg, 0, 0);
 }
 
 function frontFace(deg) {
@@ -397,8 +345,7 @@ function frontFace(deg) {
 	temp200 = wmRef[2][0][0];
 	temp201 = wmRef[2][0][1];
 	temp202 = wmRef[2][0][2];
-	console.log(temp000, temp001, temp002, temp100, temp102, temp200, temp201, temp202);
-
+	
 	if (deg > 0) {
 		// clockwise
 		wmRef[0][0][0] = temp200;
@@ -420,111 +367,158 @@ function frontFace(deg) {
 		wmRef[2][0][1] = temp100;
 		wmRef[2][0][2] = temp200;
 	}
-	console.log(wmRef[0][0][0], wmRef[0][0][1], wmRef[0][0][2], wmRef[1][0][0], wmRef[1][0][2], wmRef[2][0][0], wmRef[2][0][1], wmRef[2][0][2]);
 }
 
 function rotateFrontFace(deg) {
-	wmAndQList[wmRef[0][0][0]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[0][0][0]].matrix, utils.MakeRotateZMatrix(deg));
 	updateQuaternion(wmRef[0][0][0], 0, 0, deg);
-	wmAndQList[wmRef[0][0][1]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[0][0][1]].matrix, utils.MakeRotateZMatrix(deg));
 	updateQuaternion(wmRef[0][0][1], 0, 0, deg);
-	wmAndQList[wmRef[0][0][2]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[0][0][2]].matrix, utils.MakeRotateZMatrix(deg));
 	updateQuaternion(wmRef[0][0][2], 0, 0, deg);
-	wmAndQList[wmRef[1][0][0]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[1][0][0]].matrix, utils.MakeRotateZMatrix(deg));
 	updateQuaternion(wmRef[1][0][0], 0, 0, deg);
-	wmAndQList[wmRef[1][0][2]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[1][0][2]].matrix, utils.MakeRotateZMatrix(deg));
 	updateQuaternion(wmRef[1][0][2], 0, 0, deg);
-	wmAndQList[wmRef[2][0][0]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[2][0][0]].matrix, utils.MakeRotateZMatrix(deg));
 	updateQuaternion(wmRef[2][0][0], 0, 0, deg);
-	wmAndQList[wmRef[2][0][1]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[2][0][1]].matrix, utils.MakeRotateZMatrix(deg));
 	updateQuaternion(wmRef[2][0][1], 0, 0, deg);
-	wmAndQList[wmRef[2][0][2]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[2][0][2]].matrix, utils.MakeRotateZMatrix(deg));
 	updateQuaternion(wmRef[2][0][2], 0, 0, deg);
 }
 
 function backFace(deg) {
 	rotateBackFace(deg);
 
-	let temp000, temp001, temp002, temp010, temp012, temp020, temp021, temp022;
-	temp000 = wmRef[0][2][0];
-	temp001 = wmRef[0][2][1];
-	temp002 = wmRef[0][2][2];
-	temp100 = wmRef[1][2][0];
-	temp102 = wmRef[1][2][2];
-	temp200 = wmRef[2][2][0];
-	temp201 = wmRef[2][2][1];
-	temp202 = wmRef[2][2][2];
+	let temp020, temp021, temp022, temp120, temp122, temp220, temp221, temp222;
+	temp020 = wmRef[0][2][0];
+	temp021 = wmRef[0][2][1];
+	temp022 = wmRef[0][2][2];
+	temp120 = wmRef[1][2][0];
+	temp122 = wmRef[1][2][2];
+	temp220 = wmRef[2][2][0];
+	temp221 = wmRef[2][2][1];
+	temp222 = wmRef[2][2][2];
 
-	//if clockwise: reassign wmRef related to moved cubes
-	//else: add counterclockwise reassignment
+	if(deg < 0){
+		// clockwise
+		wmRef[0][2][0] = temp022;
+		wmRef[0][2][1] = temp122;
+		wmRef[0][2][2] = temp222;
+		wmRef[1][2][0] = temp021;
+		wmRef[1][2][2] = temp221;
+		wmRef[2][2][0] = temp020;
+		wmRef[2][2][1] = temp120;
+		wmRef[2][2][2] = temp220;
+	} else {
+		// counterclockwise
+		wmRef[0][2][0] = temp220;
+		wmRef[0][2][1] = temp120;
+		wmRef[0][2][2] = temp020;
+		wmRef[1][2][0] = temp221;
+		wmRef[1][2][2] = temp021;
+		wmRef[2][2][0] = temp222;
+		wmRef[2][2][1] = temp122;
+		wmRef[2][2][2] = temp022;
+	}
 }
 
 function rotateBackFace(deg) {
-	wmAndQList[wmRef[0][2][0]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[0][2][0]].matrix, utils.MakeRotateZMatrix(deg));
-	
-	wmAndQList[wmRef[0][2][1]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[0][2][1]].matrix, utils.MakeRotateZMatrix(deg));
-	
-	wmAndQList[wmRef[0][2][2]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[0][2][2]].matrix, utils.MakeRotateZMatrix(deg));
-	
-	wmAndQList[wmRef[1][2][0]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[1][2][0]].matrix, utils.MakeRotateZMatrix(deg));
-	
-	wmAndQList[wmRef[1][2][2]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[1][2][2]].matrix, utils.MakeRotateZMatrix(deg));
-	
-	wmAndQList[wmRef[2][2][0]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[2][2][0]].matrix, utils.MakeRotateZMatrix(deg));
-	
-	wmAndQList[wmRef[2][2][1]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[2][2][1]].matrix, utils.MakeRotateZMatrix(deg));
-	
-	wmAndQList[wmRef[2][2][2]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[2][2][2]].matrix, utils.MakeRotateZMatrix(deg));
+	updateQuaternion(wmRef[0][2][0], 0, 0, deg);
+	updateQuaternion(wmRef[0][2][1], 0, 0, deg);
+	updateQuaternion(wmRef[0][2][2], 0, 0, deg);
+	updateQuaternion(wmRef[1][2][0], 0, 0, deg);
+	updateQuaternion(wmRef[1][2][2], 0, 0, deg);
+	updateQuaternion(wmRef[2][2][0], 0, 0, deg);
+	updateQuaternion(wmRef[2][2][1], 0, 0, deg);
+	updateQuaternion(wmRef[2][2][2], 0, 0, deg);
 }
 
 function downFace(deg) {
 	rotateDownFace(deg);
 
-	//if clockwise: reassign wmRef related to moved cubes
-	//else: add counterclockwise reassignment
+	let temp000, temp010, temp020, temp100, temp120, temp200, temp210, temp220;
+	temp000 = wmRef[0][0][0];
+	temp010 = wmRef[0][1][0];
+	temp020 = wmRef[0][2][0];
+	temp100 = wmRef[1][0][0];
+	temp120 = wmRef[1][2][0];
+	temp200 = wmRef[2][0][0];
+	temp210 = wmRef[2][1][0];
+	temp220 = wmRef[2][2][0];
+
+	if(deg < 0){
+		// clockwise
+		wmRef[0][0][0] = temp020;
+		wmRef[0][1][0] = temp120;
+		wmRef[0][2][0] = temp220;
+		wmRef[1][0][0] = temp010;
+		wmRef[1][2][0] = temp210;
+		wmRef[2][0][0] = temp000;
+		wmRef[2][1][0] = temp100;
+		wmRef[2][2][0] = temp200;
+	} else {
+		// counterclockwise
+		wmRef[0][0][0] = temp200;
+		wmRef[0][1][0] = temp100;
+		wmRef[0][2][0] = temp000;
+		wmRef[1][0][0] = temp210;
+		wmRef[1][2][0] = temp010;
+		wmRef[2][0][0] = temp220;
+		wmRef[2][1][0] = temp120;
+		wmRef[2][2][0] = temp020;
+	}
 }
 
 function rotateDownFace(deg) {
-	wmAndQList[wmRef[0][0][0]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[0][0][0]].matrix, utils.MakeRotateYMatrix(deg));
-	
-	wmAndQList[wmRef[0][1][0]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[0][1][0]].matrix, utils.MakeRotateYMatrix(deg));
-	
-	wmAndQList[wmRef[0][2][0]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[0][2][0]].matrix, utils.MakeRotateYMatrix(deg));
-	
-	wmAndQList[wmRef[1][0][0]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[1][0][0]].matrix, utils.MakeRotateYMatrix(deg));
-	
-	wmAndQList[wmRef[1][2][0]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[1][2][0]].matrix, utils.MakeRotateYMatrix(deg));
-	
-	wmAndQList[wmRef[2][0][0]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[2][0][0]].matrix, utils.MakeRotateYMatrix(deg));
-	
-	wmAndQList[wmRef[2][1][0]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[2][1][0]].matrix, utils.MakeRotateYMatrix(deg));
-	
-	wmAndQList[wmRef[2][2][0]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[2][2][0]].matrix, utils.MakeRotateYMatrix(deg));
+	updateQuaternion(wmRef[0][0][0], 0, deg, 0);
+	updateQuaternion(wmRef[0][1][0], 0, deg, 0);
+	updateQuaternion(wmRef[0][2][0], 0, deg, 0);
+	updateQuaternion(wmRef[1][0][0], 0, deg, 0);
+	updateQuaternion(wmRef[1][2][0], 0, deg, 0);
+	updateQuaternion(wmRef[2][0][0], 0, deg, 0);
+	updateQuaternion(wmRef[2][1][0], 0, deg, 0);
+	updateQuaternion(wmRef[2][2][0], 0, deg, 0);
 }
 
 function upFace(deg) {
 	rotateUpFace(deg);
 
-	//if clockwise: reassign wmRef related to moved cubes
-	//else: add counterclockwise reassignment
+	let temp002, temp012, temp022, temp102, temp122, temp202, temp212, temp222;
+	temp002 = wmRef[0][0][2];
+	temp012 = wmRef[0][1][2];
+	temp022 = wmRef[0][2][2];
+	temp102 = wmRef[1][0][2];
+	temp122 = wmRef[1][2][2];
+	temp202 = wmRef[2][0][2];
+	temp212 = wmRef[2][1][2];
+	temp222 = wmRef[2][2][2];
+
+	if(deg < 0){
+		// clockwise
+		wmRef[0][0][2] = temp202;
+		wmRef[0][1][2] = temp102;
+		wmRef[0][2][2] = temp002;
+		wmRef[1][0][2] = temp212;
+		wmRef[1][2][2] = temp012;
+		wmRef[2][0][2] = temp222;
+		wmRef[2][1][2] = temp122;
+		wmRef[2][2][2] = temp022;
+	} else {
+		// counterclockwise
+		wmRef[0][0][2] = temp022;
+		wmRef[0][1][2] = temp122;
+		wmRef[0][2][2] = temp222;
+		wmRef[1][0][2] = temp012;
+		wmRef[1][2][2] = temp212;
+		wmRef[2][0][2] = temp002;
+		wmRef[2][1][2] = temp102;
+		wmRef[2][2][2] = temp202;
+	}
 }
 
 function rotateUpFace(deg) {
-	wmAndQList[wmRef[0][0][2]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[0][0][2]].matrix, utils.MakeRotateYMatrix(deg));
-	
-	wmAndQList[wmRef[0][1][2]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[0][1][2]].matrix, utils.MakeRotateYMatrix(deg));
-	
-	wmAndQList[wmRef[0][2][2]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[0][2][2]].matrix, utils.MakeRotateYMatrix(deg));
-	
-	wmAndQList[wmRef[1][0][2]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[1][0][2]].matrix, utils.MakeRotateYMatrix(deg));
-	
-	wmAndQList[wmRef[1][2][2]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[1][2][2]].matrix, utils.MakeRotateYMatrix(deg));
-	
-	wmAndQList[wmRef[2][0][2]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[2][0][2]].matrix, utils.MakeRotateYMatrix(deg));
-	
-	wmAndQList[wmRef[2][1][2]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[2][1][2]].matrix, utils.MakeRotateYMatrix(deg));
-	
-	wmAndQList[wmRef[2][2][2]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[2][2][2]].matrix, utils.MakeRotateYMatrix(deg));
+	updateQuaternion(wmRef[0][0][2], 0, deg, 0);
+	updateQuaternion(wmRef[0][1][2], 0, deg, 0);
+	updateQuaternion(wmRef[0][2][2], 0, deg, 0);
+	updateQuaternion(wmRef[1][0][2], 0, deg, 0);
+	updateQuaternion(wmRef[1][2][2], 0, deg, 0);
+	updateQuaternion(wmRef[2][0][2], 0, deg, 0);
+	updateQuaternion(wmRef[2][1][2], 0, deg, 0);
+	updateQuaternion(wmRef[2][2][2], 0, deg, 0);
 }
 
 function rotateMiddle(rotation){
@@ -532,10 +526,10 @@ function rotateMiddle(rotation){
 	if (selectedFace.i === 0) {
 		switch(rotation) {
 			case "R":
-				rightMiddleHorizontal();
+				rotateMiddleHorizontal(-90);
 				break;
 			case "L":
-				leftMiddleHorizontal();
+				rotateMiddleHorizontal(90);
 				break;
 			case "U":
 				rotateMiddleVerticalRightLeft(-90);
@@ -546,10 +540,10 @@ function rotateMiddle(rotation){
 	} else if (selectedFace.i === 2) {
 		switch(rotation) {
 			case "R":
-				rightMiddleHorizontal();
+				rotateMiddleHorizontal(-90);
 				break;
 			case "L":
-				leftMiddleHorizontal();
+				rotateMiddleHorizontal(90);
 				break;
 			case "U":
 				rotateMiddleVerticalRightLeft(90);
@@ -562,10 +556,10 @@ function rotateMiddle(rotation){
 		if (selectedFace.j === 0) {
 			switch(rotation) {
 				case "R":
-					rightMiddleHorizontal();
+					rotateMiddleHorizontal(-90);
 					break;
 				case "L":
-					leftMiddleHorizontal();
+					rotateMiddleHorizontal(90);
 					break;
 				case "U":
 					rotateMiddleVerticalFrontBack(-90);
@@ -577,10 +571,10 @@ function rotateMiddle(rotation){
 		} else if (selectedFace.j === 2) {
 			switch(rotation) {
 				case "R":
-					rightMiddleHorizontal();
+					rotateMiddleHorizontal(-90);
 					break;
 				case "L":
-					leftMiddleHorizontal();
+					rotateMiddleHorizontal(90);
 					break;
 				case "U":
 					rotateMiddleVerticalFrontBack(90);
@@ -625,67 +619,49 @@ function rotateMiddle(rotation){
 	}
 }
 
-function rightMiddleHorizontal() {
-	rotateMiddleHorizontal(-90);
-}
-
-function leftMiddleHorizontal() {
-	rotateMiddleHorizontal(90);
-}
-
-// all cubes with k = 1
 function rotateMiddleHorizontal(deg) {
-	wmAndQList[wmRef[0][0][1]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[0][0][1]].matrix, utils.MakeRotateYMatrix(deg));
-	
-	wmAndQList[wmRef[0][1][1]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[0][1][1]].matrix, utils.MakeRotateYMatrix(deg));
-	
-	wmAndQList[wmRef[0][2][1]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[0][2][1]].matrix, utils.MakeRotateYMatrix(deg));
-	
-	wmAndQList[wmRef[1][0][1]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[1][0][1]].matrix, utils.MakeRotateYMatrix(deg));
-	
-	wmAndQList[wmRef[1][2][1]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[1][2][1]].matrix, utils.MakeRotateYMatrix(deg));
-	
-	wmAndQList[wmRef[2][0][1]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[2][0][1]].matrix, utils.MakeRotateYMatrix(deg));
-	
-	wmAndQList[wmRef[2][1][1]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[2][1][1]].matrix, utils.MakeRotateYMatrix(deg));
-	
-	wmAndQList[wmRef[2][2][1]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[2][2][1]].matrix, utils.MakeRotateYMatrix(deg));
+	updateQuaternion(wmRef[0][0][1], 0, deg, 0);
+	updateQuaternion(wmRef[0][1][1], 0, deg, 0);
+	updateQuaternion(wmRef[0][2][1], 0, deg, 0);
+	updateQuaternion(wmRef[1][0][1], 0, deg, 0);
+	updateQuaternion(wmRef[1][2][1], 0, deg, 0);
+	updateQuaternion(wmRef[2][0][1], 0, deg, 0);
+	updateQuaternion(wmRef[2][1][1], 0, deg, 0);
+	updateQuaternion(wmRef[2][2][1], 0, deg, 0);
+
+	if(deg > 0){
+		//left
+			
+
+
+	} else{
+		//right
+
+
+
+	}
 }
 
 function rotateMiddleVerticalFrontBack(deg) {
-	wmAndQList[wmRef[1][0][0]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[1][0][0]].matrix, utils.MakeRotateXMatrix(deg));
-	
-	wmAndQList[wmRef[1][0][1]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[1][0][1]].matrix, utils.MakeRotateXMatrix(deg));
-	
-	wmAndQList[wmRef[1][0][2]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[1][0][2]].matrix, utils.MakeRotateXMatrix(deg));
-	
-	wmAndQList[wmRef[1][1][0]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[1][1][0]].matrix, utils.MakeRotateXMatrix(deg));
-	
-	wmAndQList[wmRef[1][1][2]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[1][1][2]].matrix, utils.MakeRotateXMatrix(deg));
-	
-	wmAndQList[wmRef[1][2][0]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[1][2][0]].matrix, utils.MakeRotateXMatrix(deg));
-	
-	wmAndQList[wmRef[1][2][1]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[1][2][1]].matrix, utils.MakeRotateXMatrix(deg));
-	
-	wmAndQList[wmRef[1][2][2]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[1][2][2]].matrix, utils.MakeRotateXMatrix(deg));
+	updateQuaternion(wmRef[1][0][0], deg, 0, 0);
+	updateQuaternion(wmRef[1][0][1], deg, 0, 0);
+	updateQuaternion(wmRef[1][0][2], deg, 0, 0);
+	updateQuaternion(wmRef[1][1][0], deg, 0, 0);
+	updateQuaternion(wmRef[1][1][2], deg, 0, 0);
+	updateQuaternion(wmRef[1][2][0], deg, 0, 0);
+	updateQuaternion(wmRef[1][2][1], deg, 0, 0);
+	updateQuaternion(wmRef[1][2][2], deg, 0, 0);
 }
 
 function rotateMiddleVerticalRightLeft(deg) {
-	wmAndQList[wmRef[0][1][0]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[0][1][0]].matrix, utils.MakeRotateZMatrix(deg));
-	
-	wmAndQList[wmRef[0][1][1]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[0][1][1]].matrix, utils.MakeRotateZMatrix(deg));
-	
-	wmAndQList[wmRef[0][1][2]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[0][1][2]].matrix, utils.MakeRotateZMatrix(deg));
-	
-	wmAndQList[wmRef[1][1][0]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[1][1][0]].matrix, utils.MakeRotateZMatrix(deg));
-	
-	wmAndQList[wmRef[1][1][2]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[1][1][2]].matrix, utils.MakeRotateZMatrix(deg));
-	
-	wmAndQList[wmRef[2][1][0]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[2][1][0]].matrix, utils.MakeRotateZMatrix(deg));
-	
-	wmAndQList[wmRef[2][1][1]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[2][1][1]].matrix, utils.MakeRotateZMatrix(deg));
-	
-	wmAndQList[wmRef[2][1][2]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[2][1][2]].matrix, utils.MakeRotateZMatrix(deg));
+	updateQuaternion(wmRef[0][1][0], 0, 0, deg);
+	updateQuaternion(wmRef[0][1][1], 0, 0, deg);
+	updateQuaternion(wmRef[0][1][2], 0, 0, deg);
+	updateQuaternion(wmRef[1][1][0], 0, 0, deg);
+	updateQuaternion(wmRef[1][1][2], 0, 0, deg);
+	updateQuaternion(wmRef[2][1][0], 0, 0, deg);
+	updateQuaternion(wmRef[2][1][1], 0, 0, deg);
+	updateQuaternion(wmRef[2][1][2], 0, 0, deg);
 }
 
 //middle vertical top/bottom missing
@@ -918,10 +894,10 @@ function updateQuaternion(i, rvx, rvy, rvz) {
 	//q'
 	q_new = delta_quat.mul(wmAndQList[i].quaternion); //q is the i-th quaternion
 
-	q = q_new; //update of the i-th quaternion
+	wmAndQList[i].quaternion = q_new; //update of the i-th quaternion
 
  	//gaining rotation matrix from quaternion
- 	out = q.toMatrix4();
+ 	out = q_new.toMatrix4();
 	//return out; //return the new matrix after rotation 
 	wmAndQList[i].matrix = utils.multiplyMatrices(out, utils.MakeScaleMatrix(scale));
 }
