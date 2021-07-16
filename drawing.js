@@ -7,12 +7,11 @@ var cubes = ["Cube00_B", "Cube00_M", "Cube00", "Cube01_B", "Cube01_M", "Cube01",
 
 var models = new Array();
 var vaos = new Array();
-var quaternions = new Array();
 
 var program;
 
-var worldMatricesList =  new Array();
-var worldMatricesRef =  new Array();
+var wmAndQList =  new Array();
+var wmRef =  new Array();
 
 var centerCoordinates = {};
 
@@ -26,6 +25,8 @@ var texture;
 var selectedFace = null;
 
 var shift;
+
+var scale = 0.7;
 
 var cx = 4.5;
 var cy = 0.0;
@@ -242,285 +243,289 @@ function rotateFace(rotation){
 	}
 }
 
-//test rotation -> complete rotation after n*sleep(), with n = # intermediate steps  (see temp_deg)
 function rightFace(deg) {
-	console.log(deg);
-	console.log(Math.sign(deg))
-	
 	let temp000, temp001, temp002, temp010, temp012, temp020, temp021, temp022;
-			temp000 = worldMatricesRef[0][0][0];
-			temp001 = worldMatricesRef[0][0][1];
-			temp002 = worldMatricesRef[0][0][2];
-			temp010 = worldMatricesRef[0][1][0];
-			temp012 = worldMatricesRef[0][1][2];
-			temp020 = worldMatricesRef[0][2][0];
-			temp021 = worldMatricesRef[0][2][1];
-			temp022 = worldMatricesRef[0][2][2];
+	temp000 = wmRef[0][0][0];
+	temp001 = wmRef[0][0][1];
+	temp002 = wmRef[0][0][2];
+	temp010 = wmRef[0][1][0];
+	temp012 = wmRef[0][1][2];
+	temp020 = wmRef[0][2][0];
+	temp021 = wmRef[0][2][1];
+	temp022 = wmRef[0][2][2];
+	console.log(temp000, temp001, temp002, temp010, temp012, temp020, temp021, temp022);
 			
-	if(Math.sign(deg)>0){
-		/*for(temp_deg = 0; temp_deg <= deg; temp_deg+=2){*/
-			rotateRightFace(deg); //temp_deg
-			/*let temp000, temp001, temp002, temp010, temp012, temp020, temp021, temp022;
-			temp000 = worldMatricesRef[0][0][0];
-			temp001 = worldMatricesRef[0][0][1];
-			temp002 = worldMatricesRef[0][0][2];
-			temp010 = worldMatricesRef[0][1][0];
-			temp012 = worldMatricesRef[0][1][2];
-			temp020 = worldMatricesRef[0][2][0];
-			temp021 = worldMatricesRef[0][2][1];
-			temp022 = worldMatricesRef[0][2][2];*/
-			
-			worldMatricesRef[0][0][0] = temp002;
-			worldMatricesRef[0][0][1] = temp012;
-			worldMatricesRef[0][0][2] = temp022;
-			worldMatricesRef[0][1][0] = temp001;
-			worldMatricesRef[0][1][2] = temp021;
-			worldMatricesRef[0][2][0] = temp000;
-			worldMatricesRef[0][2][1] = temp010;
-			worldMatricesRef[0][2][2] = temp020;	
-			//sleep(200);
-			//drawScene();
-		}
-		//console.log(worldMatricesRef);
-	//}
-	else{
-		//for(temp_deg = 0; temp_deg >= deg; temp_deg-=2){
-			rotateRightFace(deg);
-			
-			/*let temp000, temp001, temp002, temp010, temp012, temp020, temp021, temp022;
-			temp000 = worldMatricesRef[0][0][0];
-			temp001 = worldMatricesRef[0][0][1];
-			temp002 = worldMatricesRef[0][0][2];
-			temp010 = worldMatricesRef[0][1][0];
-			temp012 = worldMatricesRef[0][1][2];
-			temp020 = worldMatricesRef[0][2][0];
-			temp021 = worldMatricesRef[0][2][1];
-			temp022 = worldMatricesRef[0][2][2];*/
-
-			worldMatricesRef[0][0][0] = temp020;
-			worldMatricesRef[0][0][1] = temp010;
-			worldMatricesRef[0][0][2] = temp000;
-			worldMatricesRef[0][1][0] = temp021;
-			worldMatricesRef[0][1][2] = temp001;
-			worldMatricesRef[0][2][0] = temp022;
-			worldMatricesRef[0][2][1] = temp012;
-			worldMatricesRef[0][2][2] = temp002;
-			
-			sleep(200);
-			drawScene();
-		}
-		console.log(worldMatricesRef);
-	//}
+	if(deg > 0){
+		// counterclockwise
+		rotateRightFace(deg);
+		wmRef[0][0][0] = temp002;
+		wmRef[0][0][1] = temp012;
+		wmRef[0][0][2] = temp022;
+		wmRef[0][1][0] = temp001;
+		wmRef[0][1][2] = temp021;
+		wmRef[0][2][0] = temp000;
+		wmRef[0][2][1] = temp010;
+		wmRef[0][2][2] = temp020;
+	} else{
+		// clockwise
+		rotateRightFace(deg);
+		wmRef[0][0][0] = temp020;
+		wmRef[0][0][1] = temp010;
+		wmRef[0][0][2] = temp000;
+		wmRef[0][1][0] = temp021;
+		wmRef[0][1][2] = temp001;
+		wmRef[0][2][0] = temp022;
+		wmRef[0][2][1] = temp012;
+		wmRef[0][2][2] = temp002;
+	}
+	console.log(wmRef[0][0][0], wmRef[0][0][1], wmRef[0][0][2], wmRef[0][1][0], wmRef[0][1][2], wmRef[0][2][0], wmRef[0][2][1], wmRef[0][2][2]);
 }
 
 function rotateRightFace(deg) {
-	worldMatricesList[worldMatricesRef[0][0][0]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[0][0][0]], utils.MakeRotateXMatrix(deg));
-	worldMatricesList[worldMatricesRef[0][0][1]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[0][0][1]], utils.MakeRotateXMatrix(deg));
-	worldMatricesList[worldMatricesRef[0][0][2]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[0][0][2]], utils.MakeRotateXMatrix(deg));
-	worldMatricesList[worldMatricesRef[0][1][0]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[0][1][0]], utils.MakeRotateXMatrix(deg));
-	worldMatricesList[worldMatricesRef[0][1][2]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[0][1][2]], utils.MakeRotateXMatrix(deg));
-	worldMatricesList[worldMatricesRef[0][2][0]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[0][2][0]], utils.MakeRotateXMatrix(deg));
-	worldMatricesList[worldMatricesRef[0][2][1]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[0][2][1]], utils.MakeRotateXMatrix(deg));
-	worldMatricesList[worldMatricesRef[0][2][2]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[0][2][2]], utils.MakeRotateXMatrix(deg));
+	wmAndQList[wmRef[0][0][0]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[0][0][0]].matrix, utils.MakeRotateXMatrix(deg));
+	updateQuaternion(wmRef[0][0][0], deg, 0, 0);
+	wmAndQList[wmRef[0][0][1]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[0][0][1]].matrix, utils.MakeRotateXMatrix(deg));
+	updateQuaternion(wmRef[0][0][1], deg, 0, 0);
+	wmAndQList[wmRef[0][0][2]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[0][0][2]].matrix, utils.MakeRotateXMatrix(deg));
+	updateQuaternion(wmRef[0][0][2], deg, 0, 0);
+	wmAndQList[wmRef[0][1][0]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[0][1][0]].matrix, utils.MakeRotateXMatrix(deg));
+	updateQuaternion(wmRef[0][1][0], deg, 0, 0);
+	wmAndQList[wmRef[0][1][2]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[0][1][2]].matrix, utils.MakeRotateXMatrix(deg));
+	updateQuaternion(wmRef[0][1][2], deg, 0, 0);
+	wmAndQList[wmRef[0][2][0]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[0][2][0]].matrix, utils.MakeRotateXMatrix(deg));
+	updateQuaternion(wmRef[0][2][0], deg, 0, 0);
+	wmAndQList[wmRef[0][2][1]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[0][2][1]].matrix, utils.MakeRotateXMatrix(deg));
+	updateQuaternion(wmRef[0][2][1], deg, 0, 0);
+	wmAndQList[wmRef[0][2][2]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[0][2][2]].matrix, utils.MakeRotateXMatrix(deg));
+	updateQuaternion(wmRef[0][2][2], deg, 0, 0);
 }
 
 function leftFace(deg) { //async
-	console.log(deg);
-	console.log(Math.sign(deg));
-	if(Math.sign(deg)<0){
+	if (deg < 0) {
 		//for(temp_deg = 0; temp_deg <= deg; temp_deg+=2){
 			//i=2 forall cube
 			rotateLeftFace(deg);
 			let temp200, temp201, temp202, temp210, temp212, temp220, temp221, temp222;
-			temp200 = worldMatricesRef[2][0][0];
-			temp201 = worldMatricesRef[2][0][1];
-			temp202 = worldMatricesRef[2][0][2];
-			temp210 = worldMatricesRef[2][1][0];
-			temp212 = worldMatricesRef[2][1][2];
-			temp220 = worldMatricesRef[2][2][0];
-			temp221 = worldMatricesRef[2][2][1];
-			temp222 = worldMatricesRef[2][2][2];
+			temp200 = wmRef[2][0][0];
+			temp201 = wmRef[2][0][1];
+			temp202 = wmRef[2][0][2];
+			temp210 = wmRef[2][1][0];
+			temp212 = wmRef[2][1][2];
+			temp220 = wmRef[2][2][0];
+			temp221 = wmRef[2][2][1];
+			temp222 = wmRef[2][2][2];
 
 			console.log(temp200, temp201, temp202, temp210, temp212, temp220, temp221, temp222);
 
-			worldMatricesRef[2][0][0] = temp202;
-			worldMatricesRef[2][0][1] = temp212;
-			worldMatricesRef[2][0][2] = temp222;
-			worldMatricesRef[2][1][0] = temp201;
-			worldMatricesRef[2][1][2] = temp221;
-			worldMatricesRef[2][2][0] = temp200;
-			worldMatricesRef[2][2][1] = temp210;
-			worldMatricesRef[2][2][2] = temp220;
+			wmRef[2][0][0] = temp202;
+			wmRef[2][0][1] = temp212;
+			wmRef[2][0][2] = temp222;
+			wmRef[2][1][0] = temp201;
+			wmRef[2][1][2] = temp221;
+			wmRef[2][2][0] = temp200;
+			wmRef[2][2][1] = temp210;
+			wmRef[2][2][2] = temp220;
 
-			console.log(worldMatricesRef[2][0][0], worldMatricesRef[2][0][1], worldMatricesRef[2][0][2], worldMatricesRef[2][1][0], worldMatricesRef[2][1][2], worldMatricesRef[2][2][0], worldMatricesRef[2][2][1], worldMatricesRef[2][2][2]);
+			console.log(wmRef[2][0][0], wmRef[2][0][1], wmRef[2][0][2], wmRef[2][1][0], wmRef[2][1][2], wmRef[2][2][0], wmRef[2][2][1], wmRef[2][2][2]);
 
-			drawScene();
+			//drawScene();
 			//sleep(200);
 		//}
-	}
-	else{
+	} else {
 		rotateLeftFace(deg);
 		//for(temp_deg = 0; temp_deg >= deg; temp_deg-=2){
 			let temp200, temp201, temp202, temp210, temp212, temp220, temp221, temp222;
-			temp200 = worldMatricesRef[2][0][0];
-			temp201 = worldMatricesRef[2][0][1];
-			temp202 = worldMatricesRef[2][0][2];
-			temp210 = worldMatricesRef[2][1][0];
-			temp212 = worldMatricesRef[2][1][2];
-			temp220 = worldMatricesRef[2][2][0];
-			temp221 = worldMatricesRef[2][2][1];
-			temp222 = worldMatricesRef[2][2][2];
+			temp200 = wmRef[2][0][0];
+			temp201 = wmRef[2][0][1];
+			temp202 = wmRef[2][0][2];
+			temp210 = wmRef[2][1][0];
+			temp212 = wmRef[2][1][2];
+			temp220 = wmRef[2][2][0];
+			temp221 = wmRef[2][2][1];
+			temp222 = wmRef[2][2][2];
 
 			console.log(temp200, temp201, temp202, temp210, temp212, temp220, temp221, temp222);
 			
-			worldMatricesRef[2][0][0] = temp220;
-			worldMatricesRef[2][0][1] = temp210;
-			worldMatricesRef[2][0][2] = temp200;
-			worldMatricesRef[2][1][0] = temp221;
-			worldMatricesRef[2][1][2] = temp201;
-			worldMatricesRef[2][2][0] = temp222;
-			worldMatricesRef[2][2][1] = temp212;
-			worldMatricesRef[2][2][2] = temp202;
+			wmRef[2][0][0] = temp220;
+			wmRef[2][0][1] = temp210;
+			wmRef[2][0][2] = temp200;
+			wmRef[2][1][0] = temp221;
+			wmRef[2][1][2] = temp201;
+			wmRef[2][2][0] = temp222;
+			wmRef[2][2][1] = temp212;
+			wmRef[2][2][2] = temp202;
 
-			console.log(worldMatricesRef[2][0][0], worldMatricesRef[2][0][1], worldMatricesRef[2][0][2], worldMatricesRef[2][1][0], worldMatricesRef[2][1][2], worldMatricesRef[2][2][0], worldMatricesRef[2][2][1], worldMatricesRef[2][2][2] )
+			console.log(wmRef[2][0][0], wmRef[2][0][1], wmRef[2][0][2], wmRef[2][1][0], wmRef[2][1][2], wmRef[2][2][0], wmRef[2][2][1], wmRef[2][2][2] )
 			
-			drawScene();
+			//drawScene();
 			//sleep(200);
 
 		//}
 	
 	}
-	console.log(worldMatricesRef)
-
+	//console.log(wmRef);
 }
 
 
 function rotateLeftFace(deg) {
-	worldMatricesList[worldMatricesRef[2][0][0]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[2][0][0]], utils.MakeRotateXMatrix(deg));
-	worldMatricesList[worldMatricesRef[2][0][1]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[2][0][1]], utils.MakeRotateXMatrix(deg));
-	worldMatricesList[worldMatricesRef[2][0][2]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[2][0][2]], utils.MakeRotateXMatrix(deg));
-	worldMatricesList[worldMatricesRef[2][1][0]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[2][1][0]], utils.MakeRotateXMatrix(deg));
-	worldMatricesList[worldMatricesRef[2][1][2]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[2][1][2]], utils.MakeRotateXMatrix(deg));
-	worldMatricesList[worldMatricesRef[2][2][0]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[2][2][0]], utils.MakeRotateXMatrix(deg));
-	worldMatricesList[worldMatricesRef[2][2][1]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[2][2][1]], utils.MakeRotateXMatrix(deg));
-	worldMatricesList[worldMatricesRef[2][2][2]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[2][2][2]], utils.MakeRotateXMatrix(deg));
+	wmAndQList[wmRef[2][0][0]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[2][0][0]].matrix, utils.MakeRotateXMatrix(deg));
+	
+	wmAndQList[wmRef[2][0][1]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[2][0][1]].matrix, utils.MakeRotateXMatrix(deg));
+	
+	wmAndQList[wmRef[2][0][2]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[2][0][2]].matrix, utils.MakeRotateXMatrix(deg));
+	
+	wmAndQList[wmRef[2][1][0]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[2][1][0]].matrix, utils.MakeRotateXMatrix(deg));
+	
+	wmAndQList[wmRef[2][1][2]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[2][1][2]].matrix, utils.MakeRotateXMatrix(deg));
+	
+	wmAndQList[wmRef[2][2][0]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[2][2][0]].matrix, utils.MakeRotateXMatrix(deg));
+	
+	wmAndQList[wmRef[2][2][1]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[2][2][1]].matrix, utils.MakeRotateXMatrix(deg));
+	
+	wmAndQList[wmRef[2][2][2]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[2][2][2]].matrix, utils.MakeRotateXMatrix(deg));
 }
 
 function frontFace(deg) {
 	rotateFrontFace(deg);
 
-	let temp000, temp001, temp002, temp010, temp012, temp020, temp021, temp022;
-	temp000 = worldMatricesRef[0][0][0];
-	temp001 = worldMatricesRef[0][0][1];
-	temp002 = worldMatricesRef[0][0][2];
-	temp100 = worldMatricesRef[1][0][0];
-	temp102 = worldMatricesRef[1][0][2];
-	temp200 = worldMatricesRef[2][0][0];
-	temp201 = worldMatricesRef[2][0][1];
-	temp202 = worldMatricesRef[2][0][2];
-	
-	if(deg>0){
-		
+	let temp000, temp001, temp002, temp100, temp102, temp200, temp201, temp202;
+	temp000 = wmRef[0][0][0];
+	temp001 = wmRef[0][0][1];
+	temp002 = wmRef[0][0][2];
+	temp100 = wmRef[1][0][0];
+	temp102 = wmRef[1][0][2];
+	temp200 = wmRef[2][0][0];
+	temp201 = wmRef[2][0][1];
+	temp202 = wmRef[2][0][2];
+	console.log(temp000, temp001, temp002, temp100, temp102, temp200, temp201, temp202);
 
-			worldMatricesRef[0][0][0]=temp200;
-		worldMatricesRef[0][0][1]=temp100;
-		worldMatricesRef[0][0][2]=temp000;
-		worldMatricesRef[1][0][0]=temp201;
-		worldMatricesRef[1][0][2]=temp001;
-		worldMatricesRef[2][0][0]=temp202;
-		worldMatricesRef[2][0][1]=temp102;
-		worldMatricesRef[2][0][2]=temp002;
-		
-		
-		
-		
-	}else{
-	
-				worldMatricesRef[0][0][0]=temp002;
-		worldMatricesRef[0][0][1]=temp102;
-		worldMatricesRef[0][0][2]=temp202;
-		worldMatricesRef[1][0][0]=temp001;
-		worldMatricesRef[1][0][2]=temp201;
-		worldMatricesRef[2][0][0]=temp000;
-		worldMatricesRef[2][0][1]=temp100;
-		worldMatricesRef[2][0][2]=temp200;
+	if (deg > 0) {
+		// clockwise
+		wmRef[0][0][0] = temp002;
+		wmRef[0][0][1] = temp102;
+		wmRef[0][0][2] = temp202;
+		wmRef[1][0][0] = temp001;
+		wmRef[1][0][2] = temp201;
+		wmRef[2][0][0] = temp000;
+		wmRef[2][0][1] = temp100;
+		wmRef[2][0][2] = temp200;
+	} else {
+		// checked ok
+		//counterclockwise
+		wmRef[0][0][0] = temp200;
+		wmRef[0][0][1] = temp100;
+		wmRef[0][0][2] = temp000;
+		wmRef[1][0][0] = temp201;
+		wmRef[1][0][2] = temp001;
+		wmRef[2][0][0] = temp202;
+		wmRef[2][0][1] = temp102;
+		wmRef[2][0][2] = temp002;
 	}
-
+	console.log(wmRef[0][0][0], wmRef[0][0][1], wmRef[0][0][2], wmRef[1][0][0], wmRef[1][0][2], wmRef[2][0][0], wmRef[2][0][1], wmRef[2][0][2]);
 }
 
 function rotateFrontFace(deg) {
-	worldMatricesList[worldMatricesRef[0][0][0]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[0][0][0]], utils.MakeRotateZMatrix(deg));
-	worldMatricesList[worldMatricesRef[0][0][1]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[0][0][1]], utils.MakeRotateZMatrix(deg));
-	worldMatricesList[worldMatricesRef[0][0][2]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[0][0][2]], utils.MakeRotateZMatrix(deg));
-	worldMatricesList[worldMatricesRef[1][0][0]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[1][0][0]], utils.MakeRotateZMatrix(deg));
-	worldMatricesList[worldMatricesRef[1][0][2]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[1][0][2]], utils.MakeRotateZMatrix(deg));
-	worldMatricesList[worldMatricesRef[2][0][0]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[2][0][0]], utils.MakeRotateZMatrix(deg));
-	worldMatricesList[worldMatricesRef[2][0][1]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[2][0][1]], utils.MakeRotateZMatrix(deg));
-	worldMatricesList[worldMatricesRef[2][0][2]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[2][0][2]], utils.MakeRotateZMatrix(deg));
+	wmAndQList[wmRef[0][0][0]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[0][0][0]].matrix, utils.MakeRotateZMatrix(deg));
+	updateQuaternion(wmRef[0][0][0], 0, 0, deg);
+	wmAndQList[wmRef[0][0][1]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[0][0][1]].matrix, utils.MakeRotateZMatrix(deg));
+	updateQuaternion(wmRef[0][0][1], 0, 0, deg);
+	wmAndQList[wmRef[0][0][2]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[0][0][2]].matrix, utils.MakeRotateZMatrix(deg));
+	updateQuaternion(wmRef[0][0][2], 0, 0, deg);
+	wmAndQList[wmRef[1][0][0]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[1][0][0]].matrix, utils.MakeRotateZMatrix(deg));
+	updateQuaternion(wmRef[1][0][0], 0, 0, deg);
+	wmAndQList[wmRef[1][0][2]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[1][0][2]].matrix, utils.MakeRotateZMatrix(deg));
+	updateQuaternion(wmRef[1][0][2], 0, 0, deg);
+	wmAndQList[wmRef[2][0][0]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[2][0][0]].matrix, utils.MakeRotateZMatrix(deg));
+	updateQuaternion(wmRef[2][0][0], 0, 0, deg);
+	wmAndQList[wmRef[2][0][1]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[2][0][1]].matrix, utils.MakeRotateZMatrix(deg));
+	updateQuaternion(wmRef[2][0][1], 0, 0, deg);
+	wmAndQList[wmRef[2][0][2]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[2][0][2]].matrix, utils.MakeRotateZMatrix(deg));
+	updateQuaternion(wmRef[2][0][2], 0, 0, deg);
 }
 
 function backFace(deg) {
 	rotateBackFace(deg);
 
 	let temp000, temp001, temp002, temp010, temp012, temp020, temp021, temp022;
-	temp000 = worldMatricesRef[0][2][0];
-	temp001 = worldMatricesRef[0][2][1];
-	temp002 = worldMatricesRef[0][2][2];
-	temp100 = worldMatricesRef[1][2][0];
-	temp102 = worldMatricesRef[1][2][2];
-	temp200 = worldMatricesRef[2][2][0];
-	temp201 = worldMatricesRef[2][2][1];
-	temp202 = worldMatricesRef[2][2][2];
+	temp000 = wmRef[0][2][0];
+	temp001 = wmRef[0][2][1];
+	temp002 = wmRef[0][2][2];
+	temp100 = wmRef[1][2][0];
+	temp102 = wmRef[1][2][2];
+	temp200 = wmRef[2][2][0];
+	temp201 = wmRef[2][2][1];
+	temp202 = wmRef[2][2][2];
 
-	//if clockwise: reassign worldMatricesRef related to moved cubes
+	//if clockwise: reassign wmRef related to moved cubes
 	//else: add counterclockwise reassignment
 }
 
 function rotateBackFace(deg) {
-	worldMatricesList[worldMatricesRef[0][2][0]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[0][2][0]], utils.MakeRotateZMatrix(deg));
-	worldMatricesList[worldMatricesRef[0][2][1]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[0][2][1]], utils.MakeRotateZMatrix(deg));
-	worldMatricesList[worldMatricesRef[0][2][2]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[0][2][2]], utils.MakeRotateZMatrix(deg));
-	worldMatricesList[worldMatricesRef[1][2][0]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[1][2][0]], utils.MakeRotateZMatrix(deg));
-	worldMatricesList[worldMatricesRef[1][2][2]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[1][2][2]], utils.MakeRotateZMatrix(deg));
-	worldMatricesList[worldMatricesRef[2][2][0]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[2][2][0]], utils.MakeRotateZMatrix(deg));
-	worldMatricesList[worldMatricesRef[2][2][1]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[2][2][1]], utils.MakeRotateZMatrix(deg));
-	worldMatricesList[worldMatricesRef[2][2][2]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[2][2][2]], utils.MakeRotateZMatrix(deg));
+	wmAndQList[wmRef[0][2][0]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[0][2][0]].matrix, utils.MakeRotateZMatrix(deg));
+	
+	wmAndQList[wmRef[0][2][1]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[0][2][1]].matrix, utils.MakeRotateZMatrix(deg));
+	
+	wmAndQList[wmRef[0][2][2]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[0][2][2]].matrix, utils.MakeRotateZMatrix(deg));
+	
+	wmAndQList[wmRef[1][2][0]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[1][2][0]].matrix, utils.MakeRotateZMatrix(deg));
+	
+	wmAndQList[wmRef[1][2][2]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[1][2][2]].matrix, utils.MakeRotateZMatrix(deg));
+	
+	wmAndQList[wmRef[2][2][0]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[2][2][0]].matrix, utils.MakeRotateZMatrix(deg));
+	
+	wmAndQList[wmRef[2][2][1]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[2][2][1]].matrix, utils.MakeRotateZMatrix(deg));
+	
+	wmAndQList[wmRef[2][2][2]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[2][2][2]].matrix, utils.MakeRotateZMatrix(deg));
 }
 
 function downFace(deg) {
 	rotateDownFace(deg);
 
-	//if clockwise: reassign worldMatricesRef related to moved cubes
+	//if clockwise: reassign wmRef related to moved cubes
 	//else: add counterclockwise reassignment
 }
 
 function rotateDownFace(deg) {
-	worldMatricesList[worldMatricesRef[0][0][0]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[0][0][0]], utils.MakeRotateYMatrix(deg));
-	worldMatricesList[worldMatricesRef[0][1][0]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[0][1][0]], utils.MakeRotateYMatrix(deg));
-	worldMatricesList[worldMatricesRef[0][2][0]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[0][2][0]], utils.MakeRotateYMatrix(deg));
-	worldMatricesList[worldMatricesRef[1][0][0]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[1][0][0]], utils.MakeRotateYMatrix(deg));
-	worldMatricesList[worldMatricesRef[1][2][0]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[1][2][0]], utils.MakeRotateYMatrix(deg));
-	worldMatricesList[worldMatricesRef[2][0][0]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[2][0][0]], utils.MakeRotateYMatrix(deg));
-	worldMatricesList[worldMatricesRef[2][1][0]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[2][1][0]], utils.MakeRotateYMatrix(deg));
-	worldMatricesList[worldMatricesRef[2][2][0]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[2][2][0]], utils.MakeRotateYMatrix(deg));
+	wmAndQList[wmRef[0][0][0]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[0][0][0]].matrix, utils.MakeRotateYMatrix(deg));
+	
+	wmAndQList[wmRef[0][1][0]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[0][1][0]].matrix, utils.MakeRotateYMatrix(deg));
+	
+	wmAndQList[wmRef[0][2][0]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[0][2][0]].matrix, utils.MakeRotateYMatrix(deg));
+	
+	wmAndQList[wmRef[1][0][0]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[1][0][0]].matrix, utils.MakeRotateYMatrix(deg));
+	
+	wmAndQList[wmRef[1][2][0]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[1][2][0]].matrix, utils.MakeRotateYMatrix(deg));
+	
+	wmAndQList[wmRef[2][0][0]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[2][0][0]].matrix, utils.MakeRotateYMatrix(deg));
+	
+	wmAndQList[wmRef[2][1][0]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[2][1][0]].matrix, utils.MakeRotateYMatrix(deg));
+	
+	wmAndQList[wmRef[2][2][0]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[2][2][0]].matrix, utils.MakeRotateYMatrix(deg));
 }
 
 function upFace(deg) {
 	rotateUpFace(deg);
 
-	//if clockwise: reassign worldMatricesRef related to moved cubes
+	//if clockwise: reassign wmRef related to moved cubes
 	//else: add counterclockwise reassignment
 }
 
 function rotateUpFace(deg) {
-	worldMatricesList[worldMatricesRef[0][0][2]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[0][0][2]], utils.MakeRotateYMatrix(deg));
-	worldMatricesList[worldMatricesRef[0][1][2]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[0][1][2]], utils.MakeRotateYMatrix(deg));
-	worldMatricesList[worldMatricesRef[0][2][2]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[0][2][2]], utils.MakeRotateYMatrix(deg));
-	worldMatricesList[worldMatricesRef[1][0][2]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[1][0][2]], utils.MakeRotateYMatrix(deg));
-	worldMatricesList[worldMatricesRef[1][2][2]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[1][2][2]], utils.MakeRotateYMatrix(deg));
-	worldMatricesList[worldMatricesRef[2][0][2]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[2][0][2]], utils.MakeRotateYMatrix(deg));
-	worldMatricesList[worldMatricesRef[2][1][2]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[2][1][2]], utils.MakeRotateYMatrix(deg));
-	worldMatricesList[worldMatricesRef[2][2][2]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[2][2][2]], utils.MakeRotateYMatrix(deg));
+	wmAndQList[wmRef[0][0][2]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[0][0][2]].matrix, utils.MakeRotateYMatrix(deg));
+	
+	wmAndQList[wmRef[0][1][2]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[0][1][2]].matrix, utils.MakeRotateYMatrix(deg));
+	
+	wmAndQList[wmRef[0][2][2]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[0][2][2]].matrix, utils.MakeRotateYMatrix(deg));
+	
+	wmAndQList[wmRef[1][0][2]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[1][0][2]].matrix, utils.MakeRotateYMatrix(deg));
+	
+	wmAndQList[wmRef[1][2][2]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[1][2][2]].matrix, utils.MakeRotateYMatrix(deg));
+	
+	wmAndQList[wmRef[2][0][2]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[2][0][2]].matrix, utils.MakeRotateYMatrix(deg));
+	
+	wmAndQList[wmRef[2][1][2]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[2][1][2]].matrix, utils.MakeRotateYMatrix(deg));
+	
+	wmAndQList[wmRef[2][2][2]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[2][2][2]].matrix, utils.MakeRotateYMatrix(deg));
 }
 
 function rotateMiddle(rotation){
@@ -631,36 +636,57 @@ function leftMiddleHorizontal() {
 
 // all cubes with k = 1
 function rotateMiddleHorizontal(deg) {
-	worldMatricesList[worldMatricesRef[0][0][1]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[0][0][1]], utils.MakeRotateYMatrix(deg));
-	worldMatricesList[worldMatricesRef[0][1][1]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[0][1][1]], utils.MakeRotateYMatrix(deg));
-	worldMatricesList[worldMatricesRef[0][2][1]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[0][2][1]], utils.MakeRotateYMatrix(deg));
-	worldMatricesList[worldMatricesRef[1][0][1]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[1][0][1]], utils.MakeRotateYMatrix(deg));
-	worldMatricesList[worldMatricesRef[1][2][1]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[1][2][1]], utils.MakeRotateYMatrix(deg));
-	worldMatricesList[worldMatricesRef[2][0][1]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[2][0][1]], utils.MakeRotateYMatrix(deg));
-	worldMatricesList[worldMatricesRef[2][1][1]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[2][1][1]], utils.MakeRotateYMatrix(deg));
-	worldMatricesList[worldMatricesRef[2][2][1]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[2][2][1]], utils.MakeRotateYMatrix(deg));
+	wmAndQList[wmRef[0][0][1]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[0][0][1]].matrix, utils.MakeRotateYMatrix(deg));
+	
+	wmAndQList[wmRef[0][1][1]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[0][1][1]].matrix, utils.MakeRotateYMatrix(deg));
+	
+	wmAndQList[wmRef[0][2][1]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[0][2][1]].matrix, utils.MakeRotateYMatrix(deg));
+	
+	wmAndQList[wmRef[1][0][1]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[1][0][1]].matrix, utils.MakeRotateYMatrix(deg));
+	
+	wmAndQList[wmRef[1][2][1]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[1][2][1]].matrix, utils.MakeRotateYMatrix(deg));
+	
+	wmAndQList[wmRef[2][0][1]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[2][0][1]].matrix, utils.MakeRotateYMatrix(deg));
+	
+	wmAndQList[wmRef[2][1][1]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[2][1][1]].matrix, utils.MakeRotateYMatrix(deg));
+	
+	wmAndQList[wmRef[2][2][1]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[2][2][1]].matrix, utils.MakeRotateYMatrix(deg));
 }
 
 function rotateMiddleVerticalFrontBack(deg) {
-	worldMatricesList[worldMatricesRef[1][0][0]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[1][0][0]], utils.MakeRotateXMatrix(deg));
-	worldMatricesList[worldMatricesRef[1][0][1]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[1][0][1]], utils.MakeRotateXMatrix(deg));
-	worldMatricesList[worldMatricesRef[1][0][2]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[1][0][2]], utils.MakeRotateXMatrix(deg));
-	worldMatricesList[worldMatricesRef[1][1][0]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[1][1][0]], utils.MakeRotateXMatrix(deg));
-	worldMatricesList[worldMatricesRef[1][1][2]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[1][1][2]], utils.MakeRotateXMatrix(deg));
-	worldMatricesList[worldMatricesRef[1][2][0]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[1][2][0]], utils.MakeRotateXMatrix(deg));
-	worldMatricesList[worldMatricesRef[1][2][1]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[1][2][1]], utils.MakeRotateXMatrix(deg));
-	worldMatricesList[worldMatricesRef[1][2][2]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[1][2][2]], utils.MakeRotateXMatrix(deg));
+	wmAndQList[wmRef[1][0][0]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[1][0][0]].matrix, utils.MakeRotateXMatrix(deg));
+	
+	wmAndQList[wmRef[1][0][1]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[1][0][1]].matrix, utils.MakeRotateXMatrix(deg));
+	
+	wmAndQList[wmRef[1][0][2]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[1][0][2]].matrix, utils.MakeRotateXMatrix(deg));
+	
+	wmAndQList[wmRef[1][1][0]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[1][1][0]].matrix, utils.MakeRotateXMatrix(deg));
+	
+	wmAndQList[wmRef[1][1][2]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[1][1][2]].matrix, utils.MakeRotateXMatrix(deg));
+	
+	wmAndQList[wmRef[1][2][0]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[1][2][0]].matrix, utils.MakeRotateXMatrix(deg));
+	
+	wmAndQList[wmRef[1][2][1]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[1][2][1]].matrix, utils.MakeRotateXMatrix(deg));
+	
+	wmAndQList[wmRef[1][2][2]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[1][2][2]].matrix, utils.MakeRotateXMatrix(deg));
 }
 
 function rotateMiddleVerticalRightLeft(deg) {
-	worldMatricesList[worldMatricesRef[0][1][0]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[0][1][0]], utils.MakeRotateZMatrix(deg));
-	worldMatricesList[worldMatricesRef[0][1][1]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[0][1][1]], utils.MakeRotateZMatrix(deg));
-	worldMatricesList[worldMatricesRef[0][1][2]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[0][1][2]], utils.MakeRotateZMatrix(deg));
-	worldMatricesList[worldMatricesRef[1][1][0]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[1][1][0]], utils.MakeRotateZMatrix(deg));
-	worldMatricesList[worldMatricesRef[1][1][2]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[1][1][2]], utils.MakeRotateZMatrix(deg));
-	worldMatricesList[worldMatricesRef[2][1][0]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[2][1][0]], utils.MakeRotateZMatrix(deg));
-	worldMatricesList[worldMatricesRef[2][1][1]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[2][1][1]], utils.MakeRotateZMatrix(deg));
-	worldMatricesList[worldMatricesRef[2][1][2]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[2][1][2]], utils.MakeRotateZMatrix(deg));
+	wmAndQList[wmRef[0][1][0]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[0][1][0]].matrix, utils.MakeRotateZMatrix(deg));
+	
+	wmAndQList[wmRef[0][1][1]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[0][1][1]].matrix, utils.MakeRotateZMatrix(deg));
+	
+	wmAndQList[wmRef[0][1][2]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[0][1][2]].matrix, utils.MakeRotateZMatrix(deg));
+	
+	wmAndQList[wmRef[1][1][0]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[1][1][0]].matrix, utils.MakeRotateZMatrix(deg));
+	
+	wmAndQList[wmRef[1][1][2]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[1][1][2]].matrix, utils.MakeRotateZMatrix(deg));
+	
+	wmAndQList[wmRef[2][1][0]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[2][1][0]].matrix, utils.MakeRotateZMatrix(deg));
+	
+	wmAndQList[wmRef[2][1][1]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[2][1][1]].matrix, utils.MakeRotateZMatrix(deg));
+	
+	wmAndQList[wmRef[2][1][2]].matrix = utils.multiplyMatrices(wmAndQList[wmRef[2][1][2]].matrix, utils.MakeRotateZMatrix(deg));
 }
 
 //middle vertical top/bottom missing
@@ -699,14 +725,14 @@ function drawScene() {
 		var normalMatrixPositionHandle = gl.getUniformLocation(program, 'nMatrix');
 		var worldMatrixLocation = gl.getUniformLocation(program, 'worldMatrix');
 		
-		var normalMatrix = utils.invertMatrix(utils.transposeMatrix(worldMatricesList[i]));
+		var normalMatrix = utils.invertMatrix(utils.transposeMatrix(wmAndQList[i].matrix));
 
-		var viewWorldMatrix = utils.multiplyMatrices(viewMatrix, worldMatricesList[i]);
+		var viewWorldMatrix = utils.multiplyMatrices(viewMatrix, wmAndQList[i].matrix);
 		var projectionMatrix = utils.multiplyMatrices(perspectiveMatrix, viewWorldMatrix);
 		
 		gl.uniformMatrix4fv(matrixLocation , gl.FALSE, utils.transposeMatrix(projectionMatrix));
 		gl.uniformMatrix4fv(normalMatrixPositionHandle , gl.FALSE, utils.transposeMatrix(normalMatrix));
-		gl.uniformMatrix4fv(worldMatrixLocation , gl.FALSE, utils.transposeMatrix(worldMatricesList[i]));
+		gl.uniformMatrix4fv(worldMatrixLocation , gl.FALSE, utils.transposeMatrix(wmAndQList[i].matrix));
 
 		gl.bindVertexArray(vaos[i]);
 
@@ -769,23 +795,29 @@ async function init() {
     shaderDir = baseDir + "shaders/";
 
     for (let i = 0, count = 0; i < 3; i++) {
-    	if (!worldMatricesRef[i]) {
-    		worldMatricesRef[i] = [];
+    	if (!wmRef[i]) {
+    		wmRef[i] = [];
     	}
     	for (let j = 0; j < 3; j++) {
-	    	if (!worldMatricesRef[i][j]) {
-	    		worldMatricesRef[i][j] = [];
+	    	if (!wmRef[i][j]) {
+	    		wmRef[i][j] = [];
 	    	}
     		for (let k = 0; k < 3; k++) {
-    			if (!worldMatricesRef[i][j][k]) {
-		    		worldMatricesRef[i][j][k] = [];
+    			if (!wmRef[i][j][k]) {
+		    		wmRef[i][j][k] = [];
 		    	}
     			if (i === 1 && j === 1 && k === 1) {
-					worldMatricesRef[i][j][k] = "none";
+					wmRef[i][j][k] = "none";
     			} else {
-					var worldMatrix = utils.MakeWorld(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.7);
-					worldMatricesList[count] = worldMatrix;
-					worldMatricesRef[i][j][k] = count;
+					var worldMatrix = utils.MakeWorld(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, scale);
+					var q = new Quaternion();
+					wmAndQList[count] = {
+						matrix: worldMatrix,
+						quaternion: q
+					};
+					//wmAndQList[count].matrix = worldMatrix;
+					//wmAndQList[count].quaternion = q;
+					wmRef[i][j][k] = count;
 					count++;
     			}
     		}
@@ -879,19 +911,20 @@ async function init() {
 
 
 
-function updateQuaternion(q, rvx, rvy, rvz) {
+function updateQuaternion(i, rvx, rvy, rvz) {
 
 	//creating quaternion delta_quat
 	var delta_quat = Quaternion.fromEuler(utils.degToRad(rvz), utils.degToRad(rvx), utils.degToRad(rvy));
 	
 	//q'
-	q_new = delta_quat.mul(q); //q is the i-th quaternion
+	q_new = delta_quat.mul(wmAndQList[i].quaternion); //q is the i-th quaternion
 
 	q = q_new; //update of the i-th quaternion
 
  	//gaining rotation matrix from quaternion
  	out = q.toMatrix4();
-	return out; //return the new matrix after rotation 
+	//return out; //return the new matrix after rotation 
+	wmAndQList[i].matrix = utils.multiplyMatrices(out, utils.MakeScaleMatrix(scale));
 }
 
 
