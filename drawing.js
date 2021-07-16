@@ -7,6 +7,7 @@ var cubes = ["Cube00_B", "Cube00_M", "Cube00", "Cube01_B", "Cube01_M", "Cube01",
 
 var models = new Array();
 var vaos = new Array();
+var quaternions = new Array();
 
 var program;
 
@@ -197,10 +198,10 @@ function rotateFace(rotation){
 	} else if (selectedFace.i === 2) {
 		switch(rotation) {
 			case "R":
-				leftFace(90);
+				leftFace(-90);
 				break;
 			case "L":
-				leftFace(-90);
+				leftFace(90);
 		}
 	} else {
 		if (selectedFace.j === 0) {
@@ -323,41 +324,76 @@ function rotateRightFace(deg) {
 	worldMatricesList[worldMatricesRef[0][2][2]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[0][2][2]], utils.MakeRotateXMatrix(deg));
 }
 
-function leftFace(deg) {
-	rotateLeftFace(deg);
+function leftFace(deg) { //async
+	console.log(deg);
+	console.log(Math.sign(deg));
+	if(Math.sign(deg)<0){
+		//for(temp_deg = 0; temp_deg <= deg; temp_deg+=2){
+			//i=2 forall cube
+			rotateLeftFace(deg);
+			let temp200, temp201, temp202, temp210, temp212, temp220, temp221, temp222;
+			temp200 = worldMatricesRef[2][0][0];
+			temp201 = worldMatricesRef[2][0][1];
+			temp202 = worldMatricesRef[2][0][2];
+			temp210 = worldMatricesRef[2][1][0];
+			temp212 = worldMatricesRef[2][1][2];
+			temp220 = worldMatricesRef[2][2][0];
+			temp221 = worldMatricesRef[2][2][1];
+			temp222 = worldMatricesRef[2][2][2];
 
-	let temp000, temp001, temp002, temp010, temp012, temp020, temp021, temp022;
-	temp000 = worldMatricesRef[2][0][0];
-	temp001 = worldMatricesRef[2][0][1];
-	temp002 = worldMatricesRef[2][0][2];
-	temp010 = worldMatricesRef[2][1][0];
-	temp012 = worldMatricesRef[2][1][2];
-	temp020 = worldMatricesRef[2][2][0];
-	temp021 = worldMatricesRef[2][2][1];
-	temp022 = worldMatricesRef[2][2][2];
-	
-	if(deg>0){
-		worldMatricesRef[2][0][0]=temp020;
-		worldMatricesRef[2][0][1]=temp010;
-		worldMatricesRef[2][0][2]=temp000;
-		worldMatricesRef[2][1][0]=temp021;
-		worldMatricesRef[2][1][2]=temp001;
-		worldMatricesRef[2][2][0]=temp022;
-		worldMatricesRef[2][2][1]=temp012;
-		worldMatricesRef[2][2][2]=temp002;
-		
-	}else{
-		worldMatricesRef[2][0][0]=temp002;
-		worldMatricesRef[2][0][1]=temp012;
-		worldMatricesRef[2][0][2]=temp022;
-		worldMatricesRef[2][1][0]=temp001;
-		worldMatricesRef[2][1][2]=temp021;
-		worldMatricesRef[2][2][0]=temp000;
-		worldMatricesRef[2][2][1]=temp010;
-		worldMatricesRef[2][2][2]=temp020;
+			console.log(temp200, temp201, temp202, temp210, temp212, temp220, temp221, temp222);
+
+			worldMatricesRef[2][0][0] = temp202;
+			worldMatricesRef[2][0][1] = temp212;
+			worldMatricesRef[2][0][2] = temp222;
+			worldMatricesRef[2][1][0] = temp201;
+			worldMatricesRef[2][1][2] = temp221;
+			worldMatricesRef[2][2][0] = temp200;
+			worldMatricesRef[2][2][1] = temp210;
+			worldMatricesRef[2][2][2] = temp220;
+
+			console.log(worldMatricesRef[2][0][0], worldMatricesRef[2][0][1], worldMatricesRef[2][0][2], worldMatricesRef[2][1][0], worldMatricesRef[2][1][2], worldMatricesRef[2][2][0], worldMatricesRef[2][2][1], worldMatricesRef[2][2][2]);
+
+			drawScene();
+			//sleep(200);
+		//}
 	}
+	else{
+		rotateLeftFace(deg);
+		//for(temp_deg = 0; temp_deg >= deg; temp_deg-=2){
+			let temp200, temp201, temp202, temp210, temp212, temp220, temp221, temp222;
+			temp200 = worldMatricesRef[2][0][0];
+			temp201 = worldMatricesRef[2][0][1];
+			temp202 = worldMatricesRef[2][0][2];
+			temp210 = worldMatricesRef[2][1][0];
+			temp212 = worldMatricesRef[2][1][2];
+			temp220 = worldMatricesRef[2][2][0];
+			temp221 = worldMatricesRef[2][2][1];
+			temp222 = worldMatricesRef[2][2][2];
+
+			console.log(temp200, temp201, temp202, temp210, temp212, temp220, temp221, temp222);
+			
+			worldMatricesRef[2][0][0] = temp220;
+			worldMatricesRef[2][0][1] = temp210;
+			worldMatricesRef[2][0][2] = temp200;
+			worldMatricesRef[2][1][0] = temp221;
+			worldMatricesRef[2][1][2] = temp201;
+			worldMatricesRef[2][2][0] = temp222;
+			worldMatricesRef[2][2][1] = temp212;
+			worldMatricesRef[2][2][2] = temp202;
+
+			console.log(worldMatricesRef[2][0][0], worldMatricesRef[2][0][1], worldMatricesRef[2][0][2], worldMatricesRef[2][1][0], worldMatricesRef[2][1][2], worldMatricesRef[2][2][0], worldMatricesRef[2][2][1], worldMatricesRef[2][2][2] )
+			
+			drawScene();
+			//sleep(200);
+
+		//}
+	
+	}
+	console.log(worldMatricesRef)
 
 }
+
 
 function rotateLeftFace(deg) {
 	worldMatricesList[worldMatricesRef[2][0][0]] = utils.multiplyMatrices(worldMatricesList[worldMatricesRef[2][0][0]], utils.MakeRotateXMatrix(deg));
@@ -842,6 +878,23 @@ async function init() {
 }
 
 
+
+function updateQuaternion(q, rvx, rvy, rvz) {
+
+	//creating quaternion delta_quat
+	var delta_quat = Quaternion.fromEuler(utils.degToRad(rvz), utils.degToRad(rvx), utils.degToRad(rvy));
+	
+	//q'
+	q_new = delta_quat.mul(q); //q is the i-th quaternion
+
+	q = q_new; //update of the i-th quaternion
+
+ 	//gaining rotation matrix from quaternion
+ 	out = q.toMatrix4();
+	return out; //return the new matrix after rotation 
+}
+
+
 function sleep(milliseconds) {
   const date = Date.now();
   let currentDate = null;
@@ -849,7 +902,6 @@ function sleep(milliseconds) {
     currentDate = Date.now();
   } while (currentDate - date < milliseconds);
 }
-
 
 
 
