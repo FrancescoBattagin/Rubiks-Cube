@@ -7,7 +7,7 @@ out vec2 uvCoord;
 in vec3 a_normal;
 out vec3 fs_Position;
 
-//out vec3 fs_norm;
+out vec3 fs_norm;
 
 uniform mat4 matrix; 
 //We need to transform the normals with the position

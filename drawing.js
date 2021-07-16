@@ -50,7 +50,7 @@ var lastMouseX = -100, lastMouseY = -100;
               Math.cos(dirLightAlpha) * Math.sin(dirLightBeta)
               ];
 			  
-var directionalLightColor = [0.1, 1.0, 1.0];
+var directionalLightColor = [2.0, 2.0, 2.0];
 
 function doMouseDown(event) {
 	lastMouseX = event.pageX;
@@ -183,8 +183,7 @@ function main() {
 
 		var normalsBuffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, normalsBuffer);
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(models[i].normals), gl.STATIC_DRAW);
-		//console.log(models[i].indices);
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(models[i].vertexNormals), gl.STATIC_DRAW);
 		gl.enableVertexAttribArray(normalsAttributeLocation);
 		gl.vertexAttribPointer(normalsAttributeLocation, 3, gl.FLOAT, false, 0, 0);
 
@@ -781,6 +780,11 @@ function drawScene() {
 		cx = lookRadius * Math.sin(utils.degToRad(-angle)) * Math.cos(utils.degToRad(-elevation));
 		cy = lookRadius * Math.sin(utils.degToRad(-elevation));
 		
+		directionalLight = [Math.cos(-utils.degToRad(cx)) * Math.cos(-utils.degToRad(cy)),
+              Math.sin(-utils.degToRad(cx)),
+              Math.cos(-utils.degToRad(cx)) * Math.sin(-utils.degToRad(cy))
+              ];
+		
 		var viewMatrix = utils.MakeView(cx, cy, cz, elevation,angle);
 
 		var matrixLocation = gl.getUniformLocation(program, "matrix");
@@ -792,16 +796,23 @@ function drawScene() {
 		var viewWorldMatrix = utils.multiplyMatrices(viewMatrix, wmAndQList[i].matrix);
 		var projectionMatrix = utils.multiplyMatrices(perspectiveMatrix, viewWorldMatrix);
 		
+		var lightDirMatrix = utils.transposeMatrix(wmAndQList[i].matrix); 
+		var lightdirTransformed = utils.multiplyMatrix3Vector3(utils.sub3x3from4x4(lightDirMatrix), directionalLight); 
+		
+		gl.uniform3fv(lightColorHandle,  directionalLightColor);
+		gl.uniform3fv(lightDirectionHandle,  lightdirTransformed);
+		
 		gl.uniformMatrix4fv(matrixLocation , gl.FALSE, utils.transposeMatrix(projectionMatrix));
 		gl.uniformMatrix4fv(normalMatrixPositionHandle , gl.FALSE, utils.transposeMatrix(normalMatrix));
 		gl.uniformMatrix4fv(worldMatrixLocation , gl.FALSE, utils.transposeMatrix(wmAndQList[i].matrix));
-
+		//mettere qui ligfht dir color
+		
+		
 		gl.bindVertexArray(vaos[i]);
 
 		gl.activeTexture(gl.TEXTURE0);
 		gl.bindTexture(gl.TEXTURE_2D, texture);
 		gl.uniform1i(textureFileHandle, 0);
-		
 		gl.drawElements(gl.TRIANGLES, models[i].indices.length, gl.UNSIGNED_SHORT, 0);
 	}
 
@@ -944,7 +955,6 @@ async function init() {
 	for (let c in cubes) {
         models[c] = await importObject(cubes[c]);
     }
-	
 	console.log(models[0]);
 	
 	/*
