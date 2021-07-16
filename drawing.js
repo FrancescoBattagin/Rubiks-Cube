@@ -208,10 +208,10 @@ function rotateFace(rotation){
 		if (selectedFace.j === 0) {
 			switch(rotation) {
 				case "R":
-					frontFace(90);
+					frontFace(-90);
 					break;
 				case "L":
-					frontFace(-90);
+					frontFace(90);
 			}
 		} else if (selectedFace.j === 2) {
 			switch(rotation) {
@@ -401,17 +401,6 @@ function frontFace(deg) {
 
 	if (deg > 0) {
 		// clockwise
-		wmRef[0][0][0] = temp002;
-		wmRef[0][0][1] = temp102;
-		wmRef[0][0][2] = temp202;
-		wmRef[1][0][0] = temp001;
-		wmRef[1][0][2] = temp201;
-		wmRef[2][0][0] = temp000;
-		wmRef[2][0][1] = temp100;
-		wmRef[2][0][2] = temp200;
-	} else {
-		// checked ok
-		//counterclockwise
 		wmRef[0][0][0] = temp200;
 		wmRef[0][0][1] = temp100;
 		wmRef[0][0][2] = temp000;
@@ -420,6 +409,16 @@ function frontFace(deg) {
 		wmRef[2][0][0] = temp202;
 		wmRef[2][0][1] = temp102;
 		wmRef[2][0][2] = temp002;
+	} else {
+		//counterclockwise
+		wmRef[0][0][0] = temp002;
+		wmRef[0][0][1] = temp102;
+		wmRef[0][0][2] = temp202;
+		wmRef[1][0][0] = temp001;
+		wmRef[1][0][2] = temp201;
+		wmRef[2][0][0] = temp000;
+		wmRef[2][0][1] = temp100;
+		wmRef[2][0][2] = temp200;
 	}
 	console.log(wmRef[0][0][0], wmRef[0][0][1], wmRef[0][0][2], wmRef[1][0][0], wmRef[1][0][2], wmRef[2][0][0], wmRef[2][0][1], wmRef[2][0][2]);
 }
