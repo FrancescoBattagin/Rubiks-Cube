@@ -246,279 +246,279 @@ function rotateFace(rotation){
 function rightFace(deg) {
 	rotateRightFace(deg);
 	let temp000, temp001, temp002, temp010, temp012, temp020, temp021, temp022;
-	temp000 = wmRef[0][0][0];
-	temp001 = wmRef[0][0][1];
-	temp002 = wmRef[0][0][2];
-	temp010 = wmRef[0][1][0];
-	temp012 = wmRef[0][1][2];
-	temp020 = wmRef[0][2][0];
-	temp021 = wmRef[0][2][1];
-	temp022 = wmRef[0][2][2];
+	temp000 = wmRef[0][0][0].index;
+	temp001 = wmRef[0][0][1].index;
+	temp002 = wmRef[0][0][2].index;
+	temp010 = wmRef[0][1][0].index;
+	temp012 = wmRef[0][1][2].index;
+	temp020 = wmRef[0][2][0].index;
+	temp021 = wmRef[0][2][1].index;
+	temp022 = wmRef[0][2][2].index;
 			
 	if(deg > 0){
 		// counterclockwise
-		wmRef[0][0][0] = temp002;
-		wmRef[0][0][1] = temp012;
-		wmRef[0][0][2] = temp022;
-		wmRef[0][1][0] = temp001;
-		wmRef[0][1][2] = temp021;
-		wmRef[0][2][0] = temp000;
-		wmRef[0][2][1] = temp010;
-		wmRef[0][2][2] = temp020;
+		wmRef[0][0][0].index = temp002;
+		wmRef[0][0][1].index = temp012;
+		wmRef[0][0][2].index = temp022;
+		wmRef[0][1][0].index = temp001;
+		wmRef[0][1][2].index = temp021;
+		wmRef[0][2][0].index = temp000;
+		wmRef[0][2][1].index = temp010;
+		wmRef[0][2][2].index = temp020;
 	} else{
 		// clockwise
-		wmRef[0][0][0] = temp020;
-		wmRef[0][0][1] = temp010;
-		wmRef[0][0][2] = temp000;
-		wmRef[0][1][0] = temp021;
-		wmRef[0][1][2] = temp001;
-		wmRef[0][2][0] = temp022;
-		wmRef[0][2][1] = temp012;
-		wmRef[0][2][2] = temp002;
+		wmRef[0][0][0].index = temp020;
+		wmRef[0][0][1].index = temp010;
+		wmRef[0][0][2].index = temp000;
+		wmRef[0][1][0].index = temp021;
+		wmRef[0][1][2].index = temp001;
+		wmRef[0][2][0].index = temp022;
+		wmRef[0][2][1].index = temp012;
+		wmRef[0][2][2].index = temp002;
 	}
 }
 
 function rotateRightFace(deg) {
-	updateQuaternion(wmRef[0][0][0], deg, 0, 0);
-	updateQuaternion(wmRef[0][0][1], deg, 0, 0);
-	updateQuaternion(wmRef[0][0][2], deg, 0, 0);
-	updateQuaternion(wmRef[0][1][0], deg, 0, 0);
-	updateQuaternion(wmRef[0][1][2], deg, 0, 0);
-	updateQuaternion(wmRef[0][2][0], deg, 0, 0);
-	updateQuaternion(wmRef[0][2][1], deg, 0, 0);
-	updateQuaternion(wmRef[0][2][2], deg, 0, 0);
+	updateQuaternion(wmRef[0][0][0].index, deg, 0, 0);
+	updateQuaternion(wmRef[0][0][1].index, deg, 0, 0);
+	updateQuaternion(wmRef[0][0][2].index, deg, 0, 0);
+	updateQuaternion(wmRef[0][1][0].index, deg, 0, 0);
+	updateQuaternion(wmRef[0][1][2].index, deg, 0, 0);
+	updateQuaternion(wmRef[0][2][0].index, deg, 0, 0);
+	updateQuaternion(wmRef[0][2][1].index, deg, 0, 0);
+	updateQuaternion(wmRef[0][2][2].index, deg, 0, 0);
 }
 
 function leftFace(deg) {
 	rotateLeftFace(deg);
 	let temp200, temp201, temp202, temp210, temp212, temp220, temp221, temp222;
-	temp200 = wmRef[2][0][0];
-	temp201 = wmRef[2][0][1];
-	temp202 = wmRef[2][0][2];
-	temp210 = wmRef[2][1][0];
-	temp212 = wmRef[2][1][2];
-	temp220 = wmRef[2][2][0];
-	temp221 = wmRef[2][2][1];
-	temp222 = wmRef[2][2][2];
+	temp200 = wmRef[2][0][0].index;
+	temp201 = wmRef[2][0][1].index;
+	temp202 = wmRef[2][0][2].index;
+	temp210 = wmRef[2][1][0].index;
+	temp212 = wmRef[2][1][2].index;
+	temp220 = wmRef[2][2][0].index;
+	temp221 = wmRef[2][2][1].index;
+	temp222 = wmRef[2][2][2].index;
 	
 	if (deg < 0) {
-		wmRef[2][0][0] = temp220;
-		wmRef[2][0][1] = temp210;
-		wmRef[2][0][2] = temp200;
-		wmRef[2][1][0] = temp221;
-		wmRef[2][1][2] = temp201;
-		wmRef[2][2][0] = temp222;
-		wmRef[2][2][1] = temp212;
-		wmRef[2][2][2] = temp202;
+		wmRef[2][0][0].index = temp220;
+		wmRef[2][0][1].index = temp210;
+		wmRef[2][0][2].index = temp200;
+		wmRef[2][1][0].index = temp221;
+		wmRef[2][1][2].index = temp201;
+		wmRef[2][2][0].index = temp222;
+		wmRef[2][2][1].index = temp212;
+		wmRef[2][2][2].index = temp202;
 	} else {
-		wmRef[2][0][0] = temp202;
-		wmRef[2][0][1] = temp212;
-		wmRef[2][0][2] = temp222;
-		wmRef[2][1][0] = temp201;
-		wmRef[2][1][2] = temp221;
-		wmRef[2][2][0] = temp200;
-		wmRef[2][2][1] = temp210;
-		wmRef[2][2][2] = temp220;	
+		wmRef[2][0][0].index = temp202;
+		wmRef[2][0][1].index = temp212;
+		wmRef[2][0][2].index = temp222;
+		wmRef[2][1][0].index = temp201;
+		wmRef[2][1][2].index = temp221;
+		wmRef[2][2][0].index = temp200;
+		wmRef[2][2][1].index = temp210;
+		wmRef[2][2][2].index = temp220;	
 	}
 }
 
 function rotateLeftFace(deg) {
-	updateQuaternion(wmRef[2][0][0], deg, 0, 0);
-	updateQuaternion(wmRef[2][0][1], deg, 0, 0);
-	updateQuaternion(wmRef[2][0][2], deg, 0, 0);
-	updateQuaternion(wmRef[2][1][0], deg, 0, 0);
-	updateQuaternion(wmRef[2][1][2], deg, 0, 0);
-	updateQuaternion(wmRef[2][2][0], deg, 0, 0);
-	updateQuaternion(wmRef[2][2][1], deg, 0, 0);
-	updateQuaternion(wmRef[2][2][2], deg, 0, 0);
+	updateQuaternion(wmRef[2][0][0].index, deg, 0, 0);
+	updateQuaternion(wmRef[2][0][1].index, deg, 0, 0);
+	updateQuaternion(wmRef[2][0][2].index, deg, 0, 0);
+	updateQuaternion(wmRef[2][1][0].index, deg, 0, 0);
+	updateQuaternion(wmRef[2][1][2].index, deg, 0, 0);
+	updateQuaternion(wmRef[2][2][0].index, deg, 0, 0);
+	updateQuaternion(wmRef[2][2][1].index, deg, 0, 0);
+	updateQuaternion(wmRef[2][2][2].index, deg, 0, 0);
 }
 
 function frontFace(deg) {
 	rotateFrontFace(deg);
 
 	let temp000, temp001, temp002, temp100, temp102, temp200, temp201, temp202;
-	temp000 = wmRef[0][0][0];
-	temp001 = wmRef[0][0][1];
-	temp002 = wmRef[0][0][2];
-	temp100 = wmRef[1][0][0];
-	temp102 = wmRef[1][0][2];
-	temp200 = wmRef[2][0][0];
-	temp201 = wmRef[2][0][1];
-	temp202 = wmRef[2][0][2];
+	temp000 = wmRef[0][0][0].index;
+	temp001 = wmRef[0][0][1].index;
+	temp002 = wmRef[0][0][2].index;
+	temp100 = wmRef[1][0][0].index;
+	temp102 = wmRef[1][0][2].index;
+	temp200 = wmRef[2][0][0].index;
+	temp201 = wmRef[2][0][1].index;
+	temp202 = wmRef[2][0][2].index;
 	
 	if (deg > 0) {
 		// clockwise
-		wmRef[0][0][0] = temp200;
-		wmRef[0][0][1] = temp100;
-		wmRef[0][0][2] = temp000;
-		wmRef[1][0][0] = temp201;
-		wmRef[1][0][2] = temp001;
-		wmRef[2][0][0] = temp202;
-		wmRef[2][0][1] = temp102;
-		wmRef[2][0][2] = temp002;
+		wmRef[0][0][0].index = temp200;
+		wmRef[0][0][1].index = temp100;
+		wmRef[0][0][2].index = temp000;
+		wmRef[1][0][0].index = temp201;
+		wmRef[1][0][2].index = temp001;
+		wmRef[2][0][0].index = temp202;
+		wmRef[2][0][1].index = temp102;
+		wmRef[2][0][2].index = temp002;
 	} else {
 		//counterclockwise
-		wmRef[0][0][0] = temp002;
-		wmRef[0][0][1] = temp102;
-		wmRef[0][0][2] = temp202;
-		wmRef[1][0][0] = temp001;
-		wmRef[1][0][2] = temp201;
-		wmRef[2][0][0] = temp000;
-		wmRef[2][0][1] = temp100;
-		wmRef[2][0][2] = temp200;
+		wmRef[0][0][0].index = temp002;
+		wmRef[0][0][1].index = temp102;
+		wmRef[0][0][2].index = temp202;
+		wmRef[1][0][0].index = temp001;
+		wmRef[1][0][2].index = temp201;
+		wmRef[2][0][0].index = temp000;
+		wmRef[2][0][1].index = temp100;
+		wmRef[2][0][2].index = temp200;
 	}
 }
 
 function rotateFrontFace(deg) {
-	updateQuaternion(wmRef[0][0][0], 0, 0, deg);
-	updateQuaternion(wmRef[0][0][1], 0, 0, deg);
-	updateQuaternion(wmRef[0][0][2], 0, 0, deg);
-	updateQuaternion(wmRef[1][0][0], 0, 0, deg);
-	updateQuaternion(wmRef[1][0][2], 0, 0, deg);
-	updateQuaternion(wmRef[2][0][0], 0, 0, deg);
-	updateQuaternion(wmRef[2][0][1], 0, 0, deg);
-	updateQuaternion(wmRef[2][0][2], 0, 0, deg);
+	updateQuaternion(wmRef[0][0][0].index, 0, 0, deg);
+	updateQuaternion(wmRef[0][0][1].index, 0, 0, deg);
+	updateQuaternion(wmRef[0][0][2].index, 0, 0, deg);
+	updateQuaternion(wmRef[1][0][0].index, 0, 0, deg);
+	updateQuaternion(wmRef[1][0][2].index, 0, 0, deg);
+	updateQuaternion(wmRef[2][0][0].index, 0, 0, deg);
+	updateQuaternion(wmRef[2][0][1].index, 0, 0, deg);
+	updateQuaternion(wmRef[2][0][2].index, 0, 0, deg);
 }
 
 function backFace(deg) {
 	rotateBackFace(deg);
 
 	let temp020, temp021, temp022, temp120, temp122, temp220, temp221, temp222;
-	temp020 = wmRef[0][2][0];
-	temp021 = wmRef[0][2][1];
-	temp022 = wmRef[0][2][2];
-	temp120 = wmRef[1][2][0];
-	temp122 = wmRef[1][2][2];
-	temp220 = wmRef[2][2][0];
-	temp221 = wmRef[2][2][1];
-	temp222 = wmRef[2][2][2];
+	temp020 = wmRef[0][2][0].index;
+	temp021 = wmRef[0][2][1].index;
+	temp022 = wmRef[0][2][2].index;
+	temp120 = wmRef[1][2][0].index;
+	temp122 = wmRef[1][2][2].index;
+	temp220 = wmRef[2][2][0].index;
+	temp221 = wmRef[2][2][1].index;
+	temp222 = wmRef[2][2][2].index;
 
 	if(deg < 0){
 		// clockwise
-		wmRef[0][2][0] = temp022;
-		wmRef[0][2][1] = temp122;
-		wmRef[0][2][2] = temp222;
-		wmRef[1][2][0] = temp021;
-		wmRef[1][2][2] = temp221;
-		wmRef[2][2][0] = temp020;
-		wmRef[2][2][1] = temp120;
-		wmRef[2][2][2] = temp220;
+		wmRef[0][2][0].index = temp022;
+		wmRef[0][2][1].index = temp122;
+		wmRef[0][2][2].index = temp222;
+		wmRef[1][2][0].index = temp021;
+		wmRef[1][2][2].index = temp221;
+		wmRef[2][2][0].index = temp020;
+		wmRef[2][2][1].index = temp120;
+		wmRef[2][2][2].index = temp220;
 	} else {
 		// counterclockwise
-		wmRef[0][2][0] = temp220;
-		wmRef[0][2][1] = temp120;
-		wmRef[0][2][2] = temp020;
-		wmRef[1][2][0] = temp221;
-		wmRef[1][2][2] = temp021;
-		wmRef[2][2][0] = temp222;
-		wmRef[2][2][1] = temp122;
-		wmRef[2][2][2] = temp022;
+		wmRef[0][2][0].index = temp220;
+		wmRef[0][2][1].index = temp120;
+		wmRef[0][2][2].index = temp020;
+		wmRef[1][2][0].index = temp221;
+		wmRef[1][2][2].index = temp021;
+		wmRef[2][2][0].index = temp222;
+		wmRef[2][2][1].index = temp122;
+		wmRef[2][2][2].index = temp022;
 	}
 }
 
 function rotateBackFace(deg) {
-	updateQuaternion(wmRef[0][2][0], 0, 0, deg);
-	updateQuaternion(wmRef[0][2][1], 0, 0, deg);
-	updateQuaternion(wmRef[0][2][2], 0, 0, deg);
-	updateQuaternion(wmRef[1][2][0], 0, 0, deg);
-	updateQuaternion(wmRef[1][2][2], 0, 0, deg);
-	updateQuaternion(wmRef[2][2][0], 0, 0, deg);
-	updateQuaternion(wmRef[2][2][1], 0, 0, deg);
-	updateQuaternion(wmRef[2][2][2], 0, 0, deg);
+	updateQuaternion(wmRef[0][2][0].index, 0, 0, deg);
+	updateQuaternion(wmRef[0][2][1].index, 0, 0, deg);
+	updateQuaternion(wmRef[0][2][2].index, 0, 0, deg);
+	updateQuaternion(wmRef[1][2][0].index, 0, 0, deg);
+	updateQuaternion(wmRef[1][2][2].index, 0, 0, deg);
+	updateQuaternion(wmRef[2][2][0].index, 0, 0, deg);
+	updateQuaternion(wmRef[2][2][1].index, 0, 0, deg);
+	updateQuaternion(wmRef[2][2][2].index, 0, 0, deg);
 }
 
 function downFace(deg) {
 	rotateDownFace(deg);
 
 	let temp000, temp010, temp020, temp100, temp120, temp200, temp210, temp220;
-	temp000 = wmRef[0][0][0];
-	temp010 = wmRef[0][1][0];
-	temp020 = wmRef[0][2][0];
-	temp100 = wmRef[1][0][0];
-	temp120 = wmRef[1][2][0];
-	temp200 = wmRef[2][0][0];
-	temp210 = wmRef[2][1][0];
-	temp220 = wmRef[2][2][0];
+	temp000 = wmRef[0][0][0].index;
+	temp010 = wmRef[0][1][0].index;
+	temp020 = wmRef[0][2][0].index;
+	temp100 = wmRef[1][0][0].index;
+	temp120 = wmRef[1][2][0].index;
+	temp200 = wmRef[2][0][0].index;
+	temp210 = wmRef[2][1][0].index;
+	temp220 = wmRef[2][2][0].index;
 
 	if(deg < 0){
 		// clockwise
-		wmRef[0][0][0] = temp020;
-		wmRef[0][1][0] = temp120;
-		wmRef[0][2][0] = temp220;
-		wmRef[1][0][0] = temp010;
-		wmRef[1][2][0] = temp210;
-		wmRef[2][0][0] = temp000;
-		wmRef[2][1][0] = temp100;
-		wmRef[2][2][0] = temp200;
+		wmRef[0][0][0].index = temp020;
+		wmRef[0][1][0].index = temp120;
+		wmRef[0][2][0].index = temp220;
+		wmRef[1][0][0].index = temp010;
+		wmRef[1][2][0].index = temp210;
+		wmRef[2][0][0].index = temp000;
+		wmRef[2][1][0].index = temp100;
+		wmRef[2][2][0].index = temp200;
 	} else {
 		// counterclockwise
-		wmRef[0][0][0] = temp200;
-		wmRef[0][1][0] = temp100;
-		wmRef[0][2][0] = temp000;
-		wmRef[1][0][0] = temp210;
-		wmRef[1][2][0] = temp010;
-		wmRef[2][0][0] = temp220;
-		wmRef[2][1][0] = temp120;
-		wmRef[2][2][0] = temp020;
+		wmRef[0][0][0].index = temp200;
+		wmRef[0][1][0].index = temp100;
+		wmRef[0][2][0].index = temp000;
+		wmRef[1][0][0].index = temp210;
+		wmRef[1][2][0].index = temp010;
+		wmRef[2][0][0].index = temp220;
+		wmRef[2][1][0].index = temp120;
+		wmRef[2][2][0].index = temp020;
 	}
 }
 
 function rotateDownFace(deg) {
-	updateQuaternion(wmRef[0][0][0], 0, deg, 0);
-	updateQuaternion(wmRef[0][1][0], 0, deg, 0);
-	updateQuaternion(wmRef[0][2][0], 0, deg, 0);
-	updateQuaternion(wmRef[1][0][0], 0, deg, 0);
-	updateQuaternion(wmRef[1][2][0], 0, deg, 0);
-	updateQuaternion(wmRef[2][0][0], 0, deg, 0);
-	updateQuaternion(wmRef[2][1][0], 0, deg, 0);
-	updateQuaternion(wmRef[2][2][0], 0, deg, 0);
+	updateQuaternion(wmRef[0][0][0].index, 0, deg, 0);
+	updateQuaternion(wmRef[0][1][0].index, 0, deg, 0);
+	updateQuaternion(wmRef[0][2][0].index, 0, deg, 0);
+	updateQuaternion(wmRef[1][0][0].index, 0, deg, 0);
+	updateQuaternion(wmRef[1][2][0].index, 0, deg, 0);
+	updateQuaternion(wmRef[2][0][0].index, 0, deg, 0);
+	updateQuaternion(wmRef[2][1][0].index, 0, deg, 0);
+	updateQuaternion(wmRef[2][2][0].index, 0, deg, 0);
 }
 
 function upFace(deg) {
 	rotateUpFace(deg);
 
 	let temp002, temp012, temp022, temp102, temp122, temp202, temp212, temp222;
-	temp002 = wmRef[0][0][2];
-	temp012 = wmRef[0][1][2];
-	temp022 = wmRef[0][2][2];
-	temp102 = wmRef[1][0][2];
-	temp122 = wmRef[1][2][2];
-	temp202 = wmRef[2][0][2];
-	temp212 = wmRef[2][1][2];
-	temp222 = wmRef[2][2][2];
+	temp002 = wmRef[0][0][2].index;
+	temp012 = wmRef[0][1][2].index;
+	temp022 = wmRef[0][2][2].index;
+	temp102 = wmRef[1][0][2].index;
+	temp122 = wmRef[1][2][2].index;
+	temp202 = wmRef[2][0][2].index;
+	temp212 = wmRef[2][1][2].index;
+	temp222 = wmRef[2][2][2].index;
 
 	if(deg < 0){
 		// clockwise
-		wmRef[0][0][2] = temp202;
-		wmRef[0][1][2] = temp102;
-		wmRef[0][2][2] = temp002;
-		wmRef[1][0][2] = temp212;
-		wmRef[1][2][2] = temp012;
-		wmRef[2][0][2] = temp222;
-		wmRef[2][1][2] = temp122;
-		wmRef[2][2][2] = temp022;
+		wmRef[0][0][2].index = temp202;
+		wmRef[0][1][2].index = temp102;
+		wmRef[0][2][2].index = temp002;
+		wmRef[1][0][2].index = temp212;
+		wmRef[1][2][2].index = temp012;
+		wmRef[2][0][2].index = temp222;
+		wmRef[2][1][2].index = temp122;
+		wmRef[2][2][2].index = temp022;
 	} else {
 		// counterclockwise
-		wmRef[0][0][2] = temp022;
-		wmRef[0][1][2] = temp122;
-		wmRef[0][2][2] = temp222;
-		wmRef[1][0][2] = temp012;
-		wmRef[1][2][2] = temp212;
-		wmRef[2][0][2] = temp002;
-		wmRef[2][1][2] = temp102;
-		wmRef[2][2][2] = temp202;
+		wmRef[0][0][2].index = temp022;
+		wmRef[0][1][2].index = temp122;
+		wmRef[0][2][2].index = temp222;
+		wmRef[1][0][2].index = temp012;
+		wmRef[1][2][2].index = temp212;
+		wmRef[2][0][2].index = temp002;
+		wmRef[2][1][2].index = temp102;
+		wmRef[2][2][2].index = temp202;
 	}
 }
 
 function rotateUpFace(deg) {
-	updateQuaternion(wmRef[0][0][2], 0, deg, 0);
-	updateQuaternion(wmRef[0][1][2], 0, deg, 0);
-	updateQuaternion(wmRef[0][2][2], 0, deg, 0);
-	updateQuaternion(wmRef[1][0][2], 0, deg, 0);
-	updateQuaternion(wmRef[1][2][2], 0, deg, 0);
-	updateQuaternion(wmRef[2][0][2], 0, deg, 0);
-	updateQuaternion(wmRef[2][1][2], 0, deg, 0);
-	updateQuaternion(wmRef[2][2][2], 0, deg, 0);
+	updateQuaternion(wmRef[0][0][2].index, 0, deg, 0);
+	updateQuaternion(wmRef[0][1][2].index, 0, deg, 0);
+	updateQuaternion(wmRef[0][2][2].index, 0, deg, 0);
+	updateQuaternion(wmRef[1][0][2].index, 0, deg, 0);
+	updateQuaternion(wmRef[1][2][2].index, 0, deg, 0);
+	updateQuaternion(wmRef[2][0][2].index, 0, deg, 0);
+	updateQuaternion(wmRef[2][1][2].index, 0, deg, 0);
+	updateQuaternion(wmRef[2][2][2].index, 0, deg, 0);
 }
 
 function rotateMiddle(rotation){
@@ -526,10 +526,10 @@ function rotateMiddle(rotation){
 	if (selectedFace.i === 0) {
 		switch(rotation) {
 			case "R":
-				rotateMiddleHorizontal(-90);
+				rotateMiddleHorizontal(90);
 				break;
 			case "L":
-				rotateMiddleHorizontal(90);
+				rotateMiddleHorizontal(-90);
 				break;
 			case "U":
 				rotateMiddleVerticalRightLeft(-90);
@@ -540,10 +540,10 @@ function rotateMiddle(rotation){
 	} else if (selectedFace.i === 2) {
 		switch(rotation) {
 			case "R":
-				rotateMiddleHorizontal(-90);
+				rotateMiddleHorizontal(90);
 				break;
 			case "L":
-				rotateMiddleHorizontal(90);
+				rotateMiddleHorizontal(-90);
 				break;
 			case "U":
 				rotateMiddleVerticalRightLeft(90);
@@ -556,10 +556,10 @@ function rotateMiddle(rotation){
 		if (selectedFace.j === 0) {
 			switch(rotation) {
 				case "R":
-					rotateMiddleHorizontal(-90);
+					rotateMiddleHorizontal(90);
 					break;
 				case "L":
-					rotateMiddleHorizontal(90);
+					rotateMiddleHorizontal(-90);
 					break;
 				case "U":
 					rotateMiddleVerticalFrontBack(-90);
@@ -571,10 +571,10 @@ function rotateMiddle(rotation){
 		} else if (selectedFace.j === 2) {
 			switch(rotation) {
 				case "R":
-					rotateMiddleHorizontal(-90);
+					rotateMiddleHorizontal(90);
 					break;
 				case "L":
-					rotateMiddleHorizontal(90);
+					rotateMiddleHorizontal(-90);
 					break;
 				case "U":
 					rotateMiddleVerticalFrontBack(90);
@@ -620,48 +620,119 @@ function rotateMiddle(rotation){
 }
 
 function rotateMiddleHorizontal(deg) {
-	updateQuaternion(wmRef[0][0][1], 0, deg, 0);
-	updateQuaternion(wmRef[0][1][1], 0, deg, 0);
-	updateQuaternion(wmRef[0][2][1], 0, deg, 0);
-	updateQuaternion(wmRef[1][0][1], 0, deg, 0);
-	updateQuaternion(wmRef[1][2][1], 0, deg, 0);
-	updateQuaternion(wmRef[2][0][1], 0, deg, 0);
-	updateQuaternion(wmRef[2][1][1], 0, deg, 0);
-	updateQuaternion(wmRef[2][2][1], 0, deg, 0);
+	let front, right, back, left;
+
+	front = wmRef[1][0][1].color;
+	right = wmRef[0][1][1].color;
+	left = wmRef[2][1][1].color;
+	back = wmRef[1][2][1].color;
+
+	let temp001, temp021, temp221, temp201;
+	temp001 = wmRef[0][0][1].index;
+	temp021 = wmRef[0][2][1].index;
+	temp221 = wmRef[2][2][1].index;
+	temp201 = wmRef[2][0][1].index;
 
 	if(deg > 0){
-		//left
-			
-
-
-	} else{
 		//right
+		moveCenter(getCoordFromCol(front), "R");
+		moveCenter(getCoordFromCol(right), "R");
+		moveCenter(getCoordFromCol(back), "R");
+		moveCenter(getCoordFromCol(left), "R");
+
+		wmRef[2][1][1].color = back;
+		wmRef[1][2][1].color = right;
+		wmRef[0][1][1].color = front;
+		wmRef[1][0][1].color = left;
+
+		wmRef[0][0][1].index = temp201;
+		wmRef[0][2][1].index = temp001;
+		wmRef[2][2][1].index = temp021;
+		wmRef[2][0][1].index = temp221;
 
 
+	} else {
+		//left
+		moveCenter(getCoordFromCol(front), "L");
+		moveCenter(getCoordFromCol(right), "L");
+		moveCenter(getCoordFromCol(back), "L");
+		moveCenter(getCoordFromCol(left), "L");
 
+		wmRef[2][1][1].color = front;
+		wmRef[1][2][1].color = left;
+		wmRef[0][1][1].color = back;
+		wmRef[1][0][1].color = right;
+
+		wmRef[0][0][1].index = temp021;
+		wmRef[0][2][1].index = temp221;
+		wmRef[2][2][1].index = temp201;
+		wmRef[2][0][1].index = temp001;
+
+	}
+
+	updateQuaternion(wmRef[0][0][1].index, 0, deg, 0);
+	updateQuaternion(wmRef[0][1][1].index, 0, deg, 0);
+	updateQuaternion(wmRef[0][2][1].index, 0, deg, 0);
+	updateQuaternion(wmRef[1][0][1].index, 0, deg, 0);
+	updateQuaternion(wmRef[1][2][1].index, 0, deg, 0);
+	updateQuaternion(wmRef[2][0][1].index, 0, deg, 0);
+	updateQuaternion(wmRef[2][1][1].index, 0, deg, 0);
+	updateQuaternion(wmRef[2][2][1].index, 0, deg, 0);
+}
+
+function moveCenter(coords, direction) {
+	if (direction === "R") {
+		if (coords.i === 1 && coords.j === 0) {
+			coords.i = 0;
+			coords.j = 1;
+		} else if (coords.i === 0 && coords.j === 1) {
+			coords.i = 1;
+			coords.j = 2;
+		} else if (coords.i === 1 && coords.j === 2) {
+			coords.i = 2;
+			coords.j = 1;
+		} else {
+			coords.i = 1;
+			coords.j = 0;
+		}
+	} else {
+		if (coords.i === 0 && coords.j === 1) {
+			coords.i = 1;
+			coords.j = 0;
+		} else if (coords.i === 1 && coords.j === 2) {
+			coords.i = 0;
+			coords.j = 1;
+		} else if (coords.i === 2 && coords.j === 1) {
+			coords.i = 1;
+			coords.j = 2;
+		} else {
+			coords.i = 2;
+			coords.j = 1;
+		}
 	}
 }
 
+
 function rotateMiddleVerticalFrontBack(deg) {
-	updateQuaternion(wmRef[1][0][0], deg, 0, 0);
-	updateQuaternion(wmRef[1][0][1], deg, 0, 0);
-	updateQuaternion(wmRef[1][0][2], deg, 0, 0);
-	updateQuaternion(wmRef[1][1][0], deg, 0, 0);
-	updateQuaternion(wmRef[1][1][2], deg, 0, 0);
-	updateQuaternion(wmRef[1][2][0], deg, 0, 0);
-	updateQuaternion(wmRef[1][2][1], deg, 0, 0);
-	updateQuaternion(wmRef[1][2][2], deg, 0, 0);
+	updateQuaternion(wmRef[1][0][0].index, deg, 0, 0);
+	updateQuaternion(wmRef[1][0][1].index, deg, 0, 0);
+	updateQuaternion(wmRef[1][0][2].index, deg, 0, 0);
+	updateQuaternion(wmRef[1][1][0].index, deg, 0, 0);
+	updateQuaternion(wmRef[1][1][2].index, deg, 0, 0);
+	updateQuaternion(wmRef[1][2][0].index, deg, 0, 0);
+	updateQuaternion(wmRef[1][2][1].index, deg, 0, 0);
+	updateQuaternion(wmRef[1][2][2].index, deg, 0, 0);
 }
 
 function rotateMiddleVerticalRightLeft(deg) {
-	updateQuaternion(wmRef[0][1][0], 0, 0, deg);
-	updateQuaternion(wmRef[0][1][1], 0, 0, deg);
-	updateQuaternion(wmRef[0][1][2], 0, 0, deg);
-	updateQuaternion(wmRef[1][1][0], 0, 0, deg);
-	updateQuaternion(wmRef[1][1][2], 0, 0, deg);
-	updateQuaternion(wmRef[2][1][0], 0, 0, deg);
-	updateQuaternion(wmRef[2][1][1], 0, 0, deg);
-	updateQuaternion(wmRef[2][1][2], 0, 0, deg);
+	updateQuaternion(wmRef[0][1][0].index, 0, 0, deg);
+	updateQuaternion(wmRef[0][1][1].index, 0, 0, deg);
+	updateQuaternion(wmRef[0][1][2].index, 0, 0, deg);
+	updateQuaternion(wmRef[1][1][0].index, 0, 0, deg);
+	updateQuaternion(wmRef[1][1][2].index, 0, 0, deg);
+	updateQuaternion(wmRef[2][1][0].index, 0, 0, deg);
+	updateQuaternion(wmRef[2][1][1].index, 0, 0, deg);
+	updateQuaternion(wmRef[2][1][2].index, 0, 0, deg);
 }
 
 //middle vertical top/bottom missing
@@ -792,43 +863,53 @@ async function init() {
 					};
 					//wmAndQList[count].matrix = worldMatrix;
 					//wmAndQList[count].quaternion = q;
-					wmRef[i][j][k] = count;
+					wmRef[i][j][k] = {
+						index: count,
+						color: ""
+					};
 					count++;
     			}
     		}
     	}
 	}
 
+
 	centerCoordinates.white = {
 		i: 1,
 		j: 1,
 		k: 2
 	};
+	wmRef[1][1][2].color = "white"; 
 	centerCoordinates.yellow = {
 		i: 0,
 		j: 1,
 		k: 1
 	};
+	wmRef[0][1][1].color = "yellow";
 	centerCoordinates.blue = {
 		i: 1,
 		j: 1,
 		k: 0
 	};
+	wmRef[1][1][0].color = "blue";
 	centerCoordinates.green = {
 		i: 1,
 		j: 0,
 		k: 1
 	};
+	wmRef[1][0][1].color = "green";
 	centerCoordinates.red = {
 		i: 2,
 		j: 1,
 		k: 1
 	};
+	wmRef[2][1][1].color = "red";
 	centerCoordinates.orange = {
 		i: 1,
 		j: 2,
 		k: 1
 	};
+	wmRef[1][2][1].color = "orange";
 
     await utils.loadFiles([shaderDir + "vs.glsl", shaderDir + "fs.glsl"], function (shaderText) {
 		var vertexShader = utils.createShader(gl, gl.VERTEX_SHADER, shaderText[0]);
@@ -884,7 +965,22 @@ async function init() {
     main();
 }
 
-
+function getCoordFromCol(color) {
+	switch(color){
+		case "white":
+			return centerCoordinates.white;
+		case "yellow":
+			return centerCoordinates.yellow;
+		case "blue":
+			return centerCoordinates.blue;
+		case "red":
+			return centerCoordinates.red;
+		case "orange":
+			return centerCoordinates.orange;
+		case "green":
+			return centerCoordinates.green;
+	}
+}
 
 function updateQuaternion(i, rvx, rvy, rvz) {
 
