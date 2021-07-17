@@ -52,6 +52,9 @@ var lastMouseX = -100, lastMouseY = -100;
 			  
 var directionalLightColor = [2.0, 2.0, 2.0];
 
+var node;
+var newNode;
+
 function doMouseDown(event) {
 	lastMouseX = event.pageX;
 	lastMouseY = event.pageY;
@@ -90,30 +93,32 @@ var keyFunctionDown = function(e) {
   		case 87:
 			console.log("KeyDown - White");
 			selectedFace = centerCoordinates.white;
-			var node = document.getElementById('face');
-			var newNode = document.createElement('p');
-			newNode.appendChild(document.createTextNode('some dynamic html'));
-			node.appendChild(newNode);
+			newNode.replaceChildren(document.createTextNode('White'));
 			break;
 	  	case 89:
 			console.log("KeyDown - Yellow");
 			selectedFace = centerCoordinates.yellow;
+			newNode.replaceChildren(document.createTextNode('Yellow'));
 			break;
 	  	case 66:
 			console.log("KeyDown - Blue");
 			selectedFace = centerCoordinates.blue;
+			newNode.replaceChildren(document.createTextNode('Blue'));
 			break;
 	  	case 71:
 			console.log("KeyDown - Green");
 			selectedFace = centerCoordinates.green;
+			newNode.replaceChildren(document.createTextNode('Green'));
 			break;
 	  	case 82:
 			console.log("KeyDown - Red");
 			selectedFace = centerCoordinates.red;
+			newNode.replaceChildren(document.createTextNode('Red'));
 			break;
 	  	case 79:
 			console.log("KeyDown - Orange");
 			selectedFace = centerCoordinates.orange;
+			newNode.replaceChildren(document.createTextNode('Orange'));
 			break;
 		case 39:
 			console.log("KeyDown - Right");
@@ -850,6 +855,11 @@ async function init() {
     }
 	
     utils.resizeCanvasToDisplaySize(gl.canvas);
+
+	node = document.getElementById('face');
+    newNode = document.createElement('p');
+	newNode.appendChild(document.createTextNode(''));
+	node.appendChild(newNode);
 
     image = new Image();
     image.src = "assets/Rubiks Cube.png";
