@@ -16,7 +16,7 @@ void main() {
   //vec3 nEyeDirection = normalize(eyePosition-fs_Position);
   vec3 nLightDirection = -normalize(lightDirection);
   vec3 mDiffColor=texture(sampler, uvCoord).xyz;
-  vec3 lambertColor = mDiffColor * lightColor * dot(nLightDirection,norm);
-  
-  outColor = vec4(clamp(lambertColor, 0.0, 1.0),1.0);;
+  vec3 lambertColor = mDiffColor * lightColor * dot(-nLightDirection,norm);
+  outColor=texture(sampler, uvCoord);
+  //outColor = vec4(clamp(lambertColor, 0.0, 1.0),1.0);;
 }

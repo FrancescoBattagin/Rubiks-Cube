@@ -771,19 +771,27 @@ function drawScene() {
 			for (let k = 0; k < 3; k++) {
 				if (!(i === 1 && j === 1 && k === 1)) {*/
 					//console.log(count);
-	for (let i = 0; i < 26; i++) {
-		gl.useProgram(program);
-	
-		var perspectiveMatrix = utils.MakePerspective(30, gl.canvas.width/gl.canvas.height, 0.1, 100.0);
-		
+					
+										
 		cz = lookRadius * Math.cos(utils.degToRad(-angle)) * Math.cos(utils.degToRad(-elevation));
 		cx = lookRadius * Math.sin(utils.degToRad(-angle)) * Math.cos(utils.degToRad(-elevation));
 		cy = lookRadius * Math.sin(utils.degToRad(-elevation));
 		
-		directionalLight = [Math.cos(-utils.degToRad(cx)) * Math.cos(-utils.degToRad(cy)),
-              Math.sin(-utils.degToRad(cx)),
-              Math.cos(-utils.degToRad(cx)) * Math.sin(-utils.degToRad(cy))
+		 directionalLight = [Math.cos(utils.degToRad(-angle)),
+              Math.sin(utils.degToRad(-angle)),
+              Math.cos(utils.degToRad(-elevation))
               ];
+		
+		//console.log(angle);
+		//console.log(elevation);
+
+	for (let i = 0; i < 26; i++) {
+		gl.useProgram(program);
+	
+		var perspectiveMatrix = utils.MakePerspective(60, gl.canvas.width/gl.canvas.height, 0.1, 100.0);
+
+
+		//TODO: devi trovare il modo di indirizzare la luce nella direzione in cui noi stiamo guardando
 		
 		var viewMatrix = utils.MakeView(cx, cy, cz, elevation,angle);
 
