@@ -90,6 +90,10 @@ var keyFunctionDown = function(e) {
   		case 87:
 			console.log("KeyDown - White");
 			selectedFace = centerCoordinates.white;
+			var node = document.getElementById('face');
+			var newNode = document.createElement('p');
+			newNode.appendChild(document.createTextNode('some dynamic html'));
+			node.appendChild(newNode);
 			break;
 	  	case 89:
 			console.log("KeyDown - Yellow");
@@ -788,7 +792,7 @@ function drawScene() {
 	for (let i = 0; i < 26; i++) {
 		gl.useProgram(program);
 	
-		var perspectiveMatrix = utils.MakePerspective(60, gl.canvas.width/gl.canvas.height, 0.1, 100.0);
+		var perspectiveMatrix = utils.MakePerspective(30, gl.canvas.width/gl.canvas.height, 0.1, 100.0);
 
 
 		//TODO: devi trovare il modo di indirizzare la luce nella direzione in cui noi stiamo guardando

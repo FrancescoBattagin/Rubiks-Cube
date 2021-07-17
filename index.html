@@ -2,27 +2,47 @@
 <html lang="en-US">
 
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style type="text/css">
-      body {
-        margin: 0;
-        background-color: gray;
-      }
-      canvas {
-        display: block;
-        background-color: white;
-      }
-    </style>
-    <script type="text/javascript" src="webgl-obj-loader.min.js"></script>
+	<script type="text/javascript" src="webgl-obj-loader.min.js"></script>
     <script type="text/javascript" src="quaternion.min.js"></script>
     <script type="text/javascript" src="utils.js"></script>
     <script type="text/javascript" src="drawing.js"></script>
 </head>
 
 
-<body>
-  <canvas id="c"></canvas>
+
+
+<body style=" margin: 0;
+      padding: 0;">
+
+	<canvas id="c" style="right:23%; width:77%; height:100%;">
+	</canvas>
+	
+	<div style="
+	font-family: courier;  
+	position: fixed;
+	top: 0;
+	right: 0;
+	width: 23%;
+	left:77%;
+	height: 100%;
+	background-color: white;
+	border-left: 1px solid #353535;
+	padding: 10px;
+  ">
+		<h2><p style="color:black">Legend:</p></h2>
+		<h3><p style="color:red"> R -> FACE WITH RED CENTER CUBE</p></h3>
+		<h3><p style="color:green"> G -> FACE WITH GREEN CENTER CUBE</p></h3>
+		<h3><p style="color:grey"> W -> FACE WITH WHITE CENTER CUBE</p></h3>
+		<h3><p style="color:yellow"> Y -> FACE WITH YELLOW CENTER CUBE</p></h3>
+		<h3><p style="color:blue"> B -> FACE WITH BLUE CENTER CUBE</p></h3>
+		<h3><p style="color:orange"> O -> FACE WITH ORANGE CENTER CUBE</p></h3>
+		<p></p>
+		<h2><p style="color:black">Currently selected face:</p></h2>
+		<div id="face"></div>
+			
+	</div>
 </body>
 
 </html>
