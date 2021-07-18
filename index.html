@@ -16,7 +16,7 @@
 <body style=" margin: 0;
       padding: 0;">
 
-	<canvas id="c" style="right:23%; width:77%; height:100%;">
+	<canvas id="c" style="right:23%; width:77%; height:90%;">
 	</canvas>
 	
 	<div style="
@@ -27,35 +27,57 @@
 	width: 23%;
 	left:77%;
 	height: 100%;
+	bottom: 10%;
 	background-color: white;
 	border-left: 1px solid #353535;
-	padding: 6px;
+	padding: 3px;
   ">
 		
 		
-		<h1><p style="color:black">Legend:</p></h1>
-			<div style="padding: 3px;">
-			<h2> Moves: </h2>
-			<h3 style="color: grey"> LEFT ARROW -> Rotate the selected face clockwise </h3>
-			<h3 style="color: grey"> RIGHT ARROW -> Rotate the selected face counter-clockwise </h3>
-			<h3> WHILE HOLDING DOWN SHIFT : </h3>
-			<h3 style="color: grey"> UP ARROW -> Rotate the middle upwards </h3>
-			<h3 style="color: grey"> DOWN ARROW -> Rotate the middle downwards </h3>
-			<h3 style="color: grey"> LEFT ARROW -> Rotate the middle left</h3>
-			<h3 style="color: grey"> RIGHT ARROW -> Rotate the middle right </h3>
+		<h2><p style="color:black">Legend:</p></h1>
+			<div style="padding: 1px;">
+			<h3> Moves: </h3>
+			<h4 style="color: grey"> RIGHT ARROW -> Rotate the selected face clockwise </h4>
+			<h4 style="color: grey"> LEFT ARROW -> Rotate the selected face counter-clockwise </h4>
+			<h4> WHILE HOLDING DOWN SHIFT : </h4>
+			<h4 style="color: grey"> UP ARROW -> Rotate the middle upwards </h4>
+			<h4 style="color: grey"> DOWN ARROW -> Rotate the middle downwards </h4>
+			<h4 style="color: grey"> LEFT ARROW -> Rotate the middle left</h4>
+			<h4 style="color: grey"> RIGHT ARROW -> Rotate the middle right </h4>
 		</div>
-		<div style="padding: 3px;">
-			<h2> Face selection:</h2>
-			<h3><p style="color:red"> R -> FACE WITH RED CENTER CUBE</p></h3>
-			<h3><p style="color:green"> G -> FACE WITH GREEN CENTER CUBE</p></h3>
-			<h3><p style="color:grey"> W -> FACE WITH WHITE CENTER CUBE</p></h3>
-			<h3><p style="color:#E5C32A"> Y -> FACE WITH YELLOW CENTER CUBE</p></h3>
-			<h3><p style="color:blue"> B -> FACE WITH BLUE CENTER CUBE</p></h3>
-			<h3><p style="color:orange"> O -> FACE WITH ORANGE CENTER CUBE</p></h3>
+		<div style="padding: 1px;">
+			<h3> Face selection:</h3>
+			<h4><p style="color:red"> R -> FACE WITH RED CENTER CUBE</p></h4>
+			<h4><p style="color:green"> G -> FACE WITH GREEN CENTER CUBE</p></h4>
+			<h4><p style="color:grey"> W -> FACE WITH WHITE CENTER CUBE</p></h4>
+			<h4><p style="color:#E5C32A"> Y -> FACE WITH YELLOW CENTER CUBE</p></h4>
+			<h4><p style="color:blue"> B -> FACE WITH BLUE CENTER CUBE</p></h4>
+			<h4><p style="color:orange"> O -> FACE WITH ORANGE CENTER CUBE</p></h4>
 			<h2><p style="color:black">Currently selected face:</p></h2>
-			<h3><div id="face"></div></h3>
-		</div>
-			
+			<h3><div id="face" style="color:black"></div></h3>
+		</div>			
+	</div>
+	<div style="
+	text-align:center;
+	top: 80%;
+	right: 23%;
+	width: 77%;
+	left:0;
+	height: 10%;
+	background-color: white;
+	border-left: 1px solid #353535;
+	padding: 14px;
+	">		
+		<p> Direzione α:
+			<div id="slider1"> 0°
+					<input id="alfa" type="range" min="0" max="360" step="1" value="220" onchange="onAlfaChange(this.value);"/> 360° <br/>	
+			</div>
+		</p>
+		<p> Direzione β:
+			<div id="slider2"> 0°
+					<input id="beta" type="range" min="0" max="360" step="1" value="100" onchange="onBetaChange(this.value);"/> 360° <br/>	
+			</div>
+		</p>
 	</div>
 </body>
 

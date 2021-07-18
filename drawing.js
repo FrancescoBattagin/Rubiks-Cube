@@ -42,8 +42,8 @@ var lookRadius = 23.0;
 var mouseState = false;
 var lastMouseX = -100, lastMouseY = -100;
 
- var dirLightAlpha = -utils.degToRad(60);
- var dirLightBeta  = -utils.degToRad(120);
+var dirLightAlpha = -utils.degToRad(220);
+var dirLightBeta  = -utils.degToRad(100);
 
  var directionalLight = [Math.cos(dirLightAlpha) * Math.cos(dirLightBeta),
               Math.sin(dirLightAlpha),
@@ -86,6 +86,16 @@ function doMouseWheel(event) {
 	if((nLookRadius > 2.0) && (nLookRadius < 100.0)) {
 		lookRadius = nLookRadius;
 	}
+}
+
+function onAlfaChange(value){
+	dirLightAlpha = -utils.degToRad(value);
+    console.log("Slider value changed to "+value);
+}
+
+function onBetaChange(value){
+	dirLightBeta = -utils.degToRad(value);
+    console.log("Slider value changed to "+value);
 }
 
 var keyFunctionDown = function(e) {
@@ -786,9 +796,9 @@ function drawScene() {
 		cx = lookRadius * Math.sin(utils.degToRad(-angle)) * Math.cos(utils.degToRad(-elevation));
 		cy = lookRadius * Math.sin(utils.degToRad(-elevation));
 		
-		 directionalLight = [Math.cos(utils.degToRad(-angle)),
-              Math.sin(utils.degToRad(-angle)),
-              Math.cos(utils.degToRad(-elevation))
+		directionalLight = [Math.cos(dirLightAlpha) * Math.cos(dirLightBeta),
+              Math.sin(dirLightAlpha),
+              Math.cos(dirLightAlpha) * Math.sin(dirLightBeta)
               ];
 		
 		//console.log(angle);
