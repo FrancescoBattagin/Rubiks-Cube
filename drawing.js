@@ -125,37 +125,37 @@ function onBetaChange(value){
 var keyFunctionDown = function(e) {
 	switch(e.keyCode) {
   		case 87:
-			console.log("KeyDown - White");
+			//console.log("KeyDown - White");
 			selectedFace = centerCoordinates.white;
 			newNode.replaceChildren(document.createTextNode('White'));
 			break;
 	  	case 89:
-			console.log("KeyDown - Yellow");
+			//console.log("KeyDown - Yellow");
 			selectedFace = centerCoordinates.yellow;
 			newNode.replaceChildren(document.createTextNode('Yellow'));
 			break;
 	  	case 66:
-			console.log("KeyDown - Blue");
+			//console.log("KeyDown - Blue");
 			selectedFace = centerCoordinates.blue;
 			newNode.replaceChildren(document.createTextNode('Blue'));
 			break;
 	  	case 71:
-			console.log("KeyDown - Green");
+			//console.log("KeyDown - Green");
 			selectedFace = centerCoordinates.green;
 			newNode.replaceChildren(document.createTextNode('Green'));
 			break;
 	  	case 82:
-			console.log("KeyDown - Red");
+			//console.log("KeyDown - Red");
 			selectedFace = centerCoordinates.red;
 			newNode.replaceChildren(document.createTextNode('Red'));
 			break;
 	  	case 79:
-			console.log("KeyDown - Orange");
+			//console.log("KeyDown - Orange");
 			selectedFace = centerCoordinates.orange;
 			newNode.replaceChildren(document.createTextNode('Orange'));
 			break;
 		case 39:
-			console.log("KeyDown - Right");
+			//console.log("KeyDown - Right");
 			if(shift)
 				rotateMiddle("R");
 			else
@@ -163,7 +163,7 @@ var keyFunctionDown = function(e) {
 			window.requestAnimationFrame(drawScene);
 			break;
 	  	case 37:
-			console.log("KeyDown - Left");
+			//console.log("KeyDown - Left");
 			if(shift)
 				rotateMiddle("L");
 			else
@@ -171,21 +171,21 @@ var keyFunctionDown = function(e) {
 			window.requestAnimationFrame(drawScene);
 			break;	
 		case 38:
-			console.log("KeyDown - Up");
+			//console.log("KeyDown - Up");
 			if(shift) {
 				rotateMiddle("U");
 				window.requestAnimationFrame(drawScene);
 			}
 			break;
 		case 40:
-			console.log("KeyDown - Down");
+			//console.log("KeyDown - Down");
 			if(shift) {
 				rotateMiddle("D");
 				window.requestAnimationFrame(drawScene);
 			}
 			break;
 		case 16:
-			console.log("KeyDown - Shift");
+			//console.log("KeyDown - Shift");
 			shift = true;
 			break;
 	}
@@ -193,7 +193,7 @@ var keyFunctionDown = function(e) {
 
 var keyFunctionUp = function(e) {
 	if(e.keyCode === 16){
-		console.log("KeyUp - Shift")
+		//console.log("KeyUp - Shift")
 		shift = false;
 	}
 }
@@ -214,7 +214,6 @@ function main() {
 	
 	vaos[0]=[];
 	vaos[1]=[];
-	
 	
 	for(let j=0;j<2;j++){
 		
@@ -263,22 +262,18 @@ function rotateFace(rotation){
 			functionToAnimate = rightFace;
 			switch(rotation) {
 				case "R":
-					//rightFace(-90);
 					degToAnimate = -90;
 					break;
 				case "L":
-					//rightFace(90);
 					degToAnimate = 90; 
 			}
 		} else if (selectedFace.i === 2) {
 			functionToAnimate = leftFace;
 			switch(rotation) {
 				case "R":
-					//leftFace(90);
 					degToAnimate = 90;
 					break;
 				case "L":
-					//leftFace(-90);
 					degToAnimate = -90;
 			}
 		} else {
@@ -286,22 +281,18 @@ function rotateFace(rotation){
 				functionToAnimate = frontFace;
 				switch(rotation) {
 					case "R":
-						//frontFace(-90);
 						degToAnimate = -90;
 						break;
 					case "L":
-						//frontFace(90);
 						degToAnimate = 90;
 				}
 			} else if (selectedFace.j === 2) {
 				functionToAnimate = backFace;
 				switch(rotation) {
 					case "R":
-						//backFace(90);
 						degToAnimate = 90;
 						break;
 					case "L":
-						//backFace(-90);
 						degToAnimate = -90;
 				}
 			} else {
@@ -309,22 +300,18 @@ function rotateFace(rotation){
 					functionToAnimate = downFace;
 					switch(rotation) {
 						case "R":
-							//downFace(90);
 							degToAnimate = 90;
 							break;
 						case "L":
-							//downFace(-90);
 							degToAnimate = -90;
 					}
 				} else if (selectedFace.k === 2) {
 					functionToAnimate = upFace;
 					switch(rotation) {
 						case "R":
-							//upFace(-90);
 							degToAnimate = -90;
 							break;
 						case "L":
-							//upFace(90);
 							degToAnimate = 90;
 					}
 				}
@@ -638,44 +625,36 @@ function rotateMiddle(rotation){
 		if (selectedFace.i === 0) {
 			switch(rotation) {
 				case "R":
-					//rotateMiddleHorizontal(90);
 					functionToAnimate = rotateMiddleHorizontal;
 					degToAnimate = 90;
 					break;
 				case "L":
-					//rotateMiddleHorizontal(-90);
 					functionToAnimate = rotateMiddleHorizontal;
 					degToAnimate = -90;
 					break;
 				case "U":
-					//rotateMiddleVerticalRightLeft(-90);
 					functionToAnimate = rotateMiddleVerticalRightLeft;
 					degToAnimate = 90;
 					break;
 				case "D":
-					//rotateMiddleVerticalRightLeft(90);
 					functionToAnimate = rotateMiddleVerticalRightLeft;
 					degToAnimate = -90;
 			}
 		} else if (selectedFace.i === 2) {
 			switch(rotation) {
 				case "R":
-					//rotateMiddleHorizontal(90);
 					functionToAnimate = rotateMiddleHorizontal;
 					degToAnimate = 90;
 					break;
 				case "L":
-					//rotateMiddleHorizontal(-90);
 					functionToAnimate = rotateMiddleHorizontal;
 					degToAnimate = -90;
 					break;
 				case "U":
-					//rotateMiddleVerticalRightLeft(90);
 					functionToAnimate = rotateMiddleVerticalRightLeft;
 					degToAnimate = -90;
 					break;
 				case "D":
-					//rotateMiddleVerticalRightLeft(-90);
 					functionToAnimate = rotateMiddleVerticalRightLeft;
 					degToAnimate = 90;
 					break;
@@ -684,22 +663,18 @@ function rotateMiddle(rotation){
 			if (selectedFace.j === 0) {
 				switch(rotation) {
 					case "R":
-						//rotateMiddleHorizontal(90);
 						functionToAnimate = rotateMiddleHorizontal;
 						degToAnimate = 90;
 						break;
 					case "L":
-						//rotateMiddleHorizontal(-90);
 						functionToAnimate = rotateMiddleHorizontal;
 						degToAnimate = -90;
 						break;
 					case "U":
-						//rotateMiddleVerticalFrontBack(-90);
 						functionToAnimate = rotateMiddleVerticalFrontBack;
 						degToAnimate = -90;
 						break;
 					case "D":
-						//rotateMiddleVerticalFrontBack(-90);
 						functionToAnimate = rotateMiddleVerticalFrontBack;
 						degToAnimate = 90;
 						break;
@@ -707,22 +682,18 @@ function rotateMiddle(rotation){
 			} else if (selectedFace.j === 2) {
 				switch(rotation) {
 					case "R":
-						//rotateMiddleHorizontal(90);
 						functionToAnimate = rotateMiddleHorizontal;
 						degToAnimate = 90;
 						break;
 					case "L":
-						//rotateMiddleHorizontal(-90);
 						functionToAnimate = rotateMiddleHorizontal;
 						degToAnimate = -90;
 						break;
 					case "U":
-						//rotateMiddleVerticalFrontBack(90);
 						functionToAnimate = rotateMiddleVerticalFrontBack;
 						degToAnimate = 90;
 						break;
 					case "D":
-						//rotateMiddleVerticalFrontBack(-90);
 						functionToAnimate = rotateMiddleVerticalFrontBack;
 						degToAnimate = -90;
 						break;
@@ -731,22 +702,18 @@ function rotateMiddle(rotation){
 				if (selectedFace.k === 0) {
 					switch(rotation) {
 						case "R":
-							//rotateMiddleVerticalRightLeft(-90);
 							functionToAnimate = rotateMiddleVerticalRightLeft;
 							degToAnimate = -90;
 							break;
 						case "L":
-							//rotateMiddleVerticalRightLeft(90);
 							functionToAnimate = rotateMiddleVerticalRightLeft;
 							degToAnimate = 90;
 							break;
 						case "U":
-							//rotateMiddleVerticalFrontBack(-90);
 							functionToAnimate = rotateMiddleVerticalFrontBack;
 							degToAnimate = -90;
 							break;
 						case "D":
-							//rotateMiddleVerticalFrontBack(90);
 							functionToAnimate = rotateMiddleVerticalFrontBack;
 							degToAnimate = 90;
 							break;
@@ -754,22 +721,18 @@ function rotateMiddle(rotation){
 				} else if (selectedFace.k === 2) {
 					switch(rotation) {
 						case "R":
-							//rotateMiddleVerticalRightLeft(-90);
 							functionToAnimate = rotateMiddleVerticalRightLeft;
 							degToAnimate = -90;
 							break;
 						case "L":
-							//rotateMiddleVerticalRightLeft(90);
 							functionToAnimate = rotateMiddleVerticalRightLeft;
 							degToAnimate = 90;
 							break;
 						case "U":
-							//rotateMiddleVerticalFrontBack(-90);
 							functionToAnimate = rotateMiddleVerticalFrontBack;
 							degToAnimate = -90;
 							break;
 						case "D":
-							//rotateMiddleVerticalFrontBack(90);
 							functionToAnimate = rotateMiddleVerticalFrontBack;
 							degToAnimate = 90;
 							break;
@@ -839,8 +802,6 @@ function rotateMiddleHorizontal(deg) {
 			wmRef[0][2][1].index = temp221;
 			wmRef[2][2][1].index = temp201;
 			wmRef[2][0][1].index = temp001;
-
-
 		}
 	}
 }
@@ -876,7 +837,6 @@ function moveCenterMiddleHorizontal(coords, direction) {
 		}
 	}
 }
-
 
 function rotateMiddleVerticalFrontBack(deg) {
 	updateQuaternion(wmRef[1][0][0].index, deg, 0, 0);
@@ -1064,7 +1024,6 @@ function moveCenterMiddleVerticalRightLeft(coords, direction){
 	}
 }
 
-
 function animate(){
 	var currentTime = (new Date).getTime();
     if(lastUpdateTime){
@@ -1121,8 +1080,6 @@ function animate(){
     }
 }
 
-//------------------------------------------------------------- DRAW SCENE ---------------------------------------------------------------------
-
 function drawScene() {
 	
 	if (functionToAnimate !== null) {
@@ -1140,17 +1097,17 @@ function drawScene() {
 					//console.log(count);
 					
 										
-		cz = lookRadius * Math.cos(utils.degToRad(-angle)) * Math.cos(utils.degToRad(-elevation));
-		cx = lookRadius * Math.sin(utils.degToRad(-angle)) * Math.cos(utils.degToRad(-elevation));
-		cy = lookRadius * Math.sin(utils.degToRad(-elevation));
-		
-		directionalLight = [Math.cos(dirLightAlpha) * Math.cos(dirLightBeta),
-              Math.sin(dirLightAlpha),
-              Math.cos(dirLightAlpha) * Math.sin(dirLightBeta)
-              ];
-		
-		//console.log(angle);
-		//console.log(elevation);
+	cz = lookRadius * Math.cos(utils.degToRad(-angle)) * Math.cos(utils.degToRad(-elevation));
+	cx = lookRadius * Math.sin(utils.degToRad(-angle)) * Math.cos(utils.degToRad(-elevation));
+	cy = lookRadius * Math.sin(utils.degToRad(-elevation));
+	
+	directionalLight = [Math.cos(dirLightAlpha) * Math.cos(dirLightBeta),
+          Math.sin(dirLightAlpha),
+          Math.cos(dirLightAlpha) * Math.sin(dirLightBeta)
+          ];
+	
+	//console.log(angle);
+	//console.log(elevation);
 
 	for (let i = 0; i < 26; i++) {
 		gl.useProgram(program[selectedLight]);
@@ -1280,7 +1237,6 @@ async function init() {
     	}
 	}
 
-
 	centerCoordinates.white = {
 		i: 1,
 		j: 1,
@@ -1377,16 +1333,5 @@ function updateQuaternion(i, rvx, rvy, rvz) {
 	//return out; //return the new matrix after rotation 
 	wmAndQList[i].matrix = utils.multiplyMatrices(out, utils.MakeScaleMatrix(scale));
 }
-
-
-function sleep(milliseconds) {
-  const date = Date.now();
-  let currentDate = null;
-  do {
-    currentDate = Date.now();
-  } while (currentDate - date < milliseconds);
-}
-
-
 
 window.onload = init;
