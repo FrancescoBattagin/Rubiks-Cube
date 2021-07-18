@@ -52,6 +52,10 @@ var dirLightBeta  = -utils.degToRad(100);
 			  
 var directionalLightColor = [2.0, 2.0, 2.0];
 
+var functionToAnimate = null;
+var degToAnimate = null;
+var countAnimate = 0;
+
 var node;
 var newNode;
 
@@ -136,6 +140,7 @@ var keyFunctionDown = function(e) {
 				rotateMiddle("R");
 			else
 				rotateFace("R");
+			window.requestAnimationFrame(drawScene);
 			break;
 	  	case 37:
 			console.log("KeyDown - Left");
@@ -143,16 +148,21 @@ var keyFunctionDown = function(e) {
 				rotateMiddle("L");
 			else
 				rotateFace("L");
+			window.requestAnimationFrame(drawScene);
 			break;	
 		case 38:
 			console.log("KeyDown - Up");
-			if(shift)
+			if(shift) {
 				rotateMiddle("U");
+				window.requestAnimationFrame(drawScene);
+			}
 			break;
 		case 40:
 			console.log("KeyDown - Down");
-			if(shift)
+			if(shift) {
 				rotateMiddle("D");
+				window.requestAnimationFrame(drawScene);
+			}
 			break;
 		case 16:
 			console.log("KeyDown - Shift");
@@ -222,54 +232,72 @@ function main() {
 
 function rotateFace(rotation){
 	if (selectedFace.i === 0) {
+		functionToAnimate = rightFace;
 		switch(rotation) {
 			case "R":
-				rightFace(-90);
+				//rightFace(-90);
+				degToAnimate = -90;
 				break;
 			case "L":
-				rightFace(90);
+				//rightFace(90);
+				degToAnimate = 90; 
 		}
 	} else if (selectedFace.i === 2) {
+		functionToAnimate = leftFace;
 		switch(rotation) {
 			case "R":
-				leftFace(90);
+				//leftFace(90);
+				degToAnimate = 90;
 				break;
 			case "L":
-				leftFace(-90);
+				//leftFace(-90);
+				degToAnimate = -90;
 		}
 	} else {
 		if (selectedFace.j === 0) {
+			functionToAnimate = frontFace;
 			switch(rotation) {
 				case "R":
-					frontFace(-90);
+					//frontFace(-90);
+					degToAnimate = -90;
 					break;
 				case "L":
-					frontFace(90);
+					//frontFace(90);
+					degToAnimate = 90;
 			}
 		} else if (selectedFace.j === 2) {
+			functionToAnimate = backFace;
 			switch(rotation) {
 				case "R":
-					backFace(90);
+					//backFace(90);
+					degToAnimate = 90;
 					break;
 				case "L":
-					backFace(-90);
+					//backFace(-90);
+					degToAnimate = -90;
 			}
 		} else {
 			if (selectedFace.k === 0) {
+				functionToAnimate = downFace;
 				switch(rotation) {
 					case "R":
-						downFace(90);
+						//downFace(90);
+						degToAnimate = 90;
 						break;
 					case "L":
-						downFace(-90);
+						//downFace(-90);
+						degToAnimate = -90;
 				}
 			} else if (selectedFace.k === 2) {
+				functionToAnimate = upFace;
 				switch(rotation) {
 					case "R":
-						upFace(-90);
+						//upFace(-90);
+						degToAnimate = -90;
 						break;
 					case "L":
-						upFace(90);
+						//upFace(90);
+						degToAnimate = 90;
 				}
 			}
 		}
@@ -278,36 +306,39 @@ function rotateFace(rotation){
 
 function rightFace(deg) {
 	rotateRightFace(deg);
-	let temp000, temp001, temp002, temp010, temp012, temp020, temp021, temp022;
-	temp000 = wmRef[0][0][0].index;
-	temp001 = wmRef[0][0][1].index;
-	temp002 = wmRef[0][0][2].index;
-	temp010 = wmRef[0][1][0].index;
-	temp012 = wmRef[0][1][2].index;
-	temp020 = wmRef[0][2][0].index;
-	temp021 = wmRef[0][2][1].index;
-	temp022 = wmRef[0][2][2].index;
-			
-	if(deg > 0){
-		// counterclockwise
-		wmRef[0][0][0].index = temp002;
-		wmRef[0][0][1].index = temp012;
-		wmRef[0][0][2].index = temp022;
-		wmRef[0][1][0].index = temp001;
-		wmRef[0][1][2].index = temp021;
-		wmRef[0][2][0].index = temp000;
-		wmRef[0][2][1].index = temp010;
-		wmRef[0][2][2].index = temp020;
-	} else{
-		// clockwise
-		wmRef[0][0][0].index = temp020;
-		wmRef[0][0][1].index = temp010;
-		wmRef[0][0][2].index = temp000;
-		wmRef[0][1][0].index = temp021;
-		wmRef[0][1][2].index = temp001;
-		wmRef[0][2][0].index = temp022;
-		wmRef[0][2][1].index = temp012;
-		wmRef[0][2][2].index = temp002;
+	
+	if (countAnimate === 45) {
+		let temp000, temp001, temp002, temp010, temp012, temp020, temp021, temp022;
+		temp000 = wmRef[0][0][0].index;
+		temp001 = wmRef[0][0][1].index;
+		temp002 = wmRef[0][0][2].index;
+		temp010 = wmRef[0][1][0].index;
+		temp012 = wmRef[0][1][2].index;
+		temp020 = wmRef[0][2][0].index;
+		temp021 = wmRef[0][2][1].index;
+		temp022 = wmRef[0][2][2].index;
+		
+		if(deg > 0){
+			// counterclockwise
+			wmRef[0][0][0].index = temp002;
+			wmRef[0][0][1].index = temp012;
+			wmRef[0][0][2].index = temp022;
+			wmRef[0][1][0].index = temp001;
+			wmRef[0][1][2].index = temp021;
+			wmRef[0][2][0].index = temp000;
+			wmRef[0][2][1].index = temp010;
+			wmRef[0][2][2].index = temp020;
+		} else{
+			// clockwise
+			wmRef[0][0][0].index = temp020;
+			wmRef[0][0][1].index = temp010;
+			wmRef[0][0][2].index = temp000;
+			wmRef[0][1][0].index = temp021;
+			wmRef[0][1][2].index = temp001;
+			wmRef[0][2][0].index = temp022;
+			wmRef[0][2][1].index = temp012;
+			wmRef[0][2][2].index = temp002;
+		}	
 	}
 }
 
@@ -316,6 +347,7 @@ function rotateRightFace(deg) {
 	updateQuaternion(wmRef[0][0][1].index, deg, 0, 0);
 	updateQuaternion(wmRef[0][0][2].index, deg, 0, 0);
 	updateQuaternion(wmRef[0][1][0].index, deg, 0, 0);
+	updateQuaternion(wmRef[0][1][1].index, deg, 0, 0);
 	updateQuaternion(wmRef[0][1][2].index, deg, 0, 0);
 	updateQuaternion(wmRef[0][2][0].index, deg, 0, 0);
 	updateQuaternion(wmRef[0][2][1].index, deg, 0, 0);
@@ -324,34 +356,37 @@ function rotateRightFace(deg) {
 
 function leftFace(deg) {
 	rotateLeftFace(deg);
-	let temp200, temp201, temp202, temp210, temp212, temp220, temp221, temp222;
-	temp200 = wmRef[2][0][0].index;
-	temp201 = wmRef[2][0][1].index;
-	temp202 = wmRef[2][0][2].index;
-	temp210 = wmRef[2][1][0].index;
-	temp212 = wmRef[2][1][2].index;
-	temp220 = wmRef[2][2][0].index;
-	temp221 = wmRef[2][2][1].index;
-	temp222 = wmRef[2][2][2].index;
-	
-	if (deg < 0) {
-		wmRef[2][0][0].index = temp220;
-		wmRef[2][0][1].index = temp210;
-		wmRef[2][0][2].index = temp200;
-		wmRef[2][1][0].index = temp221;
-		wmRef[2][1][2].index = temp201;
-		wmRef[2][2][0].index = temp222;
-		wmRef[2][2][1].index = temp212;
-		wmRef[2][2][2].index = temp202;
-	} else {
-		wmRef[2][0][0].index = temp202;
-		wmRef[2][0][1].index = temp212;
-		wmRef[2][0][2].index = temp222;
-		wmRef[2][1][0].index = temp201;
-		wmRef[2][1][2].index = temp221;
-		wmRef[2][2][0].index = temp200;
-		wmRef[2][2][1].index = temp210;
-		wmRef[2][2][2].index = temp220;	
+
+	if (countAnimate === 45) {
+		let temp200, temp201, temp202, temp210, temp212, temp220, temp221, temp222;
+		temp200 = wmRef[2][0][0].index;
+		temp201 = wmRef[2][0][1].index;
+		temp202 = wmRef[2][0][2].index;
+		temp210 = wmRef[2][1][0].index;
+		temp212 = wmRef[2][1][2].index;
+		temp220 = wmRef[2][2][0].index;
+		temp221 = wmRef[2][2][1].index;
+		temp222 = wmRef[2][2][2].index;
+		
+		if (deg < 0) {
+			wmRef[2][0][0].index = temp220;
+			wmRef[2][0][1].index = temp210;
+			wmRef[2][0][2].index = temp200;
+			wmRef[2][1][0].index = temp221;
+			wmRef[2][1][2].index = temp201;
+			wmRef[2][2][0].index = temp222;
+			wmRef[2][2][1].index = temp212;
+			wmRef[2][2][2].index = temp202;
+		} else {
+			wmRef[2][0][0].index = temp202;
+			wmRef[2][0][1].index = temp212;
+			wmRef[2][0][2].index = temp222;
+			wmRef[2][1][0].index = temp201;
+			wmRef[2][1][2].index = temp221;
+			wmRef[2][2][0].index = temp200;
+			wmRef[2][2][1].index = temp210;
+			wmRef[2][2][2].index = temp220;	
+		}
 	}
 }
 
@@ -360,6 +395,7 @@ function rotateLeftFace(deg) {
 	updateQuaternion(wmRef[2][0][1].index, deg, 0, 0);
 	updateQuaternion(wmRef[2][0][2].index, deg, 0, 0);
 	updateQuaternion(wmRef[2][1][0].index, deg, 0, 0);
+	updateQuaternion(wmRef[2][1][1].index, deg, 0, 0);
 	updateQuaternion(wmRef[2][1][2].index, deg, 0, 0);
 	updateQuaternion(wmRef[2][2][0].index, deg, 0, 0);
 	updateQuaternion(wmRef[2][2][1].index, deg, 0, 0);
@@ -369,36 +405,38 @@ function rotateLeftFace(deg) {
 function frontFace(deg) {
 	rotateFrontFace(deg);
 
-	let temp000, temp001, temp002, temp100, temp102, temp200, temp201, temp202;
-	temp000 = wmRef[0][0][0].index;
-	temp001 = wmRef[0][0][1].index;
-	temp002 = wmRef[0][0][2].index;
-	temp100 = wmRef[1][0][0].index;
-	temp102 = wmRef[1][0][2].index;
-	temp200 = wmRef[2][0][0].index;
-	temp201 = wmRef[2][0][1].index;
-	temp202 = wmRef[2][0][2].index;
-	
-	if (deg > 0) {
-		// clockwise
-		wmRef[0][0][0].index = temp200;
-		wmRef[0][0][1].index = temp100;
-		wmRef[0][0][2].index = temp000;
-		wmRef[1][0][0].index = temp201;
-		wmRef[1][0][2].index = temp001;
-		wmRef[2][0][0].index = temp202;
-		wmRef[2][0][1].index = temp102;
-		wmRef[2][0][2].index = temp002;
-	} else {
-		//counterclockwise
-		wmRef[0][0][0].index = temp002;
-		wmRef[0][0][1].index = temp102;
-		wmRef[0][0][2].index = temp202;
-		wmRef[1][0][0].index = temp001;
-		wmRef[1][0][2].index = temp201;
-		wmRef[2][0][0].index = temp000;
-		wmRef[2][0][1].index = temp100;
-		wmRef[2][0][2].index = temp200;
+	if (countAnimate === 45) {
+		let temp000, temp001, temp002, temp100, temp102, temp200, temp201, temp202;
+		temp000 = wmRef[0][0][0].index;
+		temp001 = wmRef[0][0][1].index;
+		temp002 = wmRef[0][0][2].index;
+		temp100 = wmRef[1][0][0].index;
+		temp102 = wmRef[1][0][2].index;
+		temp200 = wmRef[2][0][0].index;
+		temp201 = wmRef[2][0][1].index;
+		temp202 = wmRef[2][0][2].index;
+		
+		if (deg > 0) {
+			// clockwise
+			wmRef[0][0][0].index = temp200;
+			wmRef[0][0][1].index = temp100;
+			wmRef[0][0][2].index = temp000;
+			wmRef[1][0][0].index = temp201;
+			wmRef[1][0][2].index = temp001;
+			wmRef[2][0][0].index = temp202;
+			wmRef[2][0][1].index = temp102;
+			wmRef[2][0][2].index = temp002;
+		} else {
+			//counterclockwise
+			wmRef[0][0][0].index = temp002;
+			wmRef[0][0][1].index = temp102;
+			wmRef[0][0][2].index = temp202;
+			wmRef[1][0][0].index = temp001;
+			wmRef[1][0][2].index = temp201;
+			wmRef[2][0][0].index = temp000;
+			wmRef[2][0][1].index = temp100;
+			wmRef[2][0][2].index = temp200;
+		}
 	}
 }
 
@@ -407,6 +445,7 @@ function rotateFrontFace(deg) {
 	updateQuaternion(wmRef[0][0][1].index, 0, 0, deg);
 	updateQuaternion(wmRef[0][0][2].index, 0, 0, deg);
 	updateQuaternion(wmRef[1][0][0].index, 0, 0, deg);
+	updateQuaternion(wmRef[1][0][1].index, 0, 0, deg);
 	updateQuaternion(wmRef[1][0][2].index, 0, 0, deg);
 	updateQuaternion(wmRef[2][0][0].index, 0, 0, deg);
 	updateQuaternion(wmRef[2][0][1].index, 0, 0, deg);
@@ -416,36 +455,38 @@ function rotateFrontFace(deg) {
 function backFace(deg) {
 	rotateBackFace(deg);
 
-	let temp020, temp021, temp022, temp120, temp122, temp220, temp221, temp222;
-	temp020 = wmRef[0][2][0].index;
-	temp021 = wmRef[0][2][1].index;
-	temp022 = wmRef[0][2][2].index;
-	temp120 = wmRef[1][2][0].index;
-	temp122 = wmRef[1][2][2].index;
-	temp220 = wmRef[2][2][0].index;
-	temp221 = wmRef[2][2][1].index;
-	temp222 = wmRef[2][2][2].index;
+	if (countAnimate === 45) {
+		let temp020, temp021, temp022, temp120, temp122, temp220, temp221, temp222;
+		temp020 = wmRef[0][2][0].index;
+		temp021 = wmRef[0][2][1].index;
+		temp022 = wmRef[0][2][2].index;
+		temp120 = wmRef[1][2][0].index;
+		temp122 = wmRef[1][2][2].index;
+		temp220 = wmRef[2][2][0].index;
+		temp221 = wmRef[2][2][1].index;
+		temp222 = wmRef[2][2][2].index;
 
-	if(deg < 0){
-		// clockwise
-		wmRef[0][2][0].index = temp022;
-		wmRef[0][2][1].index = temp122;
-		wmRef[0][2][2].index = temp222;
-		wmRef[1][2][0].index = temp021;
-		wmRef[1][2][2].index = temp221;
-		wmRef[2][2][0].index = temp020;
-		wmRef[2][2][1].index = temp120;
-		wmRef[2][2][2].index = temp220;
-	} else {
-		// counterclockwise
-		wmRef[0][2][0].index = temp220;
-		wmRef[0][2][1].index = temp120;
-		wmRef[0][2][2].index = temp020;
-		wmRef[1][2][0].index = temp221;
-		wmRef[1][2][2].index = temp021;
-		wmRef[2][2][0].index = temp222;
-		wmRef[2][2][1].index = temp122;
-		wmRef[2][2][2].index = temp022;
+		if(deg < 0){
+			// clockwise
+			wmRef[0][2][0].index = temp022;
+			wmRef[0][2][1].index = temp122;
+			wmRef[0][2][2].index = temp222;
+			wmRef[1][2][0].index = temp021;
+			wmRef[1][2][2].index = temp221;
+			wmRef[2][2][0].index = temp020;
+			wmRef[2][2][1].index = temp120;
+			wmRef[2][2][2].index = temp220;
+		} else {
+			// counterclockwise
+			wmRef[0][2][0].index = temp220;
+			wmRef[0][2][1].index = temp120;
+			wmRef[0][2][2].index = temp020;
+			wmRef[1][2][0].index = temp221;
+			wmRef[1][2][2].index = temp021;
+			wmRef[2][2][0].index = temp222;
+			wmRef[2][2][1].index = temp122;
+			wmRef[2][2][2].index = temp022;
+		}
 	}
 }
 
@@ -454,6 +495,7 @@ function rotateBackFace(deg) {
 	updateQuaternion(wmRef[0][2][1].index, 0, 0, deg);
 	updateQuaternion(wmRef[0][2][2].index, 0, 0, deg);
 	updateQuaternion(wmRef[1][2][0].index, 0, 0, deg);
+	updateQuaternion(wmRef[1][2][1].index, 0, 0, deg);
 	updateQuaternion(wmRef[1][2][2].index, 0, 0, deg);
 	updateQuaternion(wmRef[2][2][0].index, 0, 0, deg);
 	updateQuaternion(wmRef[2][2][1].index, 0, 0, deg);
@@ -463,36 +505,38 @@ function rotateBackFace(deg) {
 function downFace(deg) {
 	rotateDownFace(deg);
 
-	let temp000, temp010, temp020, temp100, temp120, temp200, temp210, temp220;
-	temp000 = wmRef[0][0][0].index;
-	temp010 = wmRef[0][1][0].index;
-	temp020 = wmRef[0][2][0].index;
-	temp100 = wmRef[1][0][0].index;
-	temp120 = wmRef[1][2][0].index;
-	temp200 = wmRef[2][0][0].index;
-	temp210 = wmRef[2][1][0].index;
-	temp220 = wmRef[2][2][0].index;
+	if (countAnimate === 45) {
+		let temp000, temp010, temp020, temp100, temp120, temp200, temp210, temp220;
+		temp000 = wmRef[0][0][0].index;
+		temp010 = wmRef[0][1][0].index;
+		temp020 = wmRef[0][2][0].index;
+		temp100 = wmRef[1][0][0].index;
+		temp120 = wmRef[1][2][0].index;
+		temp200 = wmRef[2][0][0].index;
+		temp210 = wmRef[2][1][0].index;
+		temp220 = wmRef[2][2][0].index;
 
-	if(deg < 0){
-		// clockwise
-		wmRef[0][0][0].index = temp020;
-		wmRef[0][1][0].index = temp120;
-		wmRef[0][2][0].index = temp220;
-		wmRef[1][0][0].index = temp010;
-		wmRef[1][2][0].index = temp210;
-		wmRef[2][0][0].index = temp000;
-		wmRef[2][1][0].index = temp100;
-		wmRef[2][2][0].index = temp200;
-	} else {
-		// counterclockwise
-		wmRef[0][0][0].index = temp200;
-		wmRef[0][1][0].index = temp100;
-		wmRef[0][2][0].index = temp000;
-		wmRef[1][0][0].index = temp210;
-		wmRef[1][2][0].index = temp010;
-		wmRef[2][0][0].index = temp220;
-		wmRef[2][1][0].index = temp120;
-		wmRef[2][2][0].index = temp020;
+		if(deg < 0){
+			// clockwise
+			wmRef[0][0][0].index = temp020;
+			wmRef[0][1][0].index = temp120;
+			wmRef[0][2][0].index = temp220;
+			wmRef[1][0][0].index = temp010;
+			wmRef[1][2][0].index = temp210;
+			wmRef[2][0][0].index = temp000;
+			wmRef[2][1][0].index = temp100;
+			wmRef[2][2][0].index = temp200;
+		} else {
+			// counterclockwise
+			wmRef[0][0][0].index = temp200;
+			wmRef[0][1][0].index = temp100;
+			wmRef[0][2][0].index = temp000;
+			wmRef[1][0][0].index = temp210;
+			wmRef[1][2][0].index = temp010;
+			wmRef[2][0][0].index = temp220;
+			wmRef[2][1][0].index = temp120;
+			wmRef[2][2][0].index = temp020;
+		}
 	}
 }
 
@@ -501,6 +545,7 @@ function rotateDownFace(deg) {
 	updateQuaternion(wmRef[0][1][0].index, 0, deg, 0);
 	updateQuaternion(wmRef[0][2][0].index, 0, deg, 0);
 	updateQuaternion(wmRef[1][0][0].index, 0, deg, 0);
+	updateQuaternion(wmRef[1][1][0].index, 0, deg, 0);
 	updateQuaternion(wmRef[1][2][0].index, 0, deg, 0);
 	updateQuaternion(wmRef[2][0][0].index, 0, deg, 0);
 	updateQuaternion(wmRef[2][1][0].index, 0, deg, 0);
@@ -510,36 +555,38 @@ function rotateDownFace(deg) {
 function upFace(deg) {
 	rotateUpFace(deg);
 
-	let temp002, temp012, temp022, temp102, temp122, temp202, temp212, temp222;
-	temp002 = wmRef[0][0][2].index;
-	temp012 = wmRef[0][1][2].index;
-	temp022 = wmRef[0][2][2].index;
-	temp102 = wmRef[1][0][2].index;
-	temp122 = wmRef[1][2][2].index;
-	temp202 = wmRef[2][0][2].index;
-	temp212 = wmRef[2][1][2].index;
-	temp222 = wmRef[2][2][2].index;
+	if (countAnimate === 45) {
+		let temp002, temp012, temp022, temp102, temp122, temp202, temp212, temp222;
+		temp002 = wmRef[0][0][2].index;
+		temp012 = wmRef[0][1][2].index;
+		temp022 = wmRef[0][2][2].index;
+		temp102 = wmRef[1][0][2].index;
+		temp122 = wmRef[1][2][2].index;
+		temp202 = wmRef[2][0][2].index;
+		temp212 = wmRef[2][1][2].index;
+		temp222 = wmRef[2][2][2].index;
 
-	if(deg < 0){
-		// clockwise
-		wmRef[0][0][2].index = temp022;
-		wmRef[0][1][2].index = temp122;
-		wmRef[0][2][2].index = temp222;
-		wmRef[1][0][2].index = temp012;
-		wmRef[1][2][2].index = temp212;
-		wmRef[2][0][2].index = temp002;
-		wmRef[2][1][2].index = temp102;
-		wmRef[2][2][2].index = temp202;
-	} else {
-		// counterclockwise
-		wmRef[0][0][2].index = temp202;
-		wmRef[0][1][2].index = temp102;
-		wmRef[0][2][2].index = temp002;
-		wmRef[1][0][2].index = temp212;
-		wmRef[1][2][2].index = temp012;
-		wmRef[2][0][2].index = temp222;
-		wmRef[2][1][2].index = temp122;
-		wmRef[2][2][2].index = temp022;
+		if(deg < 0){
+			// clockwise
+			wmRef[0][0][2].index = temp022;
+			wmRef[0][1][2].index = temp122;
+			wmRef[0][2][2].index = temp222;
+			wmRef[1][0][2].index = temp012;
+			wmRef[1][2][2].index = temp212;
+			wmRef[2][0][2].index = temp002;
+			wmRef[2][1][2].index = temp102;
+			wmRef[2][2][2].index = temp202;
+		} else {
+			// counterclockwise
+			wmRef[0][0][2].index = temp202;
+			wmRef[0][1][2].index = temp102;
+			wmRef[0][2][2].index = temp002;
+			wmRef[1][0][2].index = temp212;
+			wmRef[1][2][2].index = temp012;
+			wmRef[2][0][2].index = temp222;
+			wmRef[2][1][2].index = temp122;
+			wmRef[2][2][2].index = temp022;
+		}
 	}
 }
 
@@ -548,6 +595,7 @@ function rotateUpFace(deg) {
 	updateQuaternion(wmRef[0][1][2].index, 0, deg, 0);
 	updateQuaternion(wmRef[0][2][2].index, 0, deg, 0);
 	updateQuaternion(wmRef[1][0][2].index, 0, deg, 0);
+	updateQuaternion(wmRef[1][1][2].index, 0, deg, 0);
 	updateQuaternion(wmRef[1][2][2].index, 0, deg, 0);
 	updateQuaternion(wmRef[2][0][2].index, 0, deg, 0);
 	updateQuaternion(wmRef[2][1][2].index, 0, deg, 0);
@@ -559,92 +607,140 @@ function rotateMiddle(rotation){
 	if (selectedFace.i === 0) {
 		switch(rotation) {
 			case "R":
-				rotateMiddleHorizontal(90);
+				//rotateMiddleHorizontal(90);
+				functionToAnimate = rotateMiddleHorizontal;
+				degToAnimate = 90;
 				break;
 			case "L":
-				rotateMiddleHorizontal(-90);
+				//rotateMiddleHorizontal(-90);
+				functionToAnimate = rotateMiddleHorizontal;
+				degToAnimate = -90;
 				break;
 			case "U":
-				rotateMiddleVerticalRightLeft(-90);
+				//rotateMiddleVerticalRightLeft(-90);
+				functionToAnimate = rotateMiddleVerticalRightLeft;
+				degToAnimate = -90;
 				break;
 			case "D":
-				rotateMiddleVerticalRightLeft(90);
+				//rotateMiddleVerticalRightLeft(90);
+				functionToAnimate = rotateMiddleVerticalRightLeft;
+				degToAnimate = 90;
 		}
 	} else if (selectedFace.i === 2) {
 		switch(rotation) {
 			case "R":
-				rotateMiddleHorizontal(90);
+				//rotateMiddleHorizontal(90);
+				functionToAnimate = rotateMiddleHorizontal;
+				degToAnimate = 90;
 				break;
 			case "L":
-				rotateMiddleHorizontal(-90);
+				//rotateMiddleHorizontal(-90);
+				functionToAnimate = rotateMiddleHorizontal;
+				degToAnimate = -90;
 				break;
 			case "U":
-				rotateMiddleVerticalRightLeft(90);
+				//rotateMiddleVerticalRightLeft(90);
+				functionToAnimate = rotateMiddleVerticalRightLeft;
+				degToAnimate = 90;
 				break;
 			case "D":
-				rotateMiddleVerticalRightLeft(-90);
+				//rotateMiddleVerticalRightLeft(-90);
+				functionToAnimate = rotateMiddleVerticalRightLeft;
+				degToAnimate = -90;
 				break;
 		}
 	} else {
 		if (selectedFace.j === 0) {
 			switch(rotation) {
 				case "R":
-					rotateMiddleHorizontal(90);
+					//rotateMiddleHorizontal(90);
+					functionToAnimate = rotateMiddleHorizontal;
+					degToAnimate = 90;
 					break;
 				case "L":
-					rotateMiddleHorizontal(-90);
+					//rotateMiddleHorizontal(-90);
+					functionToAnimate = rotateMiddleHorizontal;
+					degToAnimate = -90;
 					break;
 				case "U":
-					rotateMiddleVerticalFrontBack(-90);
+					//rotateMiddleVerticalFrontBack(-90);
+					functionToAnimate = rotateMiddleVerticalFrontBack;
+					degToAnimate = -90;
 					break;
 				case "D":
-					rotateMiddleVerticalRightLeft(90);
+					//rotateMiddleVerticalFrontBack(-90);
+					functionToAnimate = rotateMiddleVerticalFrontBack;
+					degToAnimate = 90;
 					break;
 			}
 		} else if (selectedFace.j === 2) {
 			switch(rotation) {
 				case "R":
-					rotateMiddleHorizontal(90);
+					//rotateMiddleHorizontal(90);
+					functionToAnimate = rotateMiddleHorizontal;
+					degToAnimate = 90;
 					break;
 				case "L":
-					rotateMiddleHorizontal(-90);
+					//rotateMiddleHorizontal(-90);
+					functionToAnimate = rotateMiddleHorizontal;
+					degToAnimate = -90;
 					break;
 				case "U":
-					rotateMiddleVerticalFrontBack(90);
+					//rotateMiddleVerticalFrontBack(90);
+					functionToAnimate = rotateMiddleVerticalFrontBack;
+					degToAnimate = 90;
 					break;
 				case "D":
-					rotateMiddleVerticalFrontBack(-90);
+					//rotateMiddleVerticalFrontBack(-90);
+					functionToAnimate = rotateMiddleVerticalFrontBack;
+					degToAnimate = -90;
 					break;
 			}
 		} else {
 			if (selectedFace.k === 0) {
 				switch(rotation) {
 					case "R":
-						
+						//rotateMiddleVerticalRightLeft(-90);
+						functionToAnimate = rotateMiddleVerticalRightLeft;
+						degToAnimate = -90;
 						break;
 					case "L":
-						
+						//rotateMiddleVerticalRightLeft(90);
+						functionToAnimate = rotateMiddleVerticalRightLeft;
+						degToAnimate = 90;
 						break;
 					case "U":
-						rotateMiddleVerticalFrontBack(-90);
+						//rotateMiddleVerticalFrontBack(-90);
+						functionToAnimate = rotateMiddleVerticalFrontBack;
+						degToAnimate = -90;
 						break;
 					case "D":
-						rotateMiddleVerticalFrontBack(90);
+						//rotateMiddleVerticalFrontBack(90);
+						functionToAnimate = rotateMiddleVerticalFrontBack;
+						degToAnimate = 90;
 						break;
 				}
 			} else if (selectedFace.k === 2) {
 				switch(rotation) {
 					case "R":
-						
+						//rotateMiddleVerticalRightLeft(-90);
+						functionToAnimate = rotateMiddleVerticalRightLeft;
+						degToAnimate = -90;
 						break;
 					case "L":
-						
+						//rotateMiddleVerticalRightLeft(90);
+						functionToAnimate = rotateMiddleVerticalRightLeft;
+						degToAnimate = 90;
 						break;
 					case "U":
-						rotateMiddleVerticalFrontBack(-90);
+						//rotateMiddleVerticalFrontBack(-90);
+						functionToAnimate = rotateMiddleVerticalFrontBack;
+						degToAnimate = -90;
 						break;
 					case "D":
-						rotateMiddleVerticalFrontBack(90);
+						//rotateMiddleVerticalFrontBack(90);
+						functionToAnimate = rotateMiddleVerticalFrontBack;
+						degToAnimate = 90;
 						break;
 				}
 			}
@@ -653,56 +749,6 @@ function rotateMiddle(rotation){
 }
 
 function rotateMiddleHorizontal(deg) {
-	let front, right, back, left;
-
-	front = wmRef[1][0][1].color;
-	right = wmRef[0][1][1].color;
-	left = wmRef[2][1][1].color;
-	back = wmRef[1][2][1].color;
-
-	let temp001, temp021, temp221, temp201;
-	temp001 = wmRef[0][0][1].index;
-	temp021 = wmRef[0][2][1].index;
-	temp221 = wmRef[2][2][1].index;
-	temp201 = wmRef[2][0][1].index;
-
-	if(deg > 0){
-		//right
-		moveCenter(getCoordFromCol(front), "R");
-		moveCenter(getCoordFromCol(right), "R");
-		moveCenter(getCoordFromCol(back), "R");
-		moveCenter(getCoordFromCol(left), "R");
-
-		wmRef[2][1][1].color = back;
-		wmRef[1][2][1].color = right;
-		wmRef[0][1][1].color = front;
-		wmRef[1][0][1].color = left;
-
-		wmRef[0][0][1].index = temp201;
-		wmRef[0][2][1].index = temp001;
-		wmRef[2][2][1].index = temp021;
-		wmRef[2][0][1].index = temp221;
-
-
-	} else {
-		//left
-		moveCenter(getCoordFromCol(front), "L");
-		moveCenter(getCoordFromCol(right), "L");
-		moveCenter(getCoordFromCol(back), "L");
-		moveCenter(getCoordFromCol(left), "L");
-
-		wmRef[2][1][1].color = front;
-		wmRef[1][2][1].color = left;
-		wmRef[0][1][1].color = back;
-		wmRef[1][0][1].color = right;
-
-		wmRef[0][0][1].index = temp021;
-		wmRef[0][2][1].index = temp221;
-		wmRef[2][2][1].index = temp201;
-		wmRef[2][0][1].index = temp001;
-
-	}
-
 	updateQuaternion(wmRef[0][0][1].index, 0, deg, 0);
 	updateQuaternion(wmRef[0][1][1].index, 0, deg, 0);
 	updateQuaternion(wmRef[0][2][1].index, 0, deg, 0);
@@ -711,9 +757,61 @@ function rotateMiddleHorizontal(deg) {
 	updateQuaternion(wmRef[2][0][1].index, 0, deg, 0);
 	updateQuaternion(wmRef[2][1][1].index, 0, deg, 0);
 	updateQuaternion(wmRef[2][2][1].index, 0, deg, 0);
+
+	if (countAnimate === 45) {
+		let front, right, back, left;
+
+		front = wmRef[1][0][1].color;
+		right = wmRef[0][1][1].color;
+		left = wmRef[2][1][1].color;
+		back = wmRef[1][2][1].color;
+
+		let temp001, temp021, temp221, temp201;
+		temp001 = wmRef[0][0][1].index;
+		temp021 = wmRef[0][2][1].index;
+		temp221 = wmRef[2][2][1].index;
+		temp201 = wmRef[2][0][1].index;
+
+		if(deg > 0){
+			//right
+			moveCenterMiddleHorizontal(getCoordFromCol(front), "R");
+			moveCenterMiddleHorizontal(getCoordFromCol(right), "R");
+			moveCenterMiddleHorizontal(getCoordFromCol(back), "R");
+			moveCenterMiddleHorizontal(getCoordFromCol(left), "R");
+
+			wmRef[2][1][1].color = back;
+			wmRef[1][2][1].color = right;
+			wmRef[0][1][1].color = front;
+			wmRef[1][0][1].color = left;
+
+			wmRef[0][0][1].index = temp201;
+			wmRef[0][2][1].index = temp001;
+			wmRef[2][2][1].index = temp021;
+			wmRef[2][0][1].index = temp221;
+
+
+		} else {
+			//left
+			moveCenterMiddleHorizontal(getCoordFromCol(front), "L");
+			moveCenterMiddleHorizontal(getCoordFromCol(right), "L");
+			moveCenterMiddleHorizontal(getCoordFromCol(back), "L");
+			moveCenterMiddleHorizontal(getCoordFromCol(left), "L");
+
+			wmRef[2][1][1].color = front;
+			wmRef[1][2][1].color = left;
+			wmRef[0][1][1].color = back;
+			wmRef[1][0][1].color = right;
+
+			wmRef[0][0][1].index = temp021;
+			wmRef[0][2][1].index = temp221;
+			wmRef[2][2][1].index = temp201;
+			wmRef[2][0][1].index = temp001;
+
+		}
+	}
 }
 
-function moveCenter(coords, direction) {
+function moveCenterMiddleHorizontal(coords, direction) {
 	if (direction === "R") {
 		if (coords.i === 1 && coords.j === 0) {
 			coords.i = 0;
@@ -755,6 +853,90 @@ function rotateMiddleVerticalFrontBack(deg) {
 	updateQuaternion(wmRef[1][2][0].index, deg, 0, 0);
 	updateQuaternion(wmRef[1][2][1].index, deg, 0, 0);
 	updateQuaternion(wmRef[1][2][2].index, deg, 0, 0);
+
+	if (countAnimate === 45) {
+		let front, up, back, down;
+
+		front = wmRef[1][0][1].color;
+		up = wmRef[1][1][2].color;
+		back = wmRef[1][2][1].color;
+		down = wmRef[1][1][0].color;
+
+		let temp100, temp102, temp122, temp120;
+		temp100 = wmRef[1][0][0].index;
+		temp102 = wmRef[1][0][2].index;
+		temp122 = wmRef[1][2][2].index;
+		temp120 = wmRef[1][2][0].index;
+
+		if(deg > 0){
+			//up
+			moveCenterMiddleVerticalFrontBack(getCoordFromCol(front), "U");
+			moveCenterMiddleVerticalFrontBack(getCoordFromCol(up), "U");
+			moveCenterMiddleVerticalFrontBack(getCoordFromCol(back), "U");
+			moveCenterMiddleVerticalFrontBack(getCoordFromCol(down), "U");
+
+			wmRef[1][1][0].color = back;
+			wmRef[1][2][1].color = up;
+			wmRef[1][1][2].color = front;
+			wmRef[1][0][1].color = down;
+
+			wmRef[1][0][2].index = temp100;
+			wmRef[1][2][2].index = temp102;
+			wmRef[1][2][0].index = temp122;
+			wmRef[1][0][0].index = temp120;
+
+
+		} else {
+			//down
+			moveCenterMiddleVerticalFrontBack(getCoordFromCol(front), "D");
+			moveCenterMiddleVerticalFrontBack(getCoordFromCol(up), "D");
+			moveCenterMiddleVerticalFrontBack(getCoordFromCol(back), "D");
+			moveCenterMiddleVerticalFrontBack(getCoordFromCol(down), "D");
+
+			wmRef[1][1][0].color = front;
+			wmRef[1][2][1].color = down;
+			wmRef[1][1][2].color = back;
+			wmRef[1][0][1].color = up;
+
+			wmRef[1][2][0].index = temp100;
+			wmRef[1][0][0].index = temp102;
+			wmRef[1][0][2].index = temp122;
+			wmRef[1][2][2].index = temp120;
+
+		}
+	}
+}
+
+function moveCenterMiddleVerticalFrontBack(coords, direction) {
+	if (direction === "U") {
+		if (coords.k === 1 && coords.j === 0) {
+			coords.k = 2;
+			coords.j = 1;
+		} else if (coords.k === 0 && coords.j === 1) {
+			coords.k = 1;
+			coords.j = 0;
+		} else if (coords.k === 1 && coords.j === 2) {
+			coords.k = 0;
+			coords.j = 1;
+		} else {
+			coords.k = 1;
+			coords.j = 2;
+		}
+	} else {
+		if (coords.k === 0 && coords.j === 1) {
+			coords.k = 1;
+			coords.j = 2;
+		} else if (coords.k === 1 && coords.j === 2) {
+			coords.k = 2;
+			coords.j = 1;
+		} else if (coords.k === 2 && coords.j === 1) {
+			coords.k = 1;
+			coords.j = 0;
+		} else {
+			coords.k = 0;
+			coords.j = 1;
+		}
+	}
 }
 
 function rotateMiddleVerticalRightLeft(deg) {
@@ -770,16 +952,29 @@ function rotateMiddleVerticalRightLeft(deg) {
 
 //middle vertical top/bottom missing
 
-
 function animate(){
 	/*interpolation*/
+	if (degToAnimate > 0) {
+		functionToAnimate(2);
+		countAnimate++;
+	} else {	
+		functionToAnimate(-2);
+		countAnimate++;
+	}
 }
 
 //------------------------------------------------------------- DRAW SCENE ---------------------------------------------------------------------
 
 function drawScene() {
 	
-	animate();
+	if (functionToAnimate !== null) {
+		animate();
+	}
+	if (countAnimate === 45) {
+		functionToAnimate = null;
+		degToAnimate = null;
+		countAnimate = 0;
+	}
 	
 	gl.clearColor(0.85, 0.85, 0.85, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
