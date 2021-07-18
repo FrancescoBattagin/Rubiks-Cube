@@ -22,6 +22,7 @@ var normalsAttributeLocation=new Array();
 var lightDirectionHandle=new Array();
 var lightColorHandle=new Array();
 
+var lastUpdateTime = null;
 
 var uvLocation=new Array();
 var textureFileHandle=new Array();
@@ -55,7 +56,7 @@ var dirLightBeta  = -utils.degToRad(100);
 var directionalLightColor = [2.0, 2.0, 2.0];
 
 var functionToAnimate = null;
-var degToAnimate = null;
+var degToAnimate = 0;
 var countAnimate = 0;
 
 var node;
@@ -76,6 +77,7 @@ function onDropdownChange(value){
 		}
 	}
 }
+var last = false;
 
 function doMouseDown(event) {
 	lastMouseX = event.pageX;
@@ -256,83 +258,86 @@ function main() {
 }
 
 function rotateFace(rotation){
-	if (selectedFace.i === 0) {
-		functionToAnimate = rightFace;
-		switch(rotation) {
-			case "R":
-				//rightFace(-90);
-				degToAnimate = -90;
-				break;
-			case "L":
-				//rightFace(90);
-				degToAnimate = 90; 
-		}
-	} else if (selectedFace.i === 2) {
-		functionToAnimate = leftFace;
-		switch(rotation) {
-			case "R":
-				//leftFace(90);
-				degToAnimate = 90;
-				break;
-			case "L":
-				//leftFace(-90);
-				degToAnimate = -90;
-		}
-	} else {
-		if (selectedFace.j === 0) {
-			functionToAnimate = frontFace;
+	if(functionToAnimate === null){
+		if (selectedFace.i === 0) {
+			functionToAnimate = rightFace;
 			switch(rotation) {
 				case "R":
-					//frontFace(-90);
+					//rightFace(-90);
 					degToAnimate = -90;
 					break;
 				case "L":
-					//frontFace(90);
-					degToAnimate = 90;
+					//rightFace(90);
+					degToAnimate = 90; 
 			}
-		} else if (selectedFace.j === 2) {
-			functionToAnimate = backFace;
+		} else if (selectedFace.i === 2) {
+			functionToAnimate = leftFace;
 			switch(rotation) {
 				case "R":
-					//backFace(90);
+					//leftFace(90);
 					degToAnimate = 90;
 					break;
 				case "L":
-					//backFace(-90);
+					//leftFace(-90);
 					degToAnimate = -90;
 			}
 		} else {
-			if (selectedFace.k === 0) {
-				functionToAnimate = downFace;
+			if (selectedFace.j === 0) {
+				functionToAnimate = frontFace;
 				switch(rotation) {
 					case "R":
-						//downFace(90);
+						//frontFace(-90);
+						degToAnimate = -90;
+						break;
+					case "L":
+						//frontFace(90);
+						degToAnimate = 90;
+				}
+			} else if (selectedFace.j === 2) {
+				functionToAnimate = backFace;
+				switch(rotation) {
+					case "R":
+						//backFace(90);
 						degToAnimate = 90;
 						break;
 					case "L":
-						//downFace(-90);
+						//backFace(-90);
 						degToAnimate = -90;
 				}
-			} else if (selectedFace.k === 2) {
-				functionToAnimate = upFace;
-				switch(rotation) {
-					case "R":
-						//upFace(-90);
-						degToAnimate = -90;
-						break;
-					case "L":
-						//upFace(90);
-						degToAnimate = 90;
+			} else {
+				if (selectedFace.k === 0) {
+					functionToAnimate = downFace;
+					switch(rotation) {
+						case "R":
+							//downFace(90);
+							degToAnimate = 90;
+							break;
+						case "L":
+							//downFace(-90);
+							degToAnimate = -90;
+					}
+				} else if (selectedFace.k === 2) {
+					functionToAnimate = upFace;
+					switch(rotation) {
+						case "R":
+							//upFace(-90);
+							degToAnimate = -90;
+							break;
+						case "L":
+							//upFace(90);
+							degToAnimate = 90;
+					}
 				}
 			}
 		}
+		lastUpdateTime = (new Date).getTime();
 	}
 }
 
 function rightFace(deg) {
 	rotateRightFace(deg);
 	
-	if (countAnimate === 45) {
+	if (last) {
 		let temp000, temp001, temp002, temp010, temp012, temp020, temp021, temp022;
 		temp000 = wmRef[0][0][0].index;
 		temp001 = wmRef[0][0][1].index;
@@ -363,7 +368,7 @@ function rightFace(deg) {
 			wmRef[0][2][0].index = temp022;
 			wmRef[0][2][1].index = temp012;
 			wmRef[0][2][2].index = temp002;
-		}	
+		}
 	}
 }
 
@@ -382,7 +387,7 @@ function rotateRightFace(deg) {
 function leftFace(deg) {
 	rotateLeftFace(deg);
 
-	if (countAnimate === 45) {
+	if (last) {
 		let temp200, temp201, temp202, temp210, temp212, temp220, temp221, temp222;
 		temp200 = wmRef[2][0][0].index;
 		temp201 = wmRef[2][0][1].index;
@@ -430,7 +435,7 @@ function rotateLeftFace(deg) {
 function frontFace(deg) {
 	rotateFrontFace(deg);
 
-	if (countAnimate === 45) {
+	if (last) {
 		let temp000, temp001, temp002, temp100, temp102, temp200, temp201, temp202;
 		temp000 = wmRef[0][0][0].index;
 		temp001 = wmRef[0][0][1].index;
@@ -480,7 +485,7 @@ function rotateFrontFace(deg) {
 function backFace(deg) {
 	rotateBackFace(deg);
 
-	if (countAnimate === 45) {
+	if (last) {
 		let temp020, temp021, temp022, temp120, temp122, temp220, temp221, temp222;
 		temp020 = wmRef[0][2][0].index;
 		temp021 = wmRef[0][2][1].index;
@@ -530,7 +535,7 @@ function rotateBackFace(deg) {
 function downFace(deg) {
 	rotateDownFace(deg);
 
-	if (countAnimate === 45) {
+	if (last) {
 		let temp000, temp010, temp020, temp100, temp120, temp200, temp210, temp220;
 		temp000 = wmRef[0][0][0].index;
 		temp010 = wmRef[0][1][0].index;
@@ -580,7 +585,7 @@ function rotateDownFace(deg) {
 function upFace(deg) {
 	rotateUpFace(deg);
 
-	if (countAnimate === 45) {
+	if (last) {
 		let temp002, temp012, temp022, temp102, temp122, temp202, temp212, temp222;
 		temp002 = wmRef[0][0][2].index;
 		temp012 = wmRef[0][1][2].index;
@@ -629,53 +634,8 @@ function rotateUpFace(deg) {
 
 function rotateMiddle(rotation){
 	// the rotation must reassign centerCoordinates of each color center involved in the rotation
-	if (selectedFace.i === 0) {
-		switch(rotation) {
-			case "R":
-				//rotateMiddleHorizontal(90);
-				functionToAnimate = rotateMiddleHorizontal;
-				degToAnimate = 90;
-				break;
-			case "L":
-				//rotateMiddleHorizontal(-90);
-				functionToAnimate = rotateMiddleHorizontal;
-				degToAnimate = -90;
-				break;
-			case "U":
-				//rotateMiddleVerticalRightLeft(-90);
-				functionToAnimate = rotateMiddleVerticalRightLeft;
-				degToAnimate = -90;
-				break;
-			case "D":
-				//rotateMiddleVerticalRightLeft(90);
-				functionToAnimate = rotateMiddleVerticalRightLeft;
-				degToAnimate = 90;
-		}
-	} else if (selectedFace.i === 2) {
-		switch(rotation) {
-			case "R":
-				//rotateMiddleHorizontal(90);
-				functionToAnimate = rotateMiddleHorizontal;
-				degToAnimate = 90;
-				break;
-			case "L":
-				//rotateMiddleHorizontal(-90);
-				functionToAnimate = rotateMiddleHorizontal;
-				degToAnimate = -90;
-				break;
-			case "U":
-				//rotateMiddleVerticalRightLeft(90);
-				functionToAnimate = rotateMiddleVerticalRightLeft;
-				degToAnimate = 90;
-				break;
-			case "D":
-				//rotateMiddleVerticalRightLeft(-90);
-				functionToAnimate = rotateMiddleVerticalRightLeft;
-				degToAnimate = -90;
-				break;
-		}
-	} else {
-		if (selectedFace.j === 0) {
+	if(functionToAnimate === null){
+		if (selectedFace.i === 0) {
 			switch(rotation) {
 				case "R":
 					//rotateMiddleHorizontal(90);
@@ -688,17 +648,16 @@ function rotateMiddle(rotation){
 					degToAnimate = -90;
 					break;
 				case "U":
-					//rotateMiddleVerticalFrontBack(-90);
-					functionToAnimate = rotateMiddleVerticalFrontBack;
-					degToAnimate = -90;
-					break;
-				case "D":
-					//rotateMiddleVerticalFrontBack(-90);
-					functionToAnimate = rotateMiddleVerticalFrontBack;
+					//rotateMiddleVerticalRightLeft(-90);
+					functionToAnimate = rotateMiddleVerticalRightLeft;
 					degToAnimate = 90;
 					break;
+				case "D":
+					//rotateMiddleVerticalRightLeft(90);
+					functionToAnimate = rotateMiddleVerticalRightLeft;
+					degToAnimate = -90;
 			}
-		} else if (selectedFace.j === 2) {
+		} else if (selectedFace.i === 2) {
 			switch(rotation) {
 				case "R":
 					//rotateMiddleHorizontal(90);
@@ -711,28 +670,28 @@ function rotateMiddle(rotation){
 					degToAnimate = -90;
 					break;
 				case "U":
-					//rotateMiddleVerticalFrontBack(90);
-					functionToAnimate = rotateMiddleVerticalFrontBack;
-					degToAnimate = 90;
+					//rotateMiddleVerticalRightLeft(90);
+					functionToAnimate = rotateMiddleVerticalRightLeft;
+					degToAnimate = -90;
 					break;
 				case "D":
-					//rotateMiddleVerticalFrontBack(-90);
-					functionToAnimate = rotateMiddleVerticalFrontBack;
-					degToAnimate = -90;
+					//rotateMiddleVerticalRightLeft(-90);
+					functionToAnimate = rotateMiddleVerticalRightLeft;
+					degToAnimate = 90;
 					break;
 			}
 		} else {
-			if (selectedFace.k === 0) {
+			if (selectedFace.j === 0) {
 				switch(rotation) {
 					case "R":
-						//rotateMiddleVerticalRightLeft(-90);
-						functionToAnimate = rotateMiddleVerticalRightLeft;
-						degToAnimate = -90;
+						//rotateMiddleHorizontal(90);
+						functionToAnimate = rotateMiddleHorizontal;
+						degToAnimate = 90;
 						break;
 					case "L":
-						//rotateMiddleVerticalRightLeft(90);
-						functionToAnimate = rotateMiddleVerticalRightLeft;
-						degToAnimate = 90;
+						//rotateMiddleHorizontal(-90);
+						functionToAnimate = rotateMiddleHorizontal;
+						degToAnimate = -90;
 						break;
 					case "U":
 						//rotateMiddleVerticalFrontBack(-90);
@@ -740,36 +699,85 @@ function rotateMiddle(rotation){
 						degToAnimate = -90;
 						break;
 					case "D":
-						//rotateMiddleVerticalFrontBack(90);
+						//rotateMiddleVerticalFrontBack(-90);
 						functionToAnimate = rotateMiddleVerticalFrontBack;
 						degToAnimate = 90;
 						break;
 				}
-			} else if (selectedFace.k === 2) {
+			} else if (selectedFace.j === 2) {
 				switch(rotation) {
 					case "R":
-						//rotateMiddleVerticalRightLeft(-90);
-						functionToAnimate = rotateMiddleVerticalRightLeft;
-						degToAnimate = -90;
-						break;
-					case "L":
-						//rotateMiddleVerticalRightLeft(90);
-						functionToAnimate = rotateMiddleVerticalRightLeft;
+						//rotateMiddleHorizontal(90);
+						functionToAnimate = rotateMiddleHorizontal;
 						degToAnimate = 90;
 						break;
-					case "U":
-						//rotateMiddleVerticalFrontBack(-90);
-						functionToAnimate = rotateMiddleVerticalFrontBack;
+					case "L":
+						//rotateMiddleHorizontal(-90);
+						functionToAnimate = rotateMiddleHorizontal;
 						degToAnimate = -90;
 						break;
-					case "D":
+					case "U":
 						//rotateMiddleVerticalFrontBack(90);
 						functionToAnimate = rotateMiddleVerticalFrontBack;
 						degToAnimate = 90;
 						break;
+					case "D":
+						//rotateMiddleVerticalFrontBack(-90);
+						functionToAnimate = rotateMiddleVerticalFrontBack;
+						degToAnimate = -90;
+						break;
+				}
+			} else {
+				if (selectedFace.k === 0) {
+					switch(rotation) {
+						case "R":
+							//rotateMiddleVerticalRightLeft(-90);
+							functionToAnimate = rotateMiddleVerticalRightLeft;
+							degToAnimate = -90;
+							break;
+						case "L":
+							//rotateMiddleVerticalRightLeft(90);
+							functionToAnimate = rotateMiddleVerticalRightLeft;
+							degToAnimate = 90;
+							break;
+						case "U":
+							//rotateMiddleVerticalFrontBack(-90);
+							functionToAnimate = rotateMiddleVerticalFrontBack;
+							degToAnimate = -90;
+							break;
+						case "D":
+							//rotateMiddleVerticalFrontBack(90);
+							functionToAnimate = rotateMiddleVerticalFrontBack;
+							degToAnimate = 90;
+							break;
+					}
+				} else if (selectedFace.k === 2) {
+					switch(rotation) {
+						case "R":
+							//rotateMiddleVerticalRightLeft(-90);
+							functionToAnimate = rotateMiddleVerticalRightLeft;
+							degToAnimate = -90;
+							break;
+						case "L":
+							//rotateMiddleVerticalRightLeft(90);
+							functionToAnimate = rotateMiddleVerticalRightLeft;
+							degToAnimate = 90;
+							break;
+						case "U":
+							//rotateMiddleVerticalFrontBack(-90);
+							functionToAnimate = rotateMiddleVerticalFrontBack;
+							degToAnimate = -90;
+							break;
+						case "D":
+							//rotateMiddleVerticalFrontBack(90);
+							functionToAnimate = rotateMiddleVerticalFrontBack;
+							degToAnimate = 90;
+							break;
+					}
 				}
 			}
 		}
+		lastUpdateTime = (new Date).getTime();
 	}
 }
 
@@ -783,13 +791,13 @@ function rotateMiddleHorizontal(deg) {
 	updateQuaternion(wmRef[2][1][1].index, 0, deg, 0);
 	updateQuaternion(wmRef[2][2][1].index, 0, deg, 0);
 
-	if (countAnimate === 45) {
+	if (last) {
 		let front, right, back, left;
 
-		front = wmRef[1][0][1].color;
-		right = wmRef[0][1][1].color;
-		left = wmRef[2][1][1].color;
-		back = wmRef[1][2][1].color;
+		front = wmRef[1][0][1];
+		right = wmRef[0][1][1];
+		left = wmRef[2][1][1];
+		back = wmRef[1][2][1];
 
 		let temp001, temp021, temp221, temp201;
 		temp001 = wmRef[0][0][1].index;
@@ -799,15 +807,15 @@ function rotateMiddleHorizontal(deg) {
 
 		if(deg > 0){
 			//right
-			moveCenterMiddleHorizontal(getCoordFromCol(front), "R");
-			moveCenterMiddleHorizontal(getCoordFromCol(right), "R");
-			moveCenterMiddleHorizontal(getCoordFromCol(back), "R");
-			moveCenterMiddleHorizontal(getCoordFromCol(left), "R");
+			moveCenterMiddleHorizontal(getCoordFromCol(front.color), "R");
+			moveCenterMiddleHorizontal(getCoordFromCol(right.color), "R");
+			moveCenterMiddleHorizontal(getCoordFromCol(back.color), "R");
+			moveCenterMiddleHorizontal(getCoordFromCol(left.color), "R");
 
-			wmRef[2][1][1].color = back;
-			wmRef[1][2][1].color = right;
-			wmRef[0][1][1].color = front;
-			wmRef[1][0][1].color = left;
+			wmRef[2][1][1] = back;
+			wmRef[1][2][1] = right;
+			wmRef[0][1][1] = front;
+			wmRef[1][0][1] = left;
 
 			wmRef[0][0][1].index = temp201;
 			wmRef[0][2][1].index = temp001;
@@ -817,20 +825,21 @@ function rotateMiddleHorizontal(deg) {
 
 		} else {
 			//left
-			moveCenterMiddleHorizontal(getCoordFromCol(front), "L");
-			moveCenterMiddleHorizontal(getCoordFromCol(right), "L");
-			moveCenterMiddleHorizontal(getCoordFromCol(back), "L");
-			moveCenterMiddleHorizontal(getCoordFromCol(left), "L");
+			moveCenterMiddleHorizontal(getCoordFromCol(front.color), "L");
+			moveCenterMiddleHorizontal(getCoordFromCol(right.color), "L");
+			moveCenterMiddleHorizontal(getCoordFromCol(back.color), "L");
+			moveCenterMiddleHorizontal(getCoordFromCol(left.color), "L");
 
-			wmRef[2][1][1].color = front;
-			wmRef[1][2][1].color = left;
-			wmRef[0][1][1].color = back;
-			wmRef[1][0][1].color = right;
+			wmRef[2][1][1] = front;
+			wmRef[1][2][1] = left;
+			wmRef[0][1][1] = back;
+			wmRef[1][0][1] = right;
 
 			wmRef[0][0][1].index = temp021;
 			wmRef[0][2][1].index = temp221;
 			wmRef[2][2][1].index = temp201;
 			wmRef[2][0][1].index = temp001;
+
 
 		}
 	}
@@ -879,13 +888,13 @@ function rotateMiddleVerticalFrontBack(deg) {
 	updateQuaternion(wmRef[1][2][1].index, deg, 0, 0);
 	updateQuaternion(wmRef[1][2][2].index, deg, 0, 0);
 
-	if (countAnimate === 45) {
+	if (last) {
 		let front, up, back, down;
 
-		front = wmRef[1][0][1].color;
-		up = wmRef[1][1][2].color;
-		back = wmRef[1][2][1].color;
-		down = wmRef[1][1][0].color;
+		front = wmRef[1][0][1];
+		up = wmRef[1][1][2];
+		back = wmRef[1][2][1];
+		down = wmRef[1][1][0];
 
 		let temp100, temp102, temp122, temp120;
 		temp100 = wmRef[1][0][0].index;
@@ -893,17 +902,19 @@ function rotateMiddleVerticalFrontBack(deg) {
 		temp122 = wmRef[1][2][2].index;
 		temp120 = wmRef[1][2][0].index;
 
+		console.log(front, up, back, down);
+		//console.log(temp100, temp102, temp122, temp120);
 		if(deg > 0){
 			//up
-			moveCenterMiddleVerticalFrontBack(getCoordFromCol(front), "U");
-			moveCenterMiddleVerticalFrontBack(getCoordFromCol(up), "U");
-			moveCenterMiddleVerticalFrontBack(getCoordFromCol(back), "U");
-			moveCenterMiddleVerticalFrontBack(getCoordFromCol(down), "U");
+			moveCenterMiddleVerticalFrontBack(getCoordFromCol(front.color), "U");
+			moveCenterMiddleVerticalFrontBack(getCoordFromCol(up.color), "U");
+			moveCenterMiddleVerticalFrontBack(getCoordFromCol(back.color), "U");
+			moveCenterMiddleVerticalFrontBack(getCoordFromCol(down.color), "U");
 
-			wmRef[1][1][0].color = back;
-			wmRef[1][2][1].color = up;
-			wmRef[1][1][2].color = front;
-			wmRef[1][0][1].color = down;
+			wmRef[1][1][0] = back;
+			wmRef[1][2][1] = up;
+			wmRef[1][1][2] = front;
+			wmRef[1][0][1] = down;
 
 			wmRef[1][0][2].index = temp100;
 			wmRef[1][2][2].index = temp102;
@@ -913,22 +924,23 @@ function rotateMiddleVerticalFrontBack(deg) {
 
 		} else {
 			//down
-			moveCenterMiddleVerticalFrontBack(getCoordFromCol(front), "D");
-			moveCenterMiddleVerticalFrontBack(getCoordFromCol(up), "D");
-			moveCenterMiddleVerticalFrontBack(getCoordFromCol(back), "D");
-			moveCenterMiddleVerticalFrontBack(getCoordFromCol(down), "D");
+			moveCenterMiddleVerticalFrontBack(getCoordFromCol(front.color), "D");
+			moveCenterMiddleVerticalFrontBack(getCoordFromCol(up.color), "D");
+			moveCenterMiddleVerticalFrontBack(getCoordFromCol(back.color), "D");
+			moveCenterMiddleVerticalFrontBack(getCoordFromCol(down.color), "D");
 
-			wmRef[1][1][0].color = front;
-			wmRef[1][2][1].color = down;
-			wmRef[1][1][2].color = back;
-			wmRef[1][0][1].color = up;
+			wmRef[1][1][0] = front;
+			wmRef[1][2][1] = down;
+			wmRef[1][1][2] = back;
+			wmRef[1][0][1] = up;
 
 			wmRef[1][2][0].index = temp100;
 			wmRef[1][0][0].index = temp102;
 			wmRef[1][0][2].index = temp122;
 			wmRef[1][2][2].index = temp120;
-
 		}
+		console.log(wmRef[1][0][1],wmRef[1][1][2],wmRef[1][2][1],wmRef[1][1][0]);
+		//console.log(wmRef[1][2][0],wmRef[1][0][0],wmRef[1][0][2],wmRef[1][2][2]);
 	}
 }
 
@@ -973,19 +985,146 @@ function rotateMiddleVerticalRightLeft(deg) {
 	updateQuaternion(wmRef[2][1][0].index, 0, 0, deg);
 	updateQuaternion(wmRef[2][1][1].index, 0, 0, deg);
 	updateQuaternion(wmRef[2][1][2].index, 0, 0, deg);
+
+	if (last) {
+		let right, up, left, down;
+
+		right = wmRef[0][1][1];
+		up = wmRef[1][1][2];
+		left = wmRef[2][1][1];
+		down = wmRef[1][1][0];
+
+		let temp012, temp212, temp210, temp010;
+		temp012 = wmRef[0][1][2].index;
+		temp212 = wmRef[2][1][2].index;
+		temp210 = wmRef[2][1][0].index;
+		temp010 = wmRef[0][1][0].index;
+
+		if(deg > 0){
+			//up
+			moveCenterMiddleVerticalRightLeft(getCoordFromCol(right.color), "U");
+			moveCenterMiddleVerticalRightLeft(getCoordFromCol(up.color), "U");
+			moveCenterMiddleVerticalRightLeft(getCoordFromCol(left.color), "U");
+			moveCenterMiddleVerticalRightLeft(getCoordFromCol(down.color), "U");
+
+			wmRef[1][1][2] = right;
+			wmRef[2][1][1] = up;
+			wmRef[1][1][0] = left;
+			wmRef[0][1][1] = down;
+
+			wmRef[2][1][2].index = temp012;
+			wmRef[2][1][0].index = temp212;
+			wmRef[0][1][0].index = temp210;
+			wmRef[0][1][2].index = temp010;
+
+
+		} else {
+			//down
+			moveCenterMiddleVerticalRightLeft(getCoordFromCol(right.color), "D");
+			moveCenterMiddleVerticalRightLeft(getCoordFromCol(up.color), "D");
+			moveCenterMiddleVerticalRightLeft(getCoordFromCol(left.color), "D");
+			moveCenterMiddleVerticalRightLeft(getCoordFromCol(down.color), "D");
+
+			wmRef[1][1][0] = right;
+			wmRef[2][1][1] = down;
+			wmRef[1][1][2] = left;
+			wmRef[0][1][1] = up;
+
+			wmRef[0][1][0].index = temp012;
+			wmRef[0][1][2].index = temp212;
+			wmRef[2][1][2].index = temp210;
+			wmRef[2][1][0].index = temp010;
+		}
+	}
 }
 
-//middle vertical top/bottom missing
+function moveCenterMiddleVerticalRightLeft(coords, direction){
+	if (direction === "U") {
+		if (coords.k === 1 && coords.i === 0) {
+			coords.k = 2;
+			coords.i = 1;
+		} else if (coords.k === 0 && coords.i === 1) {
+			coords.k = 1;
+			coords.i = 0;
+		} else if (coords.k === 1 && coords.i === 2) {
+			coords.k = 0;
+			coords.i = 1;
+		} else {
+			coords.k = 1;
+			coords.i = 2;
+		}
+	} else {
+		if (coords.k === 0 && coords.i === 1) {
+			coords.k = 1;
+			coords.i = 2;
+		} else if (coords.k === 1 && coords.i === 2) {
+			coords.k = 2;
+			coords.i = 1;
+		} else if (coords.k === 2 && coords.i === 1) {
+			coords.k = 1;
+			coords.i = 0;
+		} else {
+			coords.k = 0;
+			coords.i = 1;
+		}
+	}
+}
+
 
 function animate(){
-	/*interpolation*/
-	if (degToAnimate > 0) {
-		functionToAnimate(2);
-		countAnimate++;
-	} else {	
-		functionToAnimate(-2);
-		countAnimate++;
-	}
+	var currentTime = (new Date).getTime();
+    if(lastUpdateTime){
+		var deltaC = (100 * (currentTime - lastUpdateTime)) / 1000.0;
+		if(degToAnimate > 0){
+			if(countAnimate + deltaC <= 90){
+				if(countAnimate + deltaC == 90){
+					last = true;
+				}
+				functionToAnimate(deltaC);
+				if(last){
+					last = false;
+					lastUpdateTime = null;
+					degToAnimate = 0;
+					countAnimate = 0;
+				} else {
+					lastUpdateTime = currentTime;
+					countAnimate += deltaC;					
+				}
+			} else{
+				last = true;
+				functionToAnimate(90 - countAnimate);
+				last = false;
+				lastUpdateTime = null;
+				functionToAnimate = null;
+				degToAnimate = 0;
+				countAnimate = 0;
+			}
+		} else{
+			if(countAnimate + deltaC <= 90){
+				if(countAnimate + deltaC == 90){
+					last = true;
+				}
+				functionToAnimate(-deltaC);
+				if(last){
+					last = false;
+					lastUpdateTime = null;
+					degToAnimate = 0;
+					countAnimate = 0;
+				} else {
+					lastUpdateTime = currentTime;
+					countAnimate += deltaC;
+				}
+			} else{
+				last = true;
+				functionToAnimate(-90 + countAnimate);
+				last = false;
+				lastUpdateTime = null;
+				functionToAnimate = null;
+				degToAnimate = 0;
+				countAnimate = 0;
+			}
+		}
+    }
 }
 
 //------------------------------------------------------------- DRAW SCENE ---------------------------------------------------------------------
@@ -994,11 +1133,6 @@ function drawScene() {
 	
 	if (functionToAnimate !== null) {
 		animate();
-	}
-	if (countAnimate === 45) {
-		functionToAnimate = null;
-		degToAnimate = null;
-		countAnimate = 0;
 	}
 	
 	gl.clearColor(0.85, 0.85, 0.85, 1.0);
@@ -1213,40 +1347,7 @@ async function init() {
 	for (let c in cubes) {
         models[c] = await importObject(cubes[c]);
     }
-	console.log(models[0]);
 	
-	/*
-	00 - 01 - 02 -> column "right"
-	10 - 11 - 12 -> column "in the middle"
-	20 - 21 - 22 -> column "left"
-
-    Cube00_B --> green face, bottom right
-    Cube00_M --> green face, medium right
-    Cube00 --> green face, top right
-    Cube01_B --> yellow face, bottom center
-    Cube01_M --> yellow face, medium center
-    Cube01 --> yellow face, top center
-    Cube02_B --> yellow face, bottom right
-    Cube02_M --> yellow face, medium right
-    Cube02 --> yellow face, top right
-    Cube10_B --> green face, bottom center 
-    Cube10_M --> green face, medium center
-    Cube10 --> green face, top medium
-    Cube11_B --> blue face, bottom center
-    Cube11 --> white face, medium center
-    Cube12_B --> blue face, bottom center
-    Cube12_M --> orange face, medium center
-    Cube12 --> white face, top center
-    Cube20_B --> green face, bottom left
-    Cube20_M --> green face, medium left
-    Cube20 --> green face, top left
-    Cube21_B --> blue face, medium left
-    Cube21_M --> red face, medium center
-    Cube21 --> white face, medium left 
-    Cube22_B --> blue face, bottom left
-    Cube22_M --> red face, medium left
-    Cube22 --> white face, top left*/
-
     main();
 }
 
