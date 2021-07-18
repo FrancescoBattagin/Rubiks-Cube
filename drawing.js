@@ -522,16 +522,6 @@ function upFace(deg) {
 
 	if(deg < 0){
 		// clockwise
-		wmRef[0][0][2].index = temp202;
-		wmRef[0][1][2].index = temp102;
-		wmRef[0][2][2].index = temp002;
-		wmRef[1][0][2].index = temp212;
-		wmRef[1][2][2].index = temp012;
-		wmRef[2][0][2].index = temp222;
-		wmRef[2][1][2].index = temp122;
-		wmRef[2][2][2].index = temp022;
-	} else {
-		// counterclockwise
 		wmRef[0][0][2].index = temp022;
 		wmRef[0][1][2].index = temp122;
 		wmRef[0][2][2].index = temp222;
@@ -540,6 +530,16 @@ function upFace(deg) {
 		wmRef[2][0][2].index = temp002;
 		wmRef[2][1][2].index = temp102;
 		wmRef[2][2][2].index = temp202;
+	} else {
+		// counterclockwise
+		wmRef[0][0][2].index = temp202;
+		wmRef[0][1][2].index = temp102;
+		wmRef[0][2][2].index = temp002;
+		wmRef[1][0][2].index = temp212;
+		wmRef[1][2][2].index = temp012;
+		wmRef[2][0][2].index = temp222;
+		wmRef[2][1][2].index = temp122;
+		wmRef[2][2][2].index = temp022;
 	}
 }
 
