@@ -16,8 +16,6 @@ uniform mat4 nMatrix;
 uniform mat4 worldMatrix;
 
 void main() {
-  //fs_norm = mat3(nMatrix) * a_normal;
   uvCoord = a_uv;
-  //fs_Position=(worldMatrix *vec4(a_position,1.0)).xyz;
   gl_Position = matrix * vec4(a_position,1.0);
 }
