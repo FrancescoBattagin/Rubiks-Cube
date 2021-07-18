@@ -902,28 +902,8 @@ function rotateMiddleVerticalFrontBack(deg) {
 		temp122 = wmRef[1][2][2].index;
 		temp120 = wmRef[1][2][0].index;
 
-		console.log(front, up, back, down);
-		//console.log(temp100, temp102, temp122, temp120);
 		if(deg > 0){
 			//up
-			moveCenterMiddleVerticalFrontBack(getCoordFromCol(front.color), "U");
-			moveCenterMiddleVerticalFrontBack(getCoordFromCol(up.color), "U");
-			moveCenterMiddleVerticalFrontBack(getCoordFromCol(back.color), "U");
-			moveCenterMiddleVerticalFrontBack(getCoordFromCol(down.color), "U");
-
-			wmRef[1][1][0] = back;
-			wmRef[1][2][1] = up;
-			wmRef[1][1][2] = front;
-			wmRef[1][0][1] = down;
-
-			wmRef[1][0][2].index = temp100;
-			wmRef[1][2][2].index = temp102;
-			wmRef[1][2][0].index = temp122;
-			wmRef[1][0][0].index = temp120;
-
-
-		} else {
-			//down
 			moveCenterMiddleVerticalFrontBack(getCoordFromCol(front.color), "D");
 			moveCenterMiddleVerticalFrontBack(getCoordFromCol(up.color), "D");
 			moveCenterMiddleVerticalFrontBack(getCoordFromCol(back.color), "D");
@@ -938,9 +918,23 @@ function rotateMiddleVerticalFrontBack(deg) {
 			wmRef[1][0][0].index = temp102;
 			wmRef[1][0][2].index = temp122;
 			wmRef[1][2][2].index = temp120;
+		} else {
+			//down
+			moveCenterMiddleVerticalFrontBack(getCoordFromCol(front.color), "U");
+			moveCenterMiddleVerticalFrontBack(getCoordFromCol(up.color), "U");
+			moveCenterMiddleVerticalFrontBack(getCoordFromCol(back.color), "U");
+			moveCenterMiddleVerticalFrontBack(getCoordFromCol(down.color), "U");
+
+			wmRef[1][1][0] = back;
+			wmRef[1][2][1] = up;
+			wmRef[1][1][2] = front;
+			wmRef[1][0][1] = down;
+
+			wmRef[1][0][2].index = temp100;
+			wmRef[1][2][2].index = temp102;
+			wmRef[1][2][0].index = temp122;
+			wmRef[1][0][0].index = temp120;
 		}
-		console.log(wmRef[1][0][1],wmRef[1][1][2],wmRef[1][2][1],wmRef[1][1][0]);
-		//console.log(wmRef[1][2][0],wmRef[1][0][0],wmRef[1][0][2],wmRef[1][2][2]);
 	}
 }
 
