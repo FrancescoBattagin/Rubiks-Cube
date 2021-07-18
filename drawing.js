@@ -22,6 +22,7 @@ var normalsAttributeLocation=new Array();
 var lightDirectionHandle=new Array();
 var lightColorHandle=new Array();
 
+var lastUpdateTime = null;
 
 var uvLocation=new Array();
 var textureFileHandle=new Array();
@@ -55,6 +56,7 @@ var dirLightBeta  = -utils.degToRad(100);
 var directionalLightColor = [2.0, 2.0, 2.0];
 
 var functionToAnimate = null;
+var degToAnimate = 0;
 var countAnimate = 0;
 
 var node;
@@ -256,7 +258,6 @@ function main() {
 }
 
 function rotateFace(rotation){
-	if (selectedFace.i === 0) {
 	if(functionToAnimate === null){
 		if (selectedFace.i === 0) {
 			functionToAnimate = rightFace;
