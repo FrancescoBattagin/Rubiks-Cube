@@ -17,10 +17,12 @@ var wmRef = new Array();
 
 var centerCoordinates = {};
 
+var normalMatrixPositionHandle;
+var worldMatrixLocation;
 var positionAttributeLocation = new Array();
-var normalsAttributeLocation = new Array();
-var lightDirectionHandle = new Array();
-var lightColorHandle = new Array();
+var normalsAttributeLocation;
+var lightDirectionHandle;
+var lightColorHandle;
 
 var lastUpdateTime = null;
 
@@ -59,42 +61,46 @@ function main() {
 	vaos[0] = [];
 	vaos[1] = [];
 	
-	for(let j = 0; j < 2; j++){
+		normalMatrixPositionHandle = gl.getUniformLocation(program[1], 'nMatrix');
+		worldMatrixLocation = gl.getUniformLocation(program[1], 'worldMatrix');
+		lightDirectionHandle = gl.getUniformLocation(program[1], 'lightDirection');
+		lightColorHandle = gl.getUniformLocation(program[1], 'lightColor');
 		
-		positionAttributeLocation[j] = gl.getAttribLocation(program[j], "a_position");
-		uvLocation[j] = gl.getAttribLocation(program[j], "a_uv");
-		normalsAttributeLocation[j] = gl.getAttribLocation(program[j], "a_normal");
-		textureFileHandle[j] = gl.getUniformLocation(program[j], "a_texture");
-		lightDirectionHandle[j] = gl.getUniformLocation(program[j], 'lightDirection');
-		lightColorHandle[j] = gl.getUniformLocation(program[j], 'lightColor');
-		
-		for(let i = 0; i < 26; i++){
-			vaos[j][i] = gl.createVertexArray();
-			gl.bindVertexArray(vaos[j][i]);
+		positionAttributeLocation[0] = gl.getAttribLocation(program[0], "a_position");
+		positionAttributeLocation[1] = gl.getAttribLocation(program[1], "a_position");
+		uvLocation[0] = gl.getAttribLocation(program[0], "a_uv");
+		uvLocation[1] = gl.getAttribLocation(program[1], "a_uv");
+		normalsAttributeLocation = gl.getAttribLocation(program[1], "a_normal");
+		//textureFileHandle[0] = gl.getUniformLocation(program[0], "a_texture");
+		//textureFileHandle[1] = gl.getUniformLocation(program[1], "a_texture");
 
-			var positionBuffer = gl.createBuffer();
-			gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-			gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(models[i].vertices), gl.STATIC_DRAW);
+		for(let j=0; j<2;j++){
+			for(let i = 0; i < 26; i++){
+				vaos[j][i] = gl.createVertexArray();
+				gl.bindVertexArray(vaos[j][i]);
 
-			gl.enableVertexAttribArray(positionAttributeLocation[j]);
-			gl.vertexAttribPointer(positionAttributeLocation[j], 3, gl.FLOAT, false, 0, 0);
+				var positionBuffer = gl.createBuffer();
+				gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+				gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(models[i].vertices), gl.STATIC_DRAW);
+				gl.enableVertexAttribArray(positionAttributeLocation[j]);
+				gl.vertexAttribPointer(positionAttributeLocation[j], 3, gl.FLOAT, false, 0, 0);
+				if(j==1){
+					var normalsBuffer = gl.createBuffer();
+					gl.bindBuffer(gl.ARRAY_BUFFER, normalsBuffer);
+					gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(models[i].vertexNormals), gl.STATIC_DRAW);
+					gl.enableVertexAttribArray(normalsAttributeLocation);
+					gl.vertexAttribPointer(normalsAttributeLocation, 3, gl.FLOAT, false, 0, 0);
+				}
+				var indexBuffer = gl.createBuffer();
+				gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+				gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(models[i].indices), gl.STATIC_DRAW);
 
-			var normalsBuffer = gl.createBuffer();
-			gl.bindBuffer(gl.ARRAY_BUFFER, normalsBuffer);
-			gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(models[i].vertexNormals), gl.STATIC_DRAW);
-			gl.enableVertexAttribArray(normalsAttributeLocation[j]);
-			gl.vertexAttribPointer(normalsAttributeLocation[j], 3, gl.FLOAT, false, 0, 0);
-
-			var indexBuffer = gl.createBuffer();
-			gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
-			gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(models[i].indices), gl.STATIC_DRAW);
-
-			var uvBuffer = gl.createBuffer();
-			gl.bindBuffer(gl.ARRAY_BUFFER, uvBuffer);
-			gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(models[i].textures), gl.STATIC_DRAW);
-			gl.vertexAttribPointer(uvLocation[j], 2, gl.FLOAT, false, 0, 0);
-			gl.enableVertexAttribArray(uvLocation[j]);
-		}
+				var uvBuffer = gl.createBuffer();
+				gl.bindBuffer(gl.ARRAY_BUFFER, uvBuffer);
+				gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(models[i].textures), gl.STATIC_DRAW);
+				gl.vertexAttribPointer(uvLocation[j], 2, gl.FLOAT, false, 0, 0);
+				gl.enableVertexAttribArray(uvLocation[j]);
+			}
 	}
 	
     drawScene();
@@ -173,10 +179,13 @@ function drawScene() {
           Math.sin(dirLightAlpha),
           Math.cos(dirLightAlpha) * Math.sin(dirLightBeta)
           ];
+		  
 
+	
 	for (let i = 0; i < 26; i++) {
 		gl.useProgram(program[selectedLight]);
 	
+
 		var perspectiveMatrix = utils.MakePerspective(30, gl.canvas.width/gl.canvas.height, 0.1, 100.0);
 
 		//TODO: devi trovare il modo di indirizzare la luce nella direzione in cui noi stiamo guardando
@@ -184,23 +193,26 @@ function drawScene() {
 		var viewMatrix = utils.MakeView(cx, cy, cz, elevation,angle);
 
 		var matrixLocation = gl.getUniformLocation(program[selectedLight], "matrix");
-		var normalMatrixPositionHandle = gl.getUniformLocation(program[selectedLight], 'nMatrix');
-		var worldMatrixLocation = gl.getUniformLocation(program[selectedLight], 'worldMatrix');
-		
-		var normalMatrix = utils.invertMatrix(utils.transposeMatrix(wmAndQList[i].matrix));
-
 		var viewWorldMatrix = utils.multiplyMatrices(viewMatrix, wmAndQList[i].matrix);
 		var projectionMatrix = utils.multiplyMatrices(perspectiveMatrix, viewWorldMatrix);
+		gl.uniformMatrix4fv(matrixLocation , 0, utils.transposeMatrix(projectionMatrix));
+		if(selectedLight===1){
+			
+			//var normalMatrix = utils.invertMatrix(utils.transposeMatrix(wmAndQList[i].matrix));
+
+	
+			
+			var lightDirMatrix = utils.transposeMatrix(wmAndQList[i].matrix); 
+			var lightdirTransformed = utils.multiplyMatrix3Vector3(utils.sub3x3from4x4(lightDirMatrix), directionalLight); 
+			
+			
+			gl.uniform3fv(lightColorHandle,  directionalLightColor);
+			gl.uniform3fv(lightDirectionHandle,  lightdirTransformed);
+			gl.uniformMatrix4fv(normalMatrixPositionHandle , gl.FALSE, utils.transposeMatrix(wmAndQList[i].matrix));
+			gl.uniformMatrix4fv(worldMatrixLocation , gl.FALSE, utils.transposeMatrix(wmAndQList[i].matrix));
+		}
 		
-		var lightDirMatrix = utils.transposeMatrix(wmAndQList[i].matrix); 
-		var lightdirTransformed = utils.multiplyMatrix3Vector3(utils.sub3x3from4x4(lightDirMatrix), directionalLight); 
 		
-		gl.uniform3fv(lightColorHandle[selectedLight],  directionalLightColor);
-		gl.uniform3fv(lightDirectionHandle[selectedLight],  lightdirTransformed);
-		
-		gl.uniformMatrix4fv(matrixLocation , gl.FALSE, utils.transposeMatrix(projectionMatrix));
-		gl.uniformMatrix4fv(normalMatrixPositionHandle , gl.FALSE, utils.transposeMatrix(normalMatrix));
-		gl.uniformMatrix4fv(worldMatrixLocation , gl.FALSE, utils.transposeMatrix(wmAndQList[i].matrix));
 		//mettere qui ligfht dir color
 		
 		
@@ -208,7 +220,7 @@ function drawScene() {
 
 		gl.activeTexture(gl.TEXTURE0);
 		gl.bindTexture(gl.TEXTURE_2D, texture);
-		gl.uniform1i(textureFileHandle[selectedLight], 0);
+		//gl.uniform1i(textureFileHandle[selectedLight], 0);
 		gl.drawElements(gl.TRIANGLES, models[i].indices.length, gl.UNSIGNED_SHORT, 0);
 	}
 
@@ -359,7 +371,6 @@ async function init() {
 	for (let c in cubes) {
         models[c] = await importObject(cubes[c]);
     }
-	
     main();
 }
 
