@@ -1,7 +1,3 @@
-var selectedFace = null;
-
-var shift;
-
 var functionToAnimate = null;
 var degToAnimate = 0;
 var countAnimate = 0;
@@ -15,6 +11,7 @@ function switchRefs(refs, temps) {
 }
 
 function rotateFace(rotation){
+	console.log("rotate");
 	if(functionToAnimate === null){
 		if (selectedFace.i === 0) {
 			functionToAnimate = rightFace;

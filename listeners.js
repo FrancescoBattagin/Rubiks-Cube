@@ -5,6 +5,10 @@ var lastMouseX = -100, lastMouseY = -100;
 
 var selectedLight = 0;
 
+var selectedFace = null;
+
+var shift = false;
+
 function onDropdownChange(value){
 	if(value == 1){
 		selectedLight = 0;
