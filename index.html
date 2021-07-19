@@ -4,87 +4,63 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="style.css">
+	
 	<script type="text/javascript" src="webgl-obj-loader.min.js"></script>
     <script type="text/javascript" src="quaternion.min.js"></script>
     <script type="text/javascript" src="utils.js"></script>
+    <script type="text/javascript" src="listeners.js"></script>
+    <script type="text/javascript" src="util_functions.js"></script>
+    <script type="text/javascript" src="rotations.js"></script>
     <script type="text/javascript" src="drawing.js"></script>
 </head>
 
+<body>
 
-
-
-<body style=" margin: 0;
-      padding: 0;">
-
-	<canvas id="c" style="right:23%; width:77%; height:90%;">
-	</canvas>
+	<canvas id="c"></canvas>
 	
-	<div style="
-	font-family: courier;  
-	position: fixed;
-	top: 0;
-	right: 0;
-	width: 23%;
-	left:77%;
-	height: 100%;
-	bottom: 10%;
-	background-color: white;
-	border-left: 1px solid #353535;
-	padding: 3px;
-	overflow: scroll;
-  ">
-		
-		
-		<h2><p style="color:black">Legend:</p></h1>
-			<div style="padding: 1px;">
-			<h3> Moves: </h3>
-			<h4 style="color: grey"> RIGHT ARROW -> Rotate the selected face clockwise </h4>
-			<h4 style="color: grey"> LEFT ARROW -> Rotate the selected face counter-clockwise </h4>
-			<h4> WHILE HOLDING DOWN SHIFT : </h4>
-			<h4 style="color: grey"> UP ARROW -> Rotate the middle upwards </h4>
-			<h4 style="color: grey"> DOWN ARROW -> Rotate the middle downwards </h4>
-			<h4 style="color: grey"> LEFT ARROW -> Rotate the middle left</h4>
-			<h4 style="color: grey"> RIGHT ARROW -> Rotate the middle right </h4>
+	<div id="legend">
+		<h1>Legend:</h1>
+		<div class="container">
+			<h3>Moves:</h3>
+			<h4 class="hint">RIGHT ARROW -> Rotate the selected face clockwise</h4>
+			<h4 class="hint">LEFT ARROW -> Rotate the selected face counter-clockwise</h4>
+			<h4>WHILE HOLDING DOWN SHIFT :</h4>
+			<h4 class="hint">UP ARROW -> Rotate the middle upwards</h4>
+			<h4 class="hint">DOWN ARROW -> Rotate the middle downwards</h4>
+			<h4 class="hint">LEFT ARROW -> Rotate the middle left</h4>
+			<h4 class="hint">RIGHT ARROW -> Rotate the middle right</h4>
 		</div>
-		<div style="padding: 1px;">
-			<h3> Face selection:</h3>
-			<h4><p style="color:red"> R -> FACE WITH RED CENTER CUBE</p></h4>
-			<h4><p style="color:green"> G -> FACE WITH GREEN CENTER CUBE</p></h4>
-			<h4><p style="color:grey"> W -> FACE WITH WHITE CENTER CUBE</p></h4>
-			<h4><p style="color:#E5C32A"> Y -> FACE WITH YELLOW CENTER CUBE</p></h4>
-			<h4><p style="color:blue"> B -> FACE WITH BLUE CENTER CUBE</p></h4>
-			<h4><p style="color:orange"> O -> FACE WITH ORANGE CENTER CUBE</p></h4>
-			<h2><p style="color:black">Currently selected face:</p></h2>
-			<h3><div id="face" style="color:black"></div></h3>
+		<div class="container">
+			<h3>Face selection:</h3>
+			<h4 class="red">R -> FACE WITH RED CENTER CUBE</h4>
+			<h4 class="green">G -> FACE WITH GREEN CENTER CUBE</h4>
+			<h4 class="white">W -> FACE WITH WHITE CENTER CUBE</h4>
+			<h4 class="yellow">Y -> FACE WITH YELLOW CENTER CUBE</h4>
+			<h4 class="blue">B -> FACE WITH BLUE CENTER CUBE</h4>
+			<h4 class="orange">O -> FACE WITH ORANGE CENTER CUBE</h4>
+			<h2>Currently selected face:</h2>
+			<h3><div id="face"></div></h3>
 		</div>			
 	</div>
-	<div style="
-	text-align:center;
-	top: 80%;
-	right: 23%;
-	width: 77%;
-	left:0;
-	height: 10%;
-	background-color: white;
-	border-left: 1px solid #353535;
-	padding: 14px;
-	overflow: scroll;
-	">		
-		<p> Direzione α:
-			<div id="slider1"> 0°
-					<input id="alfa" type="range" min="0" max="360" step="1" value="220" onchange="onAlfaChange(this.value);"/> 360° <br/>	
+
+	<div id="light">		
+		<p>Direction α:
+			<div id="slider1">0°
+				<input id="alfa" type="range" min="0" max="360" step="1" value="220" onchange="onAlfaChange(this.value);"/>360°<br/>	
 			</div>
 		</p>
-		<p> Direzione β:
-			<div id="slider2"> 0°
-					<input id="beta" type="range" min="0" max="360" step="1" value="100" onchange="onBetaChange(this.value);"/> 360° <br/>	
+		<p>Direction β:
+			<div id="slider2">0°
+				<input id="beta" type="range" min="0" max="360" step="1" value="100" onchange="onBetaChange(this.value);"/>360°<br/>	
 			</div>
 		</p>
-		<p><b> Select:</b></p>
-            <select id="drop-down" name="" onchange="onDropdownChange(this.value);">
-                <option value="1" selected>No lights</option>
-                <option value="2">Directional Lambert</option>
-            </select>
+		<p><b>Select:</b></p>
+        <select id="drop-down" name="" onchange="onDropdownChange(this.value);">
+            <option value="1" selected>No lights</option>
+            <option value="2">Directional Lambert</option>
+        </select>
 	</div>
 </body>
 

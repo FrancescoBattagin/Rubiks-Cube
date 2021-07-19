@@ -1,0 +1,70 @@
+body {
+	margin: 0;
+	padding: 0;
+}
+
+#c {
+	right: 23%;
+	width: 77%;
+	height: 80%;
+}
+
+#legend {
+	font-family: courier;  
+	position: fixed;
+	top: 0;
+	right: 0;
+	width: 23%;
+	left: 77%;
+	height: 100%;
+	bottom: 10%;
+	background-color: white;
+	border-left: 1px solid #353535;
+	padding: 3px;
+	overflow: scroll;
+}
+
+.container {
+	padding: 1px;
+}
+
+.hint {
+	color: grey;
+}
+
+.white {
+	color: grey;
+}
+
+.yellow {
+	color: #E5C32A;
+}
+
+.blue {
+	color: blue;
+}
+
+.green {
+	color: green;
+}
+
+.red {
+	color: red;
+}
+
+.orange {
+	color: orange;
+}
+
+#light {
+	text-align:center;
+	top: 80%;
+	right: 23%;
+	width: 77%;
+	left:0;
+	height: 10%;
+	background-color: white;
+	border-left: 1px solid #353535;
+	padding: 14px;
+	overflow: scroll;
+}
