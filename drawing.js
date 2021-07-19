@@ -208,8 +208,8 @@ function drawScene() {
 			
 			gl.uniform3fv(lightColorHandle,  directionalLightColor);
 			gl.uniform3fv(lightDirectionHandle,  lightdirTransformed);
-			gl.uniformMatrix4fv(normalMatrixPositionHandle , gl.FALSE, utils.transposeMatrix(wmAndQList[i].matrix));
-			gl.uniformMatrix4fv(worldMatrixLocation , gl.FALSE, utils.transposeMatrix(wmAndQList[i].matrix));
+			gl.uniformMatrix4fv(normalMatrixPositionHandle , gl.FALSE, utils.transposeMatrix(wmAndQList[i].matrix)); //nMatrix	
+			gl.uniformMatrix4fv(worldMatrixLocation , gl.FALSE, utils.transposeMatrix(wmAndQList[i].matrix)); //worldMatrix
 		}
 		
 		
