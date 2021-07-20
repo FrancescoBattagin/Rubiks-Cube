@@ -10,6 +10,40 @@ function switchRefs(refs, temps) {
 	}
 }
 
+function setInitTemps(refs) {
+	let initTemps = [];
+	for (let i in refs) {
+		initTemps[i] = refs[i].index;
+	}
+	return initTemps;
+}
+
+function setTemps(initTemps, deg, side) {
+	switch (side) {
+		case "FBUD":
+			if(deg < 0){
+				return [initTemps[2], initTemps[4], initTemps[7], initTemps[1], initTemps[6], initTemps[0], initTemps[3], initTemps[5]];
+			} else {
+				return [initTemps[5], initTemps[3], initTemps[0], initTemps[6], initTemps[1], initTemps[7], initTemps[4], initTemps[2]];
+			}
+		case "RL":
+			if(deg > 0){
+				return [initTemps[2], initTemps[4], initTemps[7], initTemps[1], initTemps[6], initTemps[0], initTemps[3], initTemps[5]];
+			} else {
+				return [initTemps[5], initTemps[3], initTemps[0], initTemps[6], initTemps[1], initTemps[7], initTemps[4], initTemps[2]];
+			}
+	}
+}
+
+function updateFaceRefs(refs, deg, face) {
+	let initTemps = [];
+	let temps;
+
+	initTemps = setInitTemps(refs);
+	temps = setTemps(initTemps, deg, face);
+	switchRefs(refs, temps);
+}
+
 function rotateFace(rotation){
 	console.log("rotate");
 	if(functionToAnimate === null){
@@ -128,21 +162,7 @@ function rightFace(deg) {
 	rotate(refs, deg, "R");
 	
 	if (last) {
-		let initTemps = [];
-		let temps;
-
-		for (let i in refs) {
-			initTemps[i] = refs[i].index;
-		}
-		
-		if(deg > 0){
-			// counterclockwise
-			temps = [initTemps[2], initTemps[4], initTemps[7], initTemps[1], initTemps[6], initTemps[0], initTemps[3], initTemps[5]];
-		} else {
-			// clockwise
-			temps = [initTemps[5], initTemps[3], initTemps[0], initTemps[6], initTemps[1], initTemps[7], initTemps[4], initTemps[2]];
-		}
-		switchRefs(refs, temps);
+		updateFaceRefs(refs, deg, "RL");
 	}
 }
 
@@ -151,21 +171,7 @@ function leftFace(deg) {
 	rotate(refs, deg, "L");
 
 	if (last) {
-		let initTemps = [];
-		let temps;
-
-		for (let i in refs) {
-			initTemps[i] = refs[i].index;
-		}
-		
-		if (deg < 0) {
-			// counterclockwise
-			temps = [initTemps[5], initTemps[3], initTemps[0], initTemps[6], initTemps[1], initTemps[7], initTemps[4], initTemps[2]];
-		} else {
-			// clockwise
-			temps = [initTemps[2], initTemps[4], initTemps[7], initTemps[1], initTemps[6], initTemps[0], initTemps[3], initTemps[5]];
-		}
-		switchRefs(refs, temps);
+		updateFaceRefs(refs, deg, "RL");
 	}
 }
 
@@ -174,21 +180,7 @@ function frontFace(deg) {
 	rotate(refs, deg, "F");
 
 	if (last) {
-		let initTemps = [];
-		let temps;
-		
-		for (let i in refs) {
-			initTemps[i] = refs[i].index;
-		}
-
-		if (deg > 0) {
-			// clockwise
-			temps = [initTemps[5], initTemps[3], initTemps[0], initTemps[6], initTemps[1], initTemps[7], initTemps[4], initTemps[2]];
-		} else {
-			//counterclockwise
-			temps = [initTemps[2], initTemps[4], initTemps[7], initTemps[1], initTemps[6], initTemps[0], initTemps[3], initTemps[5]];
-		}
-		switchRefs(refs, temps);
+		updateFaceRefs(refs, deg, "FBUD");
 	}
 }
 
@@ -197,21 +189,7 @@ function backFace(deg) {
 	rotate(refs, deg, "B");
 
 	if (last) {
-		let initTemps = [];
-		let temps;
-
-		for (let i in refs) {
-			initTemps[i] = refs[i].index;
-		}
-
-		if(deg < 0){
-			// clockwise
-			temps = [initTemps[2], initTemps[4], initTemps[7], initTemps[1], initTemps[6], initTemps[0], initTemps[3], initTemps[5]];
-		} else {
-			// counterclockwise
-			temps = [initTemps[5], initTemps[3], initTemps[0], initTemps[6], initTemps[1], initTemps[7], initTemps[4], initTemps[2]];
-		}
-		switchRefs(refs, temps);
+		updateFaceRefs(refs, deg, "FBUD");
 	}
 }
 
@@ -220,21 +198,7 @@ function downFace(deg) {
 	rotate(refs, deg, "D");
 
 	if (last) {
-		let initTemps = [];
-		let temps;
-
-		for (let i in refs) {
-			initTemps[i] = refs[i].index;
-		}
-
-		if(deg < 0){
-			// clockwise
-			temps = [initTemps[2], initTemps[4], initTemps[7], initTemps[1], initTemps[6], initTemps[0], initTemps[3], initTemps[5]];
-		} else {
-			// counterclockwise
-			temps = [initTemps[5], initTemps[3], initTemps[0], initTemps[6], initTemps[1], initTemps[7], initTemps[4], initTemps[2]];
-		}
-		switchRefs(refs, temps);
+		updateFaceRefs(refs, deg, "FBUD");
 	}
 }
 
@@ -243,21 +207,7 @@ function upFace(deg) {
 	rotate(refs, deg, "U");
 
 	if (last) {
-		let initTemps = [];
-		let temps;
-
-		for (let i in refs) {
-			initTemps[i] = refs[i].index;
-		}
-
-		if(deg < 0){
-			// clockwise
-			temps = [initTemps[2], initTemps[4], initTemps[7], initTemps[1], initTemps[6], initTemps[0], initTemps[3], initTemps[5]];
-		} else {
-			// counterclockwise
-			temps = [initTemps[5], initTemps[3], initTemps[0], initTemps[6], initTemps[1], initTemps[7], initTemps[4], initTemps[2]];
-		}
-		switchRefs(refs, temps);
+		updateFaceRefs(refs, deg, "FBUD");
 	}
 }
 
