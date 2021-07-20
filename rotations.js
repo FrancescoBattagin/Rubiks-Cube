@@ -4,10 +4,60 @@ var countAnimate = 0;
 
 var last = false;
 
+function setInitTemps(refs) {
+	let initTemps = [];
+	for (let i in refs) {
+		initTemps[i] = refs[i].index;
+	}
+	return initTemps;
+}
+
 function switchRefs(refs, temps) {
 	for (let i in refs) {
 		refs[i].index = temps[i];
 	}
+}
+
+function shiftArray(array, side) {
+	switch (side) {
+		case "L":
+			return [array[1], array[2], array[3], array[0]];
+		case "R":
+			return [array[3], array[0], array[1], array[2]];
+	}
+}
+
+function setTemps(initTemps, deg, side) {
+	switch (side) {
+		case "FBUD":
+			if(deg < 0){
+				return [initTemps[2], initTemps[4], initTemps[7], initTemps[1], initTemps[6], initTemps[0], initTemps[3], initTemps[5]];
+			} else {
+				return [initTemps[5], initTemps[3], initTemps[0], initTemps[6], initTemps[1], initTemps[7], initTemps[4], initTemps[2]];
+			}
+		case "RL":
+			if(deg > 0){
+				return [initTemps[2], initTemps[4], initTemps[7], initTemps[1], initTemps[6], initTemps[0], initTemps[3], initTemps[5]];
+			} else {
+				return [initTemps[5], initTemps[3], initTemps[0], initTemps[6], initTemps[1], initTemps[7], initTemps[4], initTemps[2]];
+			}
+	}
+}
+
+function updateFaceRefs(refs, deg, face) {
+	let initTemps = [];
+	let temps;
+
+	initTemps = setInitTemps(refs);
+	temps = setTemps(initTemps, deg, face);
+	switchRefs(refs, temps);
+}
+
+function switchCenters(c1, c2, c3, c4, centers) {
+	c1 = centers[0];
+	c2 = centers[1];
+	c3 = centers[2];
+	c4 = centers[3];
 }
 
 function rotateFace(rotation){
@@ -128,21 +178,7 @@ function rightFace(deg) {
 	rotate(refs, deg, "R");
 	
 	if (last) {
-		let initTemps = [];
-		let temps;
-
-		for (let i in refs) {
-			initTemps[i] = refs[i].index;
-		}
-		
-		if(deg > 0){
-			// counterclockwise
-			temps = [initTemps[2], initTemps[4], initTemps[7], initTemps[1], initTemps[6], initTemps[0], initTemps[3], initTemps[5]];
-		} else {
-			// clockwise
-			temps = [initTemps[5], initTemps[3], initTemps[0], initTemps[6], initTemps[1], initTemps[7], initTemps[4], initTemps[2]];
-		}
-		switchRefs(refs, temps);
+		updateFaceRefs(refs, deg, "RL");
 	}
 }
 
@@ -151,21 +187,7 @@ function leftFace(deg) {
 	rotate(refs, deg, "L");
 
 	if (last) {
-		let initTemps = [];
-		let temps;
-
-		for (let i in refs) {
-			initTemps[i] = refs[i].index;
-		}
-		
-		if (deg < 0) {
-			// counterclockwise
-			temps = [initTemps[5], initTemps[3], initTemps[0], initTemps[6], initTemps[1], initTemps[7], initTemps[4], initTemps[2]];
-		} else {
-			// clockwise
-			temps = [initTemps[2], initTemps[4], initTemps[7], initTemps[1], initTemps[6], initTemps[0], initTemps[3], initTemps[5]];
-		}
-		switchRefs(refs, temps);
+		updateFaceRefs(refs, deg, "RL");
 	}
 }
 
@@ -174,21 +196,7 @@ function frontFace(deg) {
 	rotate(refs, deg, "F");
 
 	if (last) {
-		let initTemps = [];
-		let temps;
-		
-		for (let i in refs) {
-			initTemps[i] = refs[i].index;
-		}
-
-		if (deg > 0) {
-			// clockwise
-			temps = [initTemps[5], initTemps[3], initTemps[0], initTemps[6], initTemps[1], initTemps[7], initTemps[4], initTemps[2]];
-		} else {
-			//counterclockwise
-			temps = [initTemps[2], initTemps[4], initTemps[7], initTemps[1], initTemps[6], initTemps[0], initTemps[3], initTemps[5]];
-		}
-		switchRefs(refs, temps);
+		updateFaceRefs(refs, deg, "FBUD");
 	}
 }
 
@@ -197,21 +205,7 @@ function backFace(deg) {
 	rotate(refs, deg, "B");
 
 	if (last) {
-		let initTemps = [];
-		let temps;
-
-		for (let i in refs) {
-			initTemps[i] = refs[i].index;
-		}
-
-		if(deg < 0){
-			// clockwise
-			temps = [initTemps[2], initTemps[4], initTemps[7], initTemps[1], initTemps[6], initTemps[0], initTemps[3], initTemps[5]];
-		} else {
-			// counterclockwise
-			temps = [initTemps[5], initTemps[3], initTemps[0], initTemps[6], initTemps[1], initTemps[7], initTemps[4], initTemps[2]];
-		}
-		switchRefs(refs, temps);
+		updateFaceRefs(refs, deg, "FBUD");
 	}
 }
 
@@ -220,21 +214,7 @@ function downFace(deg) {
 	rotate(refs, deg, "D");
 
 	if (last) {
-		let initTemps = [];
-		let temps;
-
-		for (let i in refs) {
-			initTemps[i] = refs[i].index;
-		}
-
-		if(deg < 0){
-			// clockwise
-			temps = [initTemps[2], initTemps[4], initTemps[7], initTemps[1], initTemps[6], initTemps[0], initTemps[3], initTemps[5]];
-		} else {
-			// counterclockwise
-			temps = [initTemps[5], initTemps[3], initTemps[0], initTemps[6], initTemps[1], initTemps[7], initTemps[4], initTemps[2]];
-		}
-		switchRefs(refs, temps);
+		updateFaceRefs(refs, deg, "FBUD");
 	}
 }
 
@@ -243,21 +223,7 @@ function upFace(deg) {
 	rotate(refs, deg, "U");
 
 	if (last) {
-		let initTemps = [];
-		let temps;
-
-		for (let i in refs) {
-			initTemps[i] = refs[i].index;
-		}
-
-		if(deg < 0){
-			// clockwise
-			temps = [initTemps[2], initTemps[4], initTemps[7], initTemps[1], initTemps[6], initTemps[0], initTemps[3], initTemps[5]];
-		} else {
-			// counterclockwise
-			temps = [initTemps[5], initTemps[3], initTemps[0], initTemps[6], initTemps[1], initTemps[7], initTemps[4], initTemps[2]];
-		}
-		switchRefs(refs, temps);
+		updateFaceRefs(refs, deg, "FBUD");
 	}
 }
 
@@ -392,15 +358,14 @@ function rotateMiddleHorizontal(deg) {
 	if (last) {
 		let front, right, back, left;
 
-		// centers
 		front = wmRef[1][0][1];
 		right = wmRef[0][1][1];
-		left = wmRef[2][1][1];
 		back = wmRef[1][2][1];
+		left = wmRef[2][1][1];
 
 		let centers = [front, right, back, left];
 		let refs = [wmRef[0][0][1], wmRef[0][2][1], wmRef[2][2][1], wmRef[2][0][1]];
-		let initTemps = [wmRef[0][0][1].index, wmRef[0][2][1].index, wmRef[2][2][1].index, wmRef[2][0][1].index];
+		let initTemps = setInitTemps(refs);
 		let temps;
 
 		if(deg > 0){
@@ -408,27 +373,15 @@ function rotateMiddleHorizontal(deg) {
 			for (let i in centers) {
 				moveCenterMiddleHorizontal(getCoordFromCol(centers[i].color), "R");
 			}
-
-			// switch centers
-			wmRef[2][1][1] = back;
-			wmRef[1][2][1] = right;
-			wmRef[0][1][1] = front;
-			wmRef[1][0][1] = left;
-
-			temps = [initTemps[3], initTemps[0], initTemps[1], initTemps[2]];
+			switchCenters(front, right, back, left, shiftArray(centers, "R"));
+			temps = shiftArray(initTemps, "R");
 		} else {
 			//left
 			for (let i in centers) {
 				moveCenterMiddleHorizontal(getCoordFromCol(centers[i].color), "L");
 			}
-
-			// switch centers
-			wmRef[2][1][1] = front;
-			wmRef[1][2][1] = left;
-			wmRef[0][1][1] = back;
-			wmRef[1][0][1] = right;
-
-			temps = [initTemps[1], initTemps[2], initTemps[3], initTemps[0]];
+			switchCenters(front, right, back, left, shiftArray(centers, "L"));
+			temps = shiftArray(initTemps, "L");
 		}
 		switchRefs(refs, temps);
 	}
@@ -473,7 +426,6 @@ function rotateMiddleVerticalFrontBack(deg) {
 	if (last) {
 		let front, up, back, down;
 
-		// centers
 		front = wmRef[1][0][1];
 		up = wmRef[1][1][2];
 		back = wmRef[1][2][1];
@@ -481,7 +433,7 @@ function rotateMiddleVerticalFrontBack(deg) {
 
 		let centers = [front, up, back, down];
 		let refs = [wmRef[1][0][0], wmRef[1][0][2], wmRef[1][2][2], wmRef[1][2][0]];
-		let initTemps = [wmRef[1][0][0].index, wmRef[1][0][2].index, wmRef[1][2][2].index, wmRef[1][2][0].index];
+		let initTemps = setInitTemps(refs);
 		let temps;
 
 		if(deg > 0){
@@ -489,27 +441,15 @@ function rotateMiddleVerticalFrontBack(deg) {
 			for (let i in centers) {
 				moveCenterMiddleVerticalFrontBack(getCoordFromCol(centers[i].color), "D");
 			}
-
-			// switch centers
-			wmRef[1][1][0] = front;
-			wmRef[1][2][1] = down;
-			wmRef[1][1][2] = back;
-			wmRef[1][0][1] = up;
-
-			temps = [initTemps[1], initTemps[2], initTemps[3], initTemps[0]];
+			switchCenters(front, up, back, down, shiftArray(centers, "L"));
+			temps = shiftArray(initTemps, "L");
 		} else {
 			//down
 			for (let i in centers) {
 				moveCenterMiddleVerticalFrontBack(getCoordFromCol(centers[i].color), "U");
 			}
-
-			// switch centers
-			wmRef[1][1][0] = back;
-			wmRef[1][2][1] = up;
-			wmRef[1][1][2] = front;
-			wmRef[1][0][1] = down;
-
-			temps = [initTemps[3], initTemps[0], initTemps[1], initTemps[2]];
+			switchCenters(front, up, back, down, shiftArray(centers, "R"));
+			temps = shiftArray(initTemps, "R");
 		}
 		switchRefs(refs, temps);
 	}
@@ -554,7 +494,6 @@ function rotateMiddleVerticalRightLeft(deg) {
 	if (last) {
 		let right, up, left, down;
 
-		// centers
 		right = wmRef[0][1][1];
 		up = wmRef[1][1][2];
 		left = wmRef[2][1][1];
@@ -562,7 +501,7 @@ function rotateMiddleVerticalRightLeft(deg) {
 
 		let centers = [right, up, left, down];
 		let refs = [wmRef[0][1][2], wmRef[2][1][2], wmRef[2][1][0], wmRef[0][1][0]];
-		let initTemps = [wmRef[0][1][2].index, wmRef[2][1][2].index, wmRef[2][1][0].index, wmRef[0][1][0].index];
+		let initTemps = setInitTemps(refs);
 		let temps;
 
 		if(deg > 0){
@@ -570,27 +509,15 @@ function rotateMiddleVerticalRightLeft(deg) {
 			for (let i in centers) {
 				moveCenterMiddleVerticalRightLeft(getCoordFromCol(centers[i].color), "U");
 			}
-
-			// switch centers
-			wmRef[1][1][2] = right;
-			wmRef[2][1][1] = up;
-			wmRef[1][1][0] = left;
-			wmRef[0][1][1] = down;
-
-			temps = [initTemps[3], initTemps[0], initTemps[1], initTemps[2]];
+			switchCenters(right, up, left, down, shiftArray(centers, "R"));
+			temps = shiftArray(initTemps, "R");
 		} else {
 			//down
 			for (let i in centers) {
 				moveCenterMiddleVerticalRightLeft(getCoordFromCol(centers[i].color), "D");
 			}
-
-			// switch centers
-			wmRef[1][1][0] = right;
-			wmRef[2][1][1] = down;
-			wmRef[1][1][2] = left;
-			wmRef[0][1][1] = up;
-
-			temps = [initTemps[1], initTemps[2], initTemps[3], initTemps[0]];
+			switchCenters(right, up, left, down, shiftArray(centers, "L"));
+			temps = shiftArray(initTemps, "L");
 		}
 		switchRefs(refs, temps);
 	}
