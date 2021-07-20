@@ -23,6 +23,7 @@ var positionAttributeLocation = new Array(); //shaders position location (for ea
 var normalsAttributeLocation; //shaders normals location
 var lightDirectionHandle; //shaders direction light location
 var lightColorHandle; //shaders color light location
+var textLocation= new Array();
 
 var lastUpdateTime = null;
 
@@ -61,6 +62,9 @@ function main() {
 	vaos[0] = [];
 	vaos[1] = [];
 	
+	
+	textLocation[0] = gl.getUniformLocation(program[0], "sampler");
+	textLocation[1] = gl.getUniformLocation(program[1], "sampler");
 	normalMatrixPositionHandle = gl.getUniformLocation(program[1], 'nMatrix');
 	worldMatrixLocation = gl.getUniformLocation(program[1], 'worldMatrix');
 	lightDirectionHandle = gl.getUniformLocation(program[1], 'lightDirection');
@@ -211,6 +215,8 @@ function drawScene() {
 			gl.uniformMatrix4fv(normalMatrixPositionHandle , gl.FALSE, utils.transposeMatrix(wmAndQList[i].matrix)); //nMatrix	
 			gl.uniformMatrix4fv(worldMatrixLocation , gl.FALSE, utils.transposeMatrix(wmAndQList[i].matrix)); //worldMatrix
 		}		
+		
+		gl.uniform1i(textLocation[selectedLight], 0);
 		
 		gl.bindVertexArray(vaos[selectedLight][i]);
 		gl.activeTexture(gl.TEXTURE0);
