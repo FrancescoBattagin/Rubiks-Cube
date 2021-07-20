@@ -44,6 +44,15 @@ function updateFaceRefs(refs, deg, face) {
 	switchRefs(refs, temps);
 }
 
+function shiftArray(array, side) {
+	switch (side) {
+		case "L":
+			return [array[1], array[2], array[3], array[0]];
+		case "R":
+			return [array[3], array[0], array[1], array[2]];
+	}
+}
+
 function rotateFace(rotation){
 	console.log("rotate");
 	if(functionToAnimate === null){
@@ -342,15 +351,14 @@ function rotateMiddleHorizontal(deg) {
 	if (last) {
 		let front, right, back, left;
 
-		// centers
 		front = wmRef[1][0][1];
 		right = wmRef[0][1][1];
-		left = wmRef[2][1][1];
 		back = wmRef[1][2][1];
+		left = wmRef[2][1][1];
 
 		let centers = [front, right, back, left];
 		let refs = [wmRef[0][0][1], wmRef[0][2][1], wmRef[2][2][1], wmRef[2][0][1]];
-		let initTemps = [wmRef[0][0][1].index, wmRef[0][2][1].index, wmRef[2][2][1].index, wmRef[2][0][1].index];
+		let initTemps = setInitTemps(refs);
 		let temps;
 
 		if(deg > 0){
@@ -360,10 +368,10 @@ function rotateMiddleHorizontal(deg) {
 			}
 
 			// switch centers
-			wmRef[2][1][1] = back;
-			wmRef[1][2][1] = right;
-			wmRef[0][1][1] = front;
 			wmRef[1][0][1] = left;
+			wmRef[0][1][1] = front;
+			wmRef[1][2][1] = right;
+			wmRef[2][1][1] = back;
 
 			temps = [initTemps[3], initTemps[0], initTemps[1], initTemps[2]];
 		} else {
@@ -373,10 +381,10 @@ function rotateMiddleHorizontal(deg) {
 			}
 
 			// switch centers
-			wmRef[2][1][1] = front;
-			wmRef[1][2][1] = left;
-			wmRef[0][1][1] = back;
 			wmRef[1][0][1] = right;
+			wmRef[0][1][1] = back;
+			wmRef[1][2][1] = left;
+			wmRef[2][1][1] = front;
 
 			temps = [initTemps[1], initTemps[2], initTemps[3], initTemps[0]];
 		}
