@@ -4,12 +4,14 @@ var countAnimate = 0;
 
 var last = false;
 
+//update references in 3d array
 function switchRefs(refs, temps) {
 	for (let i in refs) {
 		refs[i].index = temps[i];
 	}
 }
 
+//return ref indices (before rotation)
 function setInitTemps(refs) {
 	let initTemps = [];
 	for (let i in refs) {
@@ -18,6 +20,7 @@ function setInitTemps(refs) {
 	return initTemps;
 }
 
+//return new ref indices (after rotation)
 function setTemps(initTemps, deg, side) {
 	switch (side) {
 		case "FBUD":
@@ -44,6 +47,7 @@ function updateFaceRefs(refs, deg, face) {
 	switchRefs(refs, temps);
 }
 
+//for center ref indeces shift
 function shiftArray(array, side) {
 	switch (side) {
 		case "L":
@@ -54,7 +58,6 @@ function shiftArray(array, side) {
 }
 
 function rotateFace(rotation){
-	console.log("rotate");
 	if(functionToAnimate === null){
 		if (selectedFace.i === 0) {
 			functionToAnimate = rightFace;
@@ -120,12 +123,12 @@ function rotateFace(rotation){
 }
 
 function rotate(refs, deg, face) {
-	if (face === "R" || face === "L" || face === "F" || face === "B" || face === "U" || face === "D") {
+	if (face === "R" || face === "L" || face === "F" || face === "B" || face === "U" || face === "D") { //rotate face
 		if (face === "R" || face === "L") {
-			for (let i in refs) {
+			for (let i in refs) { //all cubes but center one
 				updateQuaternion(refs[i].index, deg, 0, 0);
 			}
-			if (face === "R") {
+			if (face === "R") { //central cube
 				updateQuaternion(wmRef[0][1][1].index, deg, 0, 0);
 			} else {
 				updateQuaternion(wmRef[2][1][1].index, deg, 0, 0);
@@ -149,7 +152,7 @@ function rotate(refs, deg, face) {
 				updateQuaternion(wmRef[1][1][0].index, 0, deg, 0);
 			}
 		}
-	} else {
+	} else { //middle moves
 		if (face === "MH") {
 			for (let i in refs) {
 				updateQuaternion(refs[i].index, 0, deg, 0);

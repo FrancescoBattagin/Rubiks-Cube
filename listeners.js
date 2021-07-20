@@ -64,43 +64,36 @@ var keyFunctionDown = function(e) {
 	let face = document.getElementById("face");
 	switch(e.keyCode) {
   		case 87:
-			//console.log("KeyDown - White");
 			selectedFace = centerCoordinates.white;
 			face.setAttribute("class", "white");
 			face.innerText = "White";
 			break;
 	  	case 89:
-			//console.log("KeyDown - Yellow");
 			selectedFace = centerCoordinates.yellow;
 			face.setAttribute("class", "yellow");
 			face.innerText = "Yellow";
 			break;
 	  	case 66:
-			//console.log("KeyDown - Blue");
 			selectedFace = centerCoordinates.blue;
 			face.setAttribute("class", "blue");
 			face.innerText = "Blue";
 			break;
 	  	case 71:
-			//console.log("KeyDown - Green");
 			selectedFace = centerCoordinates.green;
 			face.setAttribute("class", "green");
 			face.innerText = "Green";
 			break;
 	  	case 82:
-			//console.log("KeyDown - Red");
 			selectedFace = centerCoordinates.red;
 			face.setAttribute("class", "red");
 			face.innerText = "Red";
 			break;
 	  	case 79:
-			//console.log("KeyDown - Orange");
 			selectedFace = centerCoordinates.orange;
 			face.setAttribute("class", "orange");
 			face.innerText = "Orange";
 			break;
 		case 39:
-			//console.log("KeyDown - Right");
 			if(shift)
 				rotateMiddle("R");
 			else
@@ -108,7 +101,6 @@ var keyFunctionDown = function(e) {
 			window.requestAnimationFrame(drawScene);
 			break;
 	  	case 37:
-			//console.log("KeyDown - Left");
 			if(shift)
 				rotateMiddle("L");
 			else
@@ -116,21 +108,18 @@ var keyFunctionDown = function(e) {
 			window.requestAnimationFrame(drawScene);
 			break;	
 		case 38:
-			//console.log("KeyDown - Up");
 			if(shift) {
 				rotateMiddle("U");
 				window.requestAnimationFrame(drawScene);
 			}
 			break;
 		case 40:
-			//console.log("KeyDown - Down");
 			if(shift) {
 				rotateMiddle("D");
 				window.requestAnimationFrame(drawScene);
 			}
 			break;
 		case 16:
-			//console.log("KeyDown - Shift");
 			shift = true;
 			break;
 	}
@@ -138,7 +127,6 @@ var keyFunctionDown = function(e) {
 
 var keyFunctionUp = function(e) {
 	if(e.keyCode === 16){
-		//console.log("KeyUp - Shift")
 		shift = false;
 	}
 }
