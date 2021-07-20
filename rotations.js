@@ -373,7 +373,7 @@ function rotateMiddleHorizontal(deg) {
 			wmRef[1][2][1] = right;
 			wmRef[2][1][1] = back;
 
-			temps = [initTemps[3], initTemps[0], initTemps[1], initTemps[2]];
+			temps = shiftArray(initTemps, "R");
 		} else {
 			//left
 			for (let i in centers) {
@@ -386,7 +386,7 @@ function rotateMiddleHorizontal(deg) {
 			wmRef[1][2][1] = left;
 			wmRef[2][1][1] = front;
 
-			temps = [initTemps[1], initTemps[2], initTemps[3], initTemps[0]];
+			temps = shiftArray(initTemps, "L");
 		}
 		switchRefs(refs, temps);
 	}
@@ -454,7 +454,7 @@ function rotateMiddleVerticalFrontBack(deg) {
 			wmRef[1][1][2] = back;
 			wmRef[1][0][1] = up;
 
-			temps = [initTemps[1], initTemps[2], initTemps[3], initTemps[0]];
+			temps = shiftArray(initTemps, "L");
 		} else {
 			//down
 			for (let i in centers) {
@@ -467,7 +467,7 @@ function rotateMiddleVerticalFrontBack(deg) {
 			wmRef[1][1][2] = front;
 			wmRef[1][0][1] = down;
 
-			temps = [initTemps[3], initTemps[0], initTemps[1], initTemps[2]];
+			temps = shiftArray(initTemps, "R");
 		}
 		switchRefs(refs, temps);
 	}
@@ -535,7 +535,7 @@ function rotateMiddleVerticalRightLeft(deg) {
 			wmRef[1][1][0] = left;
 			wmRef[0][1][1] = down;
 
-			temps = [initTemps[3], initTemps[0], initTemps[1], initTemps[2]];
+			temps = shiftArray(initTemps, "R");
 		} else {
 			//down
 			for (let i in centers) {
@@ -548,7 +548,7 @@ function rotateMiddleVerticalRightLeft(deg) {
 			wmRef[1][1][2] = left;
 			wmRef[0][1][1] = up;
 
-			temps = [initTemps[1], initTemps[2], initTemps[3], initTemps[0]];
+			temps = shiftArray(initTemps, "L");
 		}
 		switchRefs(refs, temps);
 	}
