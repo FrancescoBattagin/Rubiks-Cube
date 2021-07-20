@@ -318,17 +318,17 @@ async function init() {
 	};
 	wmRef[1][1][2].color = "white"; 
 	centerCoordinates.yellow = {
-		i: 0,
-		j: 1,
-		k: 1
-	};
-	wmRef[0][1][1].color = "yellow";
-	centerCoordinates.blue = {
 		i: 1,
 		j: 1,
 		k: 0
 	};
-	wmRef[1][1][0].color = "blue";
+	wmRef[1][1][0].color = "yellow";
+	centerCoordinates.blue = {
+		i: 1,
+		j: 2,
+		k: 1
+	};
+	wmRef[1][2][1].color = "blue";
 	centerCoordinates.green = {
 		i: 1,
 		j: 0,
@@ -336,17 +336,17 @@ async function init() {
 	};
 	wmRef[1][0][1].color = "green";
 	centerCoordinates.red = {
+		i: 0,
+		j: 1,
+		k: 1
+	};
+	wmRef[0][1][1].color = "red";
+	centerCoordinates.orange = {
 		i: 2,
 		j: 1,
 		k: 1
 	};
-	wmRef[2][1][1].color = "red";
-	centerCoordinates.orange = {
-		i: 1,
-		j: 2,
-		k: 1
-	};
-	wmRef[1][2][1].color = "orange";
+	wmRef[2][1][1].color = "orange";
 
     await utils.loadFiles([shaderDir + "vs.glsl", shaderDir + "fs.glsl"], function (shaderText) {
 		var vertexShader = utils.createShader(gl, gl.VERTEX_SHADER, shaderText[0]);
